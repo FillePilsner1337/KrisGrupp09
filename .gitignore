@@ -296,3 +296,5 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,java,jetbrains,intellij,maven
 .idea/vcs.xml
 .idea/misc.xml
+
+.idea/*
