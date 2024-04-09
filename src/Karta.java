@@ -1,4 +1,9 @@
 
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,14 +25,11 @@ import org.jxmapviewer.input.CenterMapListener;
 import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
-import org.jxmapviewer.viewer.DefaultTileFactory;
-import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.TileFactoryInfo;
-import org.jxmapviewer.viewer.WaypointPainter;
+import org.jxmapviewer.viewer.*;
 
 
 public class Karta {
-    HashSet<SwingWaypoint> waypoints = new HashSet<SwingWaypoint>();
+    HashSet<KrisWayPoint> waypoints = new HashSet<KrisWayPoint>();
     ArrayList<SrObject> srObjects;
 
 
@@ -60,61 +62,10 @@ public class Karta {
         mapViewer.setAddressLocation(start);
         System.out.println(new Date());
         for (int i = 0; i < srObjects.size(); i++){
-            waypoints.add(new SwingWaypoint(srObjects.get(i).adress, srObjects.get(i).idNummer, srObjects.get(i).kapacitet, srObjects.get(i).pos));
+            waypoints.add(new KrisWayPoint(srObjects.get(i).pos, srObjects.get(i).adress));
 
         }
         System.out.println(new Date());
-
-
-        /*
-        try {
-            BufferedReader br = new BufferedReader( new FileReader( "files/SR.csv" ) );
-            String[] parts;
-            GeoPosition position;
-            String str = br.readLine();
-            while( str != null ) {
-                parts = str.split( "," );
-                double x = Double.parseDouble(parts[0]);
-                double y = Double.parseDouble(parts[1]);
-                String adress = parts[2];
-                String idNummer = parts[3];
-                String kapacitet = parts[4];
-                position = new GeoPosition( x,y);
-                srObjects.add(new SrObject(position, adress, idNummer, kapacitet));
-
-                str = br.readLine();
-            }
-            br.close();
-        } catch( IOException e ) {
-            System.out.println( "readPersons: " + e );
-        }
-        saveFile();
-
-         waypoints = new HashSet<SwingWaypoint>();
-
-        try {
-            BufferedReader br = new BufferedReader( new FileReader( "files/SR.csv" ) );
-            String[] parts;
-            GeoPosition position;
-            String str = br.readLine();
-            while( str != null ) {
-                parts = str.split( "," );
-                double x = Double.parseDouble(parts[0]);
-                double y = Double.parseDouble(parts[1]);
-                String adress = parts[2];
-                String idNummer = parts[3];
-                String kapacitet = parts[4];
-                position = new GeoPosition( x,y);
-                waypoints.add(new SwingWaypoint(adress, idNummer, kapacitet, position));
-
-                str = br.readLine();
-            }
-            br.close();
-        } catch( IOException e ) {
-            System.out.println( "readPersons: " + e );
-        }
-
-*/
 
         System.out.println(new Date());
         MouseInputListener mia = new PanMouseInputListener(mapViewer);
@@ -125,16 +76,67 @@ public class Karta {
         mapViewer.addKeyListener(new PanKeyListener(mapViewer));
         System.out.println(new Date());
 
+        WaypointPainter<KrisWayPoint> waypointPainter = new WaypointPainter<>();
+        waypointPainter.setRenderer(new WaypointRenderer<KrisWayPoint>() {
+            @Override
+            public void paintWaypoint(Graphics2D graphics2D, JXMapViewer jxMapViewer, KrisWayPoint krisWayPoint){
+                // Extract waypoint coordinates
+                double latitude = krisWayPoint.getGeo().getLatitude();
+                double longitude = krisWayPoint.getGeo().getLongitude();
+
+                // Convert latitude and longitude to screen coordinates
+                Point2D point = jxMapViewer.getTileFactory().geoToPixel(new org.jxmapviewer.viewer.GeoPosition(latitude, longitude), jxMapViewer.getZoom());
+
+                // Assuming KrisWayPoint has a method to get its appearance
+                // For example, krisWayPoint.getColor(), krisWayPoint.getShape(), etc.
+                // You would then use this information to paint the waypoint
+
+                // Example: Paint a simple circle at the waypoint's location
+                graphics2D.setColor(Color.RED); // Example color
+                int height = 8;
+                int width = 8;
+                graphics2D.fillRect((int) point.getX() - width/2, (int) point.getY() - height/2, width, height);
+            }
+        });
+        waypointPainter.setWaypoints(waypoints);
+        mapViewer.setOverlayPainter(waypointPainter);
+
+        mapViewer.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent me) {
+
+                for (KrisWayPoint waypoint : waypoints) {
+                    String waypointString = String.valueOf(waypoint.getGeo());
+                    //System.out.println(waypointString);
+                    String[] waypointStringSplit = waypointString.split(",", 2);
+                    System.out.println(waypointStringSplit[0] + " " + waypointStringSplit[1]);
+
+                    // System.out.println(waypoint.getGeo());
 
 
-        WaypointPainter<SwingWaypoint> swingWaypointPainter = new SwingWaypointOverlayPainter();
-        swingWaypointPainter.setWaypoints(waypoints);
-        mapViewer.setOverlayPainter(swingWaypointPainter);
-        System.out.println(new Date());
+                    //convert to screen
+                    //check if near the mouse
+                    Point clickedPoint = me.getPoint();
+                    //System.out.println(clickedPoint);
+                    GeoPosition clickedPointasGeo = mapViewer.convertPointToGeoPosition(clickedPoint);
+                    String clickedpointString = String.valueOf(clickedPointasGeo);
+                    String[] clickedpointStringSplit = clickedpointString.split(",", 2);
+                    System.out.println("\n " + clickedpointStringSplit[0] + " " + clickedpointStringSplit[1]);
+                    // System.out.println(clickedpointString);
+                    // System.out.println("\n " + clickedPointasGeo);
+                    if (clickedpointStringSplit[0].substring(0,7).equals(waypointStringSplit[0].substring(0,7))){
+                        if (clickedpointStringSplit[1].substring(0,7).equals(waypointStringSplit[1].substring(0,7))){
+                            JOptionPane.showMessageDialog(null,waypoint.getS());
+                        }
+                    }
 
-        for (SwingWaypoint w : waypoints) {
-            mapViewer.add(w.getButton());
-        }
+
+                }
+            }
+        });
+
+
 
         System.out.println(new Date());
 
