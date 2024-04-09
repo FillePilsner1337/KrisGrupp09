@@ -115,7 +115,7 @@ public class Karta {
                     String[] clickedpointStringSplit = clickedpointString.split(",", 2);
                     System.out.println("\n ----- " + clickedpointStringSplit[0] + " " + clickedpointStringSplit[1]);
                 int numberOfResults = 0;
-                ArrayList<KrisWayPoint> hittadeSkyddsrum = new ArrayList<>();
+                ArrayList<KrisWayPoint> foundShelters = new ArrayList<>();
                 for (KrisWayPoint waypoint : waypoints) {
                     String waypointString = String.valueOf(waypoint.getGeo());
                     //System.out.println(waypointString);
@@ -125,28 +125,35 @@ public class Karta {
                     // System.out.println(clickedpointString);
                     // System.out.println("\n " + clickedPointasGeo);
                     if ((clickedpointStringSplit[0].substring(0,8).equals(waypointStringSplit[0].substring(0,8))) && (clickedpointStringSplit[1].substring(0,8).equals(waypointStringSplit[1].substring(0,8)))) {
-                          hittadeSkyddsrum.add(waypoint);
+                          foundShelters.add(waypoint);
                         }
                     }
-                if (!hittadeSkyddsrum.isEmpty()){
-                    int numberOfViews = hittadeSkyddsrum.size();
-                    System.out.println(numberOfViews);
-                    for (int i = 0; i < hittadeSkyddsrum.size(); i++) {
-                        if (hittadeSkyddsrum.size() >= 2 && numberOfViews > 1) {
-                            JOptionPane.showMessageDialog(null, "There is more than one result. Click ok to show the next one. \n" +
-                                    " ID: " + hittadeSkyddsrum.get(i).getId() +
-                                    "\n Address: " + hittadeSkyddsrum.get(i).getAddress() +
-                                    "\n Capacaty: " + hittadeSkyddsrum.get(i).getCapacaty());
-                            numberOfViews--;
+                if (foundShelters.size() > 1){
+                    int numberOfShelters= foundShelters.size();
+                    System.out.println(numberOfShelters);
+                    for (int i = 0; i < foundShelters.size(); i++) {
+                        if (foundShelters.size() >= 2 && numberOfShelters > 1) {
+                            JOptionPane.showMessageDialog(mapViewer, "There is more than one result. Click ok to show the next one. \n" +
+                                    "Result 1: \n " +
+                                    "ID: " + foundShelters.get(i).getId() +
+                                    "\n Address: " + foundShelters.get(i).getAddress() +
+                                    "\n Capacaty: " + foundShelters.get(i).getCapacaty());
+                            numberOfShelters--;
 
                         } else {
-                            JOptionPane.showMessageDialog(null, " ID: " + hittadeSkyddsrum.get(i).getId() +
-                                    "\n Address: " + hittadeSkyddsrum.get(i).getAddress() +
-                                    "\n Capacaty: " + hittadeSkyddsrum.get(i).getCapacaty());
-                            numberOfViews= 0;
+                            JOptionPane.showMessageDialog(mapViewer, "Result 2: \n" +
+                                    " ID: " + foundShelters.get(i).getId() +
+                                    "\n Address: " + foundShelters.get(i).getAddress() +
+                                    "\n Capacaty: " + foundShelters.get(i).getCapacaty());
+                            numberOfShelters= 0;
                         }
                     }
 
+                }
+                else if (foundShelters.size()==1){
+                    JOptionPane.showMessageDialog(mapViewer, " ID: " + foundShelters.get(0).getId() +
+                            "\n Address: " + foundShelters.get(0).getAddress() +
+                            "\n Capacaty: " + foundShelters.get(0).getCapacaty());
                 }
 
 
