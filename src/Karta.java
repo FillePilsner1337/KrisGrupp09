@@ -132,7 +132,7 @@ public class Karta {
                     int numberOfShelters= foundShelters.size();
                     System.out.println(numberOfShelters);
                     for (int i = 0; i < foundShelters.size(); i++) {
-                        if (foundShelters.size() >= 2 && numberOfShelters > 1) {
+                        if (numberOfShelters > 1) {
                             JOptionPane.showMessageDialog(mapViewer, "There is more than one result. Click ok to show the next one. \n" +
                                     "Result 1: \n " +
                                     "ID: " + foundShelters.get(i).getId() +
