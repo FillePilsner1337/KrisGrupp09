@@ -62,7 +62,7 @@ public class Karta {
         mapViewer.setAddressLocation(start);
         System.out.println(new Date());
         for (int i = 0; i < srObjects.size(); i++){
-            waypoints.add(new KrisWayPoint(srObjects.get(i).pos, srObjects.get(i).adress));
+            waypoints.add(new KrisWayPoint(srObjects.get(i).pos, srObjects.get(i).adress, srObjects.get(i).idNummer, srObjects.get(i).kapacitet));
 
         }
         System.out.println(new Date());
@@ -106,15 +106,6 @@ public class Karta {
             @Override
             public void mouseClicked(MouseEvent me) {
 
-                for (KrisWayPoint waypoint : waypoints) {
-                    String waypointString = String.valueOf(waypoint.getGeo());
-                    //System.out.println(waypointString);
-                    String[] waypointStringSplit = waypointString.split(",", 2);
-                    System.out.println(waypointStringSplit[0] + " " + waypointStringSplit[1]);
-
-                    // System.out.println(waypoint.getGeo());
-
-
                     //convert to screen
                     //check if near the mouse
                     Point clickedPoint = me.getPoint();
@@ -122,18 +113,44 @@ public class Karta {
                     GeoPosition clickedPointasGeo = mapViewer.convertPointToGeoPosition(clickedPoint);
                     String clickedpointString = String.valueOf(clickedPointasGeo);
                     String[] clickedpointStringSplit = clickedpointString.split(",", 2);
-                    System.out.println("\n " + clickedpointStringSplit[0] + " " + clickedpointStringSplit[1]);
+                    System.out.println("\n ----- " + clickedpointStringSplit[0] + " " + clickedpointStringSplit[1]);
+                int numberOfResults = 0;
+                ArrayList<KrisWayPoint> hittadeSkyddsrum = new ArrayList<>();
+                for (KrisWayPoint waypoint : waypoints) {
+                    String waypointString = String.valueOf(waypoint.getGeo());
+                    //System.out.println(waypointString);
+                    String[] waypointStringSplit = waypointString.split(",", 2);
+                    System.out.println(waypointStringSplit[0] + " " + waypointStringSplit[1]);
+                    // System.out.println(waypoint.getGeo());
                     // System.out.println(clickedpointString);
                     // System.out.println("\n " + clickedPointasGeo);
-                    if (clickedpointStringSplit[0].substring(0,7).equals(waypointStringSplit[0].substring(0,7))){
-                        if (clickedpointStringSplit[1].substring(0,7).equals(waypointStringSplit[1].substring(0,7))){
-                            JOptionPane.showMessageDialog(null,waypoint.getS());
+                    if ((clickedpointStringSplit[0].substring(0,8).equals(waypointStringSplit[0].substring(0,8))) && (clickedpointStringSplit[1].substring(0,8).equals(waypointStringSplit[1].substring(0,8)))) {
+                          hittadeSkyddsrum.add(waypoint);
+                        }
+                    }
+                if (!hittadeSkyddsrum.isEmpty()){
+                    int numberOfViews = hittadeSkyddsrum.size();
+                    System.out.println(numberOfViews);
+                    for (int i = 0; i < hittadeSkyddsrum.size(); i++) {
+                        if (hittadeSkyddsrum.size() >= 2 && numberOfViews > 1) {
+                            JOptionPane.showMessageDialog(null, "There is more than one result. Click ok to show the next one. \n" +
+                                    " ID: " + hittadeSkyddsrum.get(i).getId() +
+                                    "\n Address: " + hittadeSkyddsrum.get(i).getAddress() +
+                                    "\n Capacaty: " + hittadeSkyddsrum.get(i).getCapacaty());
+                            numberOfViews--;
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, " ID: " + hittadeSkyddsrum.get(i).getId() +
+                                    "\n Address: " + hittadeSkyddsrum.get(i).getAddress() +
+                                    "\n Capacaty: " + hittadeSkyddsrum.get(i).getCapacaty());
+                            numberOfViews= 0;
                         }
                     }
 
+                }
+
 
                 }
-            }
         });
 
 
