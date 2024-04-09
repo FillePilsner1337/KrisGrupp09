@@ -1,19 +1,23 @@
 package Boundary;
 
-import Controller.Controller;
-import Controller.MainServerController;
+
+import Controller.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ClientConnection extends Thread {
+public class NewClientConnection extends Thread {
 
     private Controller controller;
     private ServerSocket serverSocket;
 
-    public ClientConnection(int port, Controller controller) {
+    private ServerInputHandler serverInputHandler;
+
+
+    public NewClientConnection(int port, Controller controller, ServerInputHandler serverInputHandler)  {
         this.controller = controller;
+        this.serverInputHandler = serverInputHandler;
 
         try {
             this.serverSocket = new ServerSocket(port);
@@ -21,17 +25,18 @@ public class ClientConnection extends Thread {
             System.out.println("IOException i NewClientConnection konstruktor");
             System.out.println(e.getMessage());
         }
-
+        System.out.println("New client connection startad");
     }
 
     @Override
     public void run() {
 
-
+        System.out.println("run metod new client ");
         while (!Thread.interrupted()) {
             try {
                 Socket socket = serverSocket.accept();
-                new Connection(socket, MainServerController.this, connectedClients);
+                new Connection(socket, controller, serverInputHandler);
+
 
 
             } catch (IOException e) {
