@@ -51,7 +51,7 @@ public class Karta {
         tileFactory.setLocalCache(new FileBasedLocalCache(cacheDir, false));
 
 
-        JXMapViewer mapViewer = new JXMapViewer();
+        final JXMapViewer mapViewer = new JXMapViewer();
         mapViewer.setTileFactory(tileFactory);
 
 
