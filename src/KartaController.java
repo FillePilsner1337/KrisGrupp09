@@ -1,21 +1,11 @@
-
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.Buffer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
@@ -30,19 +20,22 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
 import org.jxmapviewer.viewer.*;
 
 
-public class Karta {
+public class KartaController {
     HashSet<KrisWayPoint> waypoints = new HashSet<KrisWayPoint>();
     ArrayList<SrObject> srObjects;
+    MainFrame mainFrame;
+    Controller controller;
 
+    public KartaController(MainFrame m, Controller c) {
+        this.mainFrame = m;
+        this.controller = c;
+        loadFile();
+        start();
+    }
 
     public void start() {
 
-        try {
 
-            UIManager.setLookAndFeel(new FlatDarkLaf());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
@@ -149,25 +142,25 @@ public class Karta {
                     for (int i = 0; i < foundShelters.size(); i++) {
                         if (numberOfShelters > 1) {
                             int choice = JOptionPane.showConfirmDialog(mapViewer, " ID: " + foundShelters.get(i).getId() +
-                                    "\n Address: " + foundShelters.get(i).getAddress() +
-                                    "\n Capacaty: " + foundShelters.get(i).getCapacaty() +
-                                    "\n Vill du checka in? ", "Skyddsrum 1", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,img2);
+                                    "\n Fastighet: " + foundShelters.get(i).getAddress() +
+                                    "\n Platser: " + foundShelters.get(i).getCapacaty() +
+                                    "\n Vill du checka in? ", foundShelters.get(i).getId(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,img2);
                             numberOfShelters--;
                             if (choice == JOptionPane.YES_OPTION){
                                 System.out.println("Du checkas in i " + foundShelters.get(i).getId() + " - sout bara för att se att det fungerar");
-                                //Checka-in metod här?
+                                controller.checkIn(foundShelters.get(i).getId());
                                 foundShelters.clear();
                                 break;
                             }
                         } else{
                            int choice = JOptionPane.showConfirmDialog(mapViewer, " ID: " + foundShelters.get(i).getId() +
-                                    "\n Address: " + foundShelters.get(i).getAddress() +
-                                    "\n Capacaty: " + foundShelters.get(i).getCapacaty() +
-                                    "\n Vill du checka in? ", "Skyddsrum 2", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,img2);
+                                    "\n Fastighet: " + foundShelters.get(i).getAddress() +
+                                    "\n Kapacitet: " + foundShelters.get(i).getCapacaty() +
+                                    "\n Vill du checka in? ", foundShelters.get(i).getId(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,img2);
                             numberOfShelters= 0;
                             if (choice == JOptionPane.YES_OPTION){
                                 System.out.println("Du checkas in i " + foundShelters.get(i).getId() + " - sout bara för att se att det fungerar");
-                                //check-in metod
+                                controller.checkIn(foundShelters.get(i).getId());
                             }
                         }
                     }
@@ -175,12 +168,12 @@ public class Karta {
                 }
                 else if (foundShelters.size()==1){
                     int choice = JOptionPane.showConfirmDialog(mapViewer, " ID: " + foundShelters.get(0).getId() +
-                            "\n Address: " + foundShelters.get(0).getAddress() +
-                            "\n Capacaty: " + foundShelters.get(0).getCapacaty() +
-                            "\n Vill du checka in? ", "Skyddsrum", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,img2);
+                            "\n Fastighet: " + foundShelters.get(0).getAddress() +
+                            "\n Kapacitet: " + foundShelters.get(0).getCapacaty() +
+                            "\n Vill du checka in? ", foundShelters.get(0).getId(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,img2);
                     if (choice == JOptionPane.YES_OPTION) {
                         System.out.println("Du checkas in i " + foundShelters.get(0).getId() + " - sout bara för att se att det fungerar");
-                        //check-in metod
+                        controller.checkIn(foundShelters.get(0).getId());
                     }
                 }
 
@@ -190,21 +183,9 @@ public class Karta {
 
 
 
-        System.out.println(new Date());
+        mainFrame.setKartPanel(mapViewer);
 
-        JFrame frame = new JFrame("Skyddsrum");
-       
-        System.out.println("innan getContent " + new Date());
-        frame.getContentPane().add(mapViewer);
-        System.out.println("efter getContent " + new Date());
-        frame.setSize(800, 600);
-        System.out.println("efter setsize " + new Date());
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        System.out.println("efter defult close " + new Date());
-
-        frame.setVisible(true);
-        System.out.println("efter setvisble " + new Date());
 
     }
 
