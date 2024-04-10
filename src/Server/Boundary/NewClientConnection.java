@@ -1,7 +1,9 @@
-package Boundary;
+package Server.Boundary;
 
 
-import Controller.*;
+import Server.Controller.Controller;
+import Server.Controller.ServerInputHandler;
+import Server.Controller.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;

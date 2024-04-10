@@ -1,6 +1,6 @@
-package Controller;
+package Server.Controller;
 
-import Model.User;
+import Server.Model.User;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;

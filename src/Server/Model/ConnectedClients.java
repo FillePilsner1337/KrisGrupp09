@@ -1,6 +1,7 @@
-package Model;
+package Server.Model;
 
-import Boundary.Connection;
+import Server.Boundary.Connection;
+
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 

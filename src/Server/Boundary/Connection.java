@@ -1,11 +1,13 @@
-package Boundary;
+package Server.Boundary;
 
 
 
-import Controller.*;
-import Model.Buffer;
-import Model.ConnectedClients;
-import Model.User;
+import Server.Controller.Controller;
+import Server.Controller.ServerInputHandler;
+import Server.Controller.*;
+import Server.Model.Buffer;
+import Server.Model.ConnectedClients;
+import Server.Model.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

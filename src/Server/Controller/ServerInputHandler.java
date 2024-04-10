@@ -1,6 +1,6 @@
-package Controller;
+package Server.Controller;
 
-import Model.User;
+import Server.Model.User;
 
 public class ServerInputHandler {
 

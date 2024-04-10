@@ -1,7 +1,9 @@
-package Controller;
+package Server.Controller;
 
-import Boundary.*;
-import Model.*;
+import Server.Boundary.*;
+
+import Server.Model.*;
+
 
 public class Controller  {
     private final int port = 10000;
