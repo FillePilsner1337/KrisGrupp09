@@ -1,13 +1,30 @@
 package Server.Model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class User implements Serializable {
 
     private String userName;
+    private InUtStatus inUtStatus;
 
     public User(String userName) {
         this.userName = userName;
+
+
+
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public InUtStatus getInUtStatus() {
+        return inUtStatus;
+    }
+
+    public void setInUtStatus(InUtStatus inUtStatus) {
+        this.inUtStatus = inUtStatus;
     }
 
     @Override
@@ -22,7 +39,7 @@ public class User implements Serializable {
         return false;
     }
 
-    private String getUserName() {
+    public String getUserName() {
         return userName;
     }
 

@@ -1,9 +1,8 @@
 package Server.Boundary;
 
 
-import Server.Controller.Controller;
+import Server.Controller.ControllerServer;
 import Server.Controller.ServerInputHandler;
-import Server.Controller.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -11,14 +10,14 @@ import java.net.Socket;
 
 public class NewClientConnection extends Thread {
 
-    private Controller controller;
+    private ControllerServer controllerServer;
     private ServerSocket serverSocket;
 
     private ServerInputHandler serverInputHandler;
 
 
-    public NewClientConnection(int port, Controller controller, ServerInputHandler serverInputHandler)  {
-        this.controller = controller;
+    public NewClientConnection(int port, ControllerServer controllerServer, ServerInputHandler serverInputHandler)  {
+        this.controllerServer = controllerServer;
         this.serverInputHandler = serverInputHandler;
 
         try {
@@ -37,7 +36,7 @@ public class NewClientConnection extends Thread {
         while (!Thread.interrupted()) {
             try {
                 Socket socket = serverSocket.accept();
-                new Connection(socket, controller, serverInputHandler);
+                new Connection(socket, controllerServer, serverInputHandler);
 
 
 

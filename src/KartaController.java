@@ -5,8 +5,6 @@ import java.awt.geom.Point2D;
 import java.io.*;
 import java.util.*;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 
@@ -24,11 +22,11 @@ public class KartaController {
     HashSet<KrisWayPoint> waypoints = new HashSet<KrisWayPoint>();
     ArrayList<SrObject> srObjects;
     MainFrame mainFrame;
-    Controller controller;
+    ControllerKlient controllerKlient;
 
-    public KartaController(MainFrame m, Controller c) {
+    public KartaController(MainFrame m, ControllerKlient c) {
         this.mainFrame = m;
-        this.controller = c;
+        this.controllerKlient = c;
         loadFile();
         start();
     }
@@ -148,7 +146,7 @@ public class KartaController {
                             numberOfShelters--;
                             if (choice == JOptionPane.YES_OPTION){
                                 System.out.println("Du checkas in i " + foundShelters.get(i).getId() + " - sout bara för att se att det fungerar");
-                                controller.checkIn(foundShelters.get(i).getId());
+                                controllerKlient.checkIn(foundShelters.get(i).getId());
                                 foundShelters.clear();
                                 break;
                             }
@@ -160,7 +158,7 @@ public class KartaController {
                             numberOfShelters= 0;
                             if (choice == JOptionPane.YES_OPTION){
                                 System.out.println("Du checkas in i " + foundShelters.get(i).getId() + " - sout bara för att se att det fungerar");
-                                controller.checkIn(foundShelters.get(i).getId());
+                                controllerKlient.checkIn(foundShelters.get(i).getId());
                             }
                         }
                     }
@@ -173,7 +171,7 @@ public class KartaController {
                             "\n Vill du checka in? ", foundShelters.get(0).getId(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,img2);
                     if (choice == JOptionPane.YES_OPTION) {
                         System.out.println("Du checkas in i " + foundShelters.get(0).getId() + " - sout bara för att se att det fungerar");
-                        controller.checkIn(foundShelters.get(0).getId());
+                        controllerKlient.checkIn(foundShelters.get(0).getId());
                     }
                 }
 

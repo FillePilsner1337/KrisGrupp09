@@ -1,0 +1,66 @@
+package Server.Controller;
+
+import Server.Boundary.*;
+
+import Server.Model.*;
+
+
+public class ControllerServer {
+    private final int port = 10000;
+    private NewClientConnection newClientConnection;
+
+    private ConnectedClients connectedClients;
+    
+    private ServerInputHandler serverInputHandler;
+
+    private AllUsers allUsers;
+    private ContactList contactList;
+
+
+
+
+    public ControllerServer() {
+        this.connectedClients = new ConnectedClients();
+        this.serverInputHandler = new ServerInputHandler(this);
+        this.newClientConnection = new NewClientConnection(20000, this, serverInputHandler);
+        this.contactList = new ContactList(this);
+        this.allUsers = new AllUsers(this);
+        newClientConnection.start();
+        System.out.println("Controller startad");
+        
+        
+
+
+        
+    }
+
+
+    
+    public void userDisconnect(User user) {
+        connectedClients.removeUser(user);
+    }
+
+    public void newLogIn(User user, Connection connection) {
+        connectedClients.put(user, connection);
+        allUsers.put(user);
+        connectedClients.getConnectionForUser(user).sendObject(new ContactListUpdate(contactList.getContactlist(user)));
+    }
+
+    public void allContactUpdatesToAll(){
+
+
+    }
+    public void sendSelfUpdate(User user) {
+        connectedClients.getConnectionForUser(user).sendObject(user);
+
+    }
+
+    public void changeStatus(InUtStatus status, User user) {
+        allUsers.updateStatus(status, user);
+        System.out.println("changeStatus i serverController");
+    }
+
+    public void updateContactlistFromUser(ContactListUpdate update, User user) {
+        contactList.put(user, update.getList());
+    }
+}

@@ -2,9 +2,8 @@ package Server.Boundary;
 
 
 
-import Server.Controller.Controller;
+import Server.Controller.ControllerServer;
 import Server.Controller.ServerInputHandler;
-import Server.Controller.*;
 import Server.Model.Buffer;
 import Server.Model.ConnectedClients;
 import Server.Model.User;
@@ -25,7 +24,7 @@ public class Connection {
 
     private Buffer<Object> outputBuffer;
 
-    private Controller controller;
+    private ControllerServer controllerServer;
     private OutputHandler outputHandler;
 
     private ConnectedClients connectedClients;
@@ -33,9 +32,9 @@ public class Connection {
 
     private User user;
 
-    public Connection(Socket socket, Controller controller, ServerInputHandler serverInputHandler)  {
+    public Connection(Socket socket, ControllerServer controllerServer, ServerInputHandler serverInputHandler)  {
         System.out.println("Connection konstruktor rad 1");
-        this.controller = controller;
+        this.controllerServer = controllerServer;
         this.socket = socket;
         this.serverInputHandler = serverInputHandler;
 
@@ -55,7 +54,7 @@ public class Connection {
     }
 
     public void newConnection(){
-        controller.newLogIn(user, this);
+        controllerServer.newLogIn(user, this);
     }
 
     public void sendObject(Object object){
@@ -94,7 +93,7 @@ public class Connection {
                 System.out.println(e.getMessage());
             }
             finally {
-                controller.userDisconnect(user);
+                controllerServer.userDisconnect(user);
 
                 try{
                     this.socket.close();
@@ -133,6 +132,7 @@ public class Connection {
                         System.out.println("User objekt mottagit");
                     }
                     else {
+                        System.out.println("Annat ob mottaget");
                         serverInputHandler.newObjectReceived(o, user);
                     }
 
@@ -148,7 +148,7 @@ public class Connection {
                 System.out.println(e.getMessage());
 
             } finally {
-                controller.userDisconnect(user);
+                controllerServer.userDisconnect(user);
                 try{
                     this.socket.close();
                 }
