@@ -39,6 +39,7 @@ public class AllUsers {
             }
 
         }
+        controllerServer.allContactUpdatesToAll();
 
     }
 }

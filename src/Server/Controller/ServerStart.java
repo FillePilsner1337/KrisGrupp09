@@ -1,6 +1,6 @@
 package Server.Controller;
 
-public class MainStart {
+public class ServerStart {
 
     public static void main(String[] args) {
         new ControllerServer();
