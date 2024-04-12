@@ -1,5 +1,6 @@
 import Server.Model.ContactListUpdate;
 import Server.Model.InUtStatus;
+import Server.Model.Message;
 import Server.Model.User;
 import com.formdev.flatlaf.FlatDarkLaf;
 
@@ -33,12 +34,18 @@ public class ControllerKlient {
             user = (User)o;
             System.out.println(user.getInUtStatus().toString());
         }
-        else if (o instanceof ContactListUpdate){
+         if (o instanceof ContactListUpdate){
             this.allFriends = ((ContactListUpdate) o).getList();
             if (!allFriends.isEmpty()) {
                 System.out.println(allFriends.get(0).getUserName());
             }
         }
+        if (o instanceof Message){
+            String msg = ((Message) o).getMsg();
+            JOptionPane.showMessageDialog(null,msg);
+
+        }
+
 
 
 

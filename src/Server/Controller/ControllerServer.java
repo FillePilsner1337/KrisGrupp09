@@ -62,6 +62,11 @@ public class ControllerServer {
 
     }
 
+    public void sendMessageToUser(User user, String msg){
+        connectedClients.getConnectionForUser(user).sendObject(new Message(msg));
+
+    }
+
     public void changeStatus(InUtStatus status, User user) {
         allUsers.updateStatus(status, user);
         System.out.println("changeStatus i serverController");
