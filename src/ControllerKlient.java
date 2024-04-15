@@ -19,11 +19,10 @@ public class ControllerKlient {
     private User user;
     public ControllerKlient(String username){
         this.user = new User(username);
+        user.setInUtStatus(new InUtStatus(false,null,null));
+        this.mainFrame = new MainFrame();
         this.serverConnection = new ServerConnection(user, this);
 
-
-
-        this.mainFrame = new MainFrame();
         this.kc = new KartaController(mainFrame, this);
 
 
@@ -60,16 +59,21 @@ public class ControllerKlient {
             allaSomArray[i] = allFriends.get(i).getUserName();
            // }
         }
+        mainFrame.getCheckInPanel().getListAllaVanner().setListData(allaSomArray);
+
+
         String[] allaincheckade = new String[allFriends.size()];
         for (int i = 0; i < allFriends.size(); i++){
             if (allFriends.get(i) != user ) {
-             //if (allFriends.get(i).getInUtStatus().isIncheckad() == true) {
-            allaincheckade[i] = allFriends.get(i).getUserName() + " " + allFriends.get(i).getInUtStatus().getId();
-            // }
+                if (allFriends.get(i).getInUtStatus().isIncheckad() == true) {
+            allaincheckade[i] = allFriends.get(i).getUserName();
+                }
             }
         }
-        mainFrame.getCheckInPanel().getListAllaVanner().setListData(allaSomArray);
-        mainFrame.getCheckInPanel().getListIncheckadeVanner().setListData(allaSomArray);
+
+        mainFrame.getCheckInPanel().getListIncheckadeVanner().setListData(allaincheckade);
+
+
 
 
        // mainFrame.getCheckInPanel().getListIncheckadeVanner().setListData(allaincheckade);
@@ -85,8 +89,6 @@ public class ControllerKlient {
         InUtStatus status = new InUtStatus(true, id, new Date());
         user.setInUtStatus(status);
         serverConnection.sendObject(status);
-        allFriends.add(new User("TestKalle")); // TEST flytta till vettigt ställe
-        serverConnection.sendObject(new ContactListUpdate(allFriends)); //TEST flytta till vettigt ställe
     }
 
 
