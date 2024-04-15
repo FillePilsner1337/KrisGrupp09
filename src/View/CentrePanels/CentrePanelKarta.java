@@ -1,17 +1,20 @@
-package View;
+package View.CentrePanels;
+
+import View.MainFrame;
+import View.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CentrePanel extends JPanel {
+public class CentrePanelKarta extends JPanel {
 
     private MainFrame mF;
     private MainPanel mP;
     private int width;
     private int height;
-    private JLabel lblTest;
+    private JLabel lblTest; //Testcode to be deleted
 
-    public CentrePanel(MainFrame mF, MainPanel mP, int width, int height) {
+    public CentrePanelKarta(MainFrame mF, MainPanel mP, int width, int height) {
 
         this.mF = mF;
         this.mP = mP;
@@ -23,18 +26,18 @@ public class CentrePanel extends JPanel {
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         this.setLayout(null);
 
-//        this.setSize(mF.getWidth() - 3, getHeight() - mP.getSouthPanel().getHeight() - 3);
-
+        //Testcode to be deleted
         lblTest = new JLabel("No button is pressed yet.");
         lblTest.setHorizontalAlignment(SwingConstants.CENTER);
         lblTest.setVerticalAlignment(SwingConstants.CENTER);
         lblTest.setForeground(Color.black);
-//        this.add(lblTest);
 
-        makeLabel();
+        //Testcode to be deleted
+        makeLabelTest();
     }
 
-    private void makeLabel() {
+    //Testcode to be deleted
+    private void makeLabelTest() {
 
         int labelWidth = 200;//lblTest.getPreferredSize().width;
         int labelHeight = lblTest.getPreferredSize().height;
@@ -48,6 +51,7 @@ public class CentrePanel extends JPanel {
         this.add(lblTest);
     }
 
+    //Testcode to be deleted
     public void setLabel(String str) {
         lblTest.setText(str);
         lblTest.repaint();

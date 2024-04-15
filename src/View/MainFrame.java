@@ -1,7 +1,6 @@
 package View;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class MainFrame extends JFrame {
 
@@ -16,7 +15,6 @@ public class MainFrame extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mP);
-//        this.getContentPane().setBackground(Color.getHSBColor(120, 100, 240));
         this.setSize(width, height);
         this.setResizable(false);
         this.setVisible(true);
@@ -24,34 +22,71 @@ public class MainFrame extends JFrame {
 
     }
 
-    public void mouseClicked(int i){
+    public void mouseClickedSouth(int i){
 
         //ToDO
         switch (i) {
             case 0:
-                this.mP.getCentrePanel().setLabel( "Button: "+i+" pressed." );
+                //Code for Controller to backend goes here
                 System.out.println( "Button: "+i+" pressed." );
                 break;
             case 1:
-                this.mP.getCentrePanel().setLabel( "Button: "+i+" pressed." );
+                //Code for Controller to backend goes here
                 System.out.println( "Button: "+i+" pressed." );
                 break;
             case 2:
-                this.mP.getCentrePanel().setLabel( "Button: "+i+" pressed." );
+                //Code for Controller to backend goes here
                 System.out.println( "Button: "+i+" pressed." );
                 break;
             case 3:
-                this.mP.getCentrePanel().setLabel( "Button: "+i+" pressed." );
-                System.out.println( "Button: "+i+" pressed." );
-                break;
-            default:
-                this.mP.getCentrePanel().setLabel( "Button: "+i+" pressed." );
+                //Code for Controller to backend goes here
                 System.out.println( "Button: "+i+" pressed." );
                 break;
         }
 
+        centrePanelDisplaySelection(i);
+    }
+
+    public void mouseClickedNorth(){
+
+        //ToDO
+
+        //Code for Controller to backend goes here
+        System.out.println( "North panel pressed." );
+
+        centrePanelDisplaySelection(1);
     }
 
 
+    private void centrePanelDisplaySelection(int i) {
+        switch (i) {
+
+            case 0:
+                mP.getCentrePanelKarta().setVisible(true);
+                mP.getCentrePanelNotifications().setVisible(false);
+                mP.getCentrePanelInfo().setVisible(false);
+                mP.getCentrePanelPrepLista().setVisible(false);
+                break;
+            case 1:
+                mP.getCentrePanelKarta().setVisible(false);
+                mP.getCentrePanelNotifications().setVisible(true);
+                mP.getCentrePanelInfo().setVisible(false);
+                mP.getCentrePanelPrepLista().setVisible(false);
+                break;
+            case 2:
+                mP.getCentrePanelKarta().setVisible(false);
+                mP.getCentrePanelNotifications().setVisible(false);
+                mP.getCentrePanelInfo().setVisible(true);
+                mP.getCentrePanelPrepLista().setVisible(false);
+                break;
+            case 3:
+                mP.getCentrePanelKarta().setVisible(false);
+                mP.getCentrePanelNotifications().setVisible(false);
+                mP.getCentrePanelInfo().setVisible(false);
+                mP.getCentrePanelPrepLista().setVisible(true);
+                break;
+
+        }
+    }
 
 }

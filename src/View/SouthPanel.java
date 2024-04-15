@@ -19,7 +19,7 @@ public class SouthPanel extends JPanel implements ActionListener {
         this.mF = mF;
 
         this.setBorder(BorderFactory.createEmptyBorder());
-        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        this.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         this.setPreferredSize(new Dimension(75, 75));
 
         createButtons();
@@ -32,15 +32,21 @@ public class SouthPanel extends JPanel implements ActionListener {
 
     private void createButtons(){
 
-        btn1 = new JButton("Karta");
-        btn2 = new JButton("Aviseringar");
-        btn3 = new JButton("Info");
-        btn4 = new JButton("PrepperLista");
+        btn1 = new JButton();
+        btn2 = new JButton();
+        btn3 = new JButton();
+        btn4 = new JButton();
 
-        btn1.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-        btn2.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-        btn3.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-        btn4.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        btn1.setText("<html>Karta</html>");
+        btn2.setText("<html>Aviseringar</html>");
+        btn3.setText("<html>Info</html>");
+        btn4.setText("<html>Prepperlista</html>");
+
+        Dimension buttonSize = new Dimension(83, 75);
+        btn1.setPreferredSize(buttonSize);
+        btn2.setPreferredSize(buttonSize);
+        btn3.setPreferredSize(buttonSize);
+        btn4.setPreferredSize(buttonSize);
 
         btn1.addActionListener(this);
         btn2.addActionListener(this);
@@ -52,19 +58,26 @@ public class SouthPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if      (e.getSource() == btn1) {
-            mF.mouseClicked(1);
+            mF.mouseClickedSouth(1);
         }
 
         else if (e.getSource() == btn2) {
-            mF.mouseClicked(2);
+            mF.mouseClickedSouth(2);
         }
 
         else if (e.getSource() == btn3) {
-            mF.mouseClicked(3);
+            mF.mouseClickedSouth(3);
         }
 
         else if (e.getSource() == btn4) {
-            mF.mouseClicked(4);
+            mF.mouseClickedSouth(4);
         }
+    }
+
+    public void setNotificationText(String str) {
+
+        Timer timer = new Timer(100, this);
+        timer.start();
+
     }
 }
