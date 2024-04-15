@@ -11,11 +11,14 @@ public class ContactList {
         private ConcurrentHashMap<User, ArrayList<User>> contactList;
         private ControllerServer controllerServer;
 
+        private AllUsers allUsers;
 
 
-        public ContactList(ControllerServer controller) {
+
+        public ContactList(ControllerServer controller, AllUsers al) {
             this.contactList = new ConcurrentHashMap<>();
             this.controllerServer = controller;
+            this.allUsers = al;
 
         }
 
@@ -30,7 +33,10 @@ public class ContactList {
 
         public ArrayList<User> getContactlist(User user) {
             if (!contactList.containsKey(user)){
-                contactList.put(user, new ArrayList<User>());
+               // contactList.put(user, new ArrayList<User>());
+               //fullösning för dummydata
+                contactList.put(user,allUsers.getAllUsers() );
+
             }
 
             return contactList.get(user);

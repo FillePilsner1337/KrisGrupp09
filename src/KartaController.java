@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -46,9 +48,26 @@ public class KartaController {
 
         final JXMapViewer mapViewer = new JXMapViewer();
         mapViewer.setTileFactory(tileFactory);
+        JButton angePlats = new JButton("Ange plats");
+        mapViewer.add(angePlats);
+        angePlats.setVisible(true);
+        angePlats.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String start = JOptionPane.showInputDialog(mapViewer, "Ange koordinater (latitude, longitude): \n På detta sätt: " +
+                        "55.6088535, 12.9941134" +
+                        "\n Lund : 55.704551, 13.192441 \n Stockholm: 59.325587, 18.0552665 \n Göteborg: 57.7078558,11.9732139");
+                String[] parts = start.split(",", 2);
+                GeoPosition home = new GeoPosition(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
+                mapViewer.setAddressLocation(home);
+                mapViewer.setZoom(5);
+
+            }
+        });
 
 
         GeoPosition start = new GeoPosition(55.610348059975394, 12.994770622696002);
+
 
 
         mapViewer.setZoom(5);

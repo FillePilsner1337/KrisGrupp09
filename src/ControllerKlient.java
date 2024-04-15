@@ -39,6 +39,7 @@ public class ControllerKlient {
             if (!allFriends.isEmpty()) {
                 System.out.println(allFriends.get(0).getUserName());
             }
+            updateLists();
         }
         if (o instanceof Message){
             String msg = ((Message) o).getMsg();
@@ -50,6 +51,35 @@ public class ControllerKlient {
 
 
     }
+
+    private void updateLists() {
+
+        String[] allaSomArray = new String[allFriends.size()];
+        for (int i = 0; i < allFriends.size(); i++){
+           // if (allFriends.get(i) != user ){
+            allaSomArray[i] = allFriends.get(i).getUserName();
+           // }
+        }
+        String[] allaincheckade = new String[allFriends.size()];
+        for (int i = 0; i < allFriends.size(); i++){
+            if (allFriends.get(i) != user ) {
+             //if (allFriends.get(i).getInUtStatus().isIncheckad() == true) {
+            allaincheckade[i] = allFriends.get(i).getUserName() + " " + allFriends.get(i).getInUtStatus().getId();
+            // }
+            }
+        }
+        mainFrame.getCheckInPanel().getListAllaVanner().setListData(allaSomArray);
+        mainFrame.getCheckInPanel().getListIncheckadeVanner().setListData(allaSomArray);
+
+
+       // mainFrame.getCheckInPanel().getListIncheckadeVanner().setListData(allaincheckade);
+
+
+
+
+    }
+
+
 
     public void checkIn(String id) {
         InUtStatus status = new InUtStatus(true, id, new Date());

@@ -25,8 +25,10 @@ public class ControllerServer {
         this.connectedClients = new ConnectedClients();
         this.serverInputHandler = new ServerInputHandler(this);
         this.newClientConnection = new NewClientConnection(20000, this, serverInputHandler);
-        this.contactList = new ContactList(this);
+
         this.allUsers = new AllUsers(this);
+        this.contactList = new ContactList(this, allUsers);
+
         newClientConnection.start();
         System.out.println("Controller startad");
         

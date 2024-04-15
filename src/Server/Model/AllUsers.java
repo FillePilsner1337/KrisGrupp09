@@ -3,6 +3,7 @@ package Server.Model;
 import Server.Controller.ControllerServer;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AllUsers {
 
@@ -12,6 +13,23 @@ public class AllUsers {
     public AllUsers(ControllerServer controllerServer) {
         this.allUsers = new ArrayList<>();
         this.controllerServer = controllerServer;
+        fillWithDummyData();
+    }
+
+    private void fillWithDummyData() {
+        for (int i = 0; i < 10; i++){
+            User user = new User("Test" + i);
+            user.setInUtStatus(new InUtStatus(false,null,null));
+            allUsers.add(user);
+
+        }
+        for (int i = 5; i < allUsers.size(); i++){
+            allUsers.get(i).getInUtStatus().setIncheckad(true);
+            allUsers.get(i).getInUtStatus().setId("123456789");
+            allUsers.get(i).getInUtStatus().setTid(new Date());
+
+        }
+
     }
 
     public synchronized void put(User user){
@@ -41,5 +59,9 @@ public class AllUsers {
         }
         controllerServer.allContactUpdatesToAll();
 
+    }
+
+    public ArrayList<User> getAllUsers() {
+        return allUsers;
     }
 }

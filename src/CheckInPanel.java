@@ -72,6 +72,14 @@ public class CheckInPanel extends JPanel {
 
     }
 
+    public JList<String> getListAllaVanner() {
+        return listAllaVanner;
+    }
+
+    public JList<String> getListIncheckadeVanner() {
+        return listIncheckadeVanner;
+    }
+
     public JLabel getIncheckad() {
         return incheckad;
     }
