@@ -53,8 +53,14 @@ public class ControllerServer {
     public void allContactUpdatesToAll(){
 
         for (int i = 0; i < connectedClients.getListOfConnected().size(); i++){
-            connectedClients.getConnectionForUser(connectedClients.getListOfConnected().get(i)).sendObject
-                    (new ContactListUpdate(contactList.getContactlist(connectedClients.getListOfConnected().get(i))));
+            User user = connectedClients.getListOfConnected().get(i);
+            System.out.println("1");
+           Connection c = connectedClients.getConnectionForUser(user);
+            System.out.println("2");
+            c.sendObject(new ContactListUpdate(contactList.getContactlist(user)));
+            //c.sendObject(contactList.getContactlist(user));
+
+            System.out.println(user.getUserName());
 
         }
 

@@ -50,10 +50,10 @@ public class AllUsers {
     }
 
     public void updateStatus(InUtStatus status, User user) {
-        for (User allUser : allUsers) {
-            if (user.equals(allUser)) {
-                allUser.setInUtStatus(status);
-                System.out.println("uppdaterat status ");
+        for (int i = 0; i < allUsers.size(); i++) {
+            if (user.equals(allUsers.get(i))) {
+                allUsers.get(i).setInUtStatus(status);
+                System.out.println("uppdaterat status Update Status i All users update status  ");
             }
 
         }

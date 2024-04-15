@@ -87,4 +87,5 @@ public class CheckInPanel extends JPanel {
     public JButton getCheckaUt() {
         return checkaUtBtn;
     }
+
 }

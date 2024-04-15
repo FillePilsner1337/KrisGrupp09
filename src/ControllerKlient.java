@@ -2,6 +2,7 @@ import Server.Model.ContactListUpdate;
 import Server.Model.InUtStatus;
 import Server.Model.Message;
 import Server.Model.User;
+import Server.Model.*;
 import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.swing.*;
@@ -34,7 +35,10 @@ public class ControllerKlient {
             System.out.println(user.getInUtStatus().toString());
         }
          if (o instanceof ContactListUpdate){
+             System.out.println("Tog emot ContactListUpdate ");
             this.allFriends = ((ContactListUpdate) o).getList();
+             System.out.println(allFriends.get(10).getInUtStatus().isIncheckad());
+
             if (!allFriends.isEmpty()) {
                 System.out.println(allFriends.get(0).getUserName());
             }
@@ -43,7 +47,6 @@ public class ControllerKlient {
         if (o instanceof Message){
             String msg = ((Message) o).getMsg();
             JOptionPane.showMessageDialog(null,msg);
-
         }
 
 
@@ -72,6 +75,8 @@ public class ControllerKlient {
         }
 
         mainFrame.getCheckInPanel().getListIncheckadeVanner().setListData(allaincheckade);
+        mainFrame.getCheckInPanel().repaint();
+        mainFrame.getCheckInPanel().revalidate();
 
 
 

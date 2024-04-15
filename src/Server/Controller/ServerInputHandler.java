@@ -21,9 +21,9 @@ public class ServerInputHandler {
         if (o instanceof ContactListUpdate){
             ContactListUpdate update = (ContactListUpdate) o;
             controllerServer.updateContactlistFromUser(update, user);
-        }
-        else {
+        } else  {
             System.out.println("instance of funkar inte");
+            o.toString();
         }
 
 

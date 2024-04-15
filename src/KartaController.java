@@ -176,6 +176,7 @@ public class KartaController {
                                     "\n Vill du checka in? ", foundShelters.get(i).getId(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,img2);
                             numberOfShelters= 0;
                             if (choice == JOptionPane.YES_OPTION){
+                                mainFrame.getCheckInPanel().getIncheckad().setText("Du är incheckad i: " + foundShelters.get(i).getId());
                                 System.out.println("Du checkas in i " + foundShelters.get(i).getId() + " - sout bara för att se att det fungerar");
                                 controllerKlient.checkIn(foundShelters.get(i).getId());
                             }
@@ -189,8 +190,11 @@ public class KartaController {
                             "\n Kapacitet: " + foundShelters.get(0).getCapacaty() +
                             "\n Vill du checka in? ", foundShelters.get(0).getId(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,img2);
                     if (choice == JOptionPane.YES_OPTION) {
+                        mainFrame.getCheckInPanel().getIncheckad().setText("Du är incheckad i: " + foundShelters.get(0).getId());
                         System.out.println("Du checkas in i " + foundShelters.get(0).getId() + " - sout bara för att se att det fungerar");
                         controllerKlient.checkIn(foundShelters.get(0).getId());
+                        mainFrame.getCheckInPanel().repaint();
+                        mainFrame.getCheckInPanel().revalidate();
                     }
                 }
 
