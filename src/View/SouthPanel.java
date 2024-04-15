@@ -74,10 +74,4 @@ public class SouthPanel extends JPanel implements ActionListener {
         }
     }
 
-    public void setNotificationText(String str) {
-
-        Timer timer = new Timer(100, this);
-        timer.start();
-
-    }
 }

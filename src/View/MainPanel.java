@@ -3,6 +3,8 @@ package View;
 import View.CentrePanels.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainPanel extends JPanel {
 
@@ -12,8 +14,12 @@ public class MainPanel extends JPanel {
     private CentrePanelNotifications cPN;
     private CentrePanelInfo          cPI;
     private CentrePanelPrepLista     cPP;
-
     private NorthPanel                nP;
+    private NotificationHandler       nH;
+
+    private JLabel            scrollText;
+    private JScrollPane       scrollPane;
+
 
     public MainPanel( MainFrame mF, int width, int height ) {
 
@@ -23,10 +29,15 @@ public class MainPanel extends JPanel {
         this.setLayout  (new BorderLayout());
         this.setVisible (true);
 
-        //North
+        /*//North
         nP = new NorthPanel(mF, this, width);
-        this.add(nP, BorderLayout.NORTH);
-        setVisible(false);
+        nP.setVisible(false);
+        this.add(nP, BorderLayout.NORTH);*/
+
+        //Notification handler
+//        this.scrollText = new JLabel();
+        this.scrollPane = new JScrollPane();
+        nH = new NotificationHandler(scrollPane, this);
 
         //South
         sP = new SouthPanel(mF);
@@ -50,11 +61,12 @@ public class MainPanel extends JPanel {
 
     }
 
-    public NorthPanel getnP() {
+/*
+    public NorthPanel getNorthPanel() {
 
         return nP;
     }
-
+*/
 
     public SouthPanel getSouthPanel() {
 
@@ -81,6 +93,10 @@ public class MainPanel extends JPanel {
         return cPP;
     }
 
+    public NotificationHandler getNotificationHandler() {
+
+        return nH;
+    }
 
 }
 

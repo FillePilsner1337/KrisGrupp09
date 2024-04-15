@@ -7,15 +7,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class NorthPanel extends JPanel implements ActionListener {
+public class NorthPanel extends JPanel /*implements ActionListener*/ {
 
     private MainFrame mF;
     private MainPanel mP;
     private int width;
     private JLabel scrollText;
+    private Timer timer;
 
 
-    public NorthPanel(MainFrame mF,MainPanel mP, int width) {
+   /* public NorthPanel(MainFrame mF,MainPanel mP, int width) {
 
         this.mF = mF;
         this.mP = mP;
@@ -49,14 +50,30 @@ public class NorthPanel extends JPanel implements ActionListener {
 
         scrollText.setText(text);
 
-        Rectangle bounds = scrollText.getBounds();
-        int newX = bounds.x - 1;
-        if (newX + bounds.width < 0) {
-            newX = getWidth();
-        }
-        scrollText.setBounds(newX, bounds.y, bounds.width, bounds.height);
+        Dimension textSize = scrollText.getPreferredSize();
+        scrollText.setPreferredSize(scrollText.getPreferredSize());
+
+
+        revalidate();
+
+        timer = new Timer(50, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Rectangle bounds = scrollText.getBounds();
+                int newX = bounds.x - 1;
+                if (newX + bounds.width < 0) {
+                    newX = getWidth();
+                }
+                scrollText.setBounds(newX, bounds.y, bounds.width, bounds.height);
+            }
+        });
+        timer.start();
     }
 
+    public void stopScroll() {
+        timer.stop();
+    }
+*/
 
 
 
