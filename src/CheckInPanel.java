@@ -19,10 +19,6 @@ public class CheckInPanel extends JPanel {
         listAllaVanner = new JList<>();
         listIncheckadeVanner = new JList<>();
         setUp();
-
-
-
-
     }
 
     private void setUp() {
@@ -49,6 +45,7 @@ public class CheckInPanel extends JPanel {
         allaVanner.setLocation(200, 150);
         allaVanner.setFont(new Font(null, Font.BOLD, 15));
 
+
         incheckadeVanner.setSize(200, 30);
         incheckadeVanner.setLocation(400, 150);
         incheckadeVanner.setFont(new Font(null, Font.BOLD, 15));
@@ -68,8 +65,6 @@ public class CheckInPanel extends JPanel {
         listAllaVanner.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         add(listAllaVanner);
-
-
     }
 
     public JList<String> getListAllaVanner() {

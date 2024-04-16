@@ -26,7 +26,6 @@ public class MainFrame extends JFrame {
 
     public void setKartPanel(Component c){
         kartPanel.add(c, BorderLayout.CENTER);
-
     }
 
     public CheckInPanel getCheckInPanel() {

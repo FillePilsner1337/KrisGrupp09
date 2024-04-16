@@ -21,15 +21,12 @@ public class AllUsers {
             User user = new User("Test" + i);
             user.setInUtStatus(new InUtStatus(false,null,null));
             allUsers.add(user);
-
         }
         for (int i = 5; i < allUsers.size(); i++){
             allUsers.get(i).getInUtStatus().setIncheckad(true);
-            allUsers.get(i).getInUtStatus().setId("123456789");
+            allUsers.get(i).getInUtStatus().setId("175439-5");
             allUsers.get(i).getInUtStatus().setTid(new Date());
-
         }
-
     }
 
     public synchronized void put(User user){
@@ -42,9 +39,7 @@ public class AllUsers {
                     user = allUsers.get(i);
                     break;
                 }
-
             }
-
             controllerServer.sendSelfUpdate(user);
         }
     }
@@ -55,10 +50,8 @@ public class AllUsers {
                 allUsers.get(i).setInUtStatus(status);
                 System.out.println("uppdaterat status Update Status i All users update status  ");
             }
-
         }
         controllerServer.allContactUpdatesToAll();
-
     }
 
     public ArrayList<User> getAllUsers() {
