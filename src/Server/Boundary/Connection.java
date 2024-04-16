@@ -31,7 +31,7 @@ public class Connection {
     private ServerInputHandler serverInputHandler;
 
     private User user;
-
+    //samma här
     public Connection(Socket socket, ControllerServer controllerServer, ServerInputHandler serverInputHandler)  {
         System.out.println("Connection konstruktor rad 1");
         this.controllerServer = controllerServer;
@@ -46,20 +46,21 @@ public class Connection {
         System.out.println("new connection objekt");
 
 
-
+                //samma här med blankrader
     }
 
+        //metoden under fel på måsvingar
     public Socket getSocket() {
         return socket;
     }
 
     public void newConnection(){
         controllerServer.newLogIn(user, this);
-    }
+    } //metod fel med måsvingar
 
     public void sendObject(Object object){
         outputBuffer.put(object);
-
+        //blankrader
 
     }
 
@@ -67,7 +68,7 @@ public class Connection {
     private class OutputHandler extends Thread {
         private Socket socket;
 
-
+        //samma här
         public OutputHandler(Socket socket) {
 
             this.socket = socket;

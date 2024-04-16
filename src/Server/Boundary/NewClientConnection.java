@@ -15,7 +15,7 @@ public class NewClientConnection extends Thread {
 
     private ServerInputHandler serverInputHandler;
 
-
+    //samma här
     public NewClientConnection(int port, ControllerServer controllerServer, ServerInputHandler serverInputHandler)  {
         this.controllerServer = controllerServer;
         this.serverInputHandler = serverInputHandler;
@@ -38,7 +38,7 @@ public class NewClientConnection extends Thread {
                 Socket socket = serverSocket.accept();
                 new Connection(socket, controllerServer, serverInputHandler);
 
-
+                    //samma här med blankrader helt ranodm
 
             } catch (IOException e) {
                 System.out.println("IOException i NewClientConnection run metod");

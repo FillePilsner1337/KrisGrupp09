@@ -12,12 +12,14 @@ import java.util.Date;
 public class ControllerKlient {
 
     private MainFrame mainFrame;
+    //Potentiellt skriva ut kartaController, eller åtminstonde hålla det konsistent
     private KartaController kc;
     private ServerConnection serverConnection;
     private ArrayList<User> allFriends = new ArrayList<>();
 
 
     private User user;
+    //Fel i konstruktorn, ska stå controllerKlient
     public ControllerKlient(String username){
         this.user = new User(username);
         user.setInUtStatus(new InUtStatus(false,null,null));
@@ -32,11 +34,11 @@ public class ControllerKlient {
             System.out.println(user.getInUtStatus().toString());
         }
          if (o instanceof ContactListUpdate){
-             System.out.println("Tog emot ContactListUpdate ");
+             System.out.println("Tog emot ContactListUpdate "); // överlag i denna metoden så är det ett mellanslag in på vissa ställen och vissa inte
             this.allFriends = ((ContactListUpdate) o).getList();
              System.out.println(allFriends.get(10).getInUtStatus().isIncheckad());
 
-            if (!allFriends.isEmpty()) {
+            if (!allFriends.isEmpty()) { //här ett extra osvosv
                 System.out.println(allFriends.get(0).getUserName());
             }
             updateLists();
@@ -59,8 +61,8 @@ public class ControllerKlient {
 
 
         String[] allaincheckade = new String[allFriends.size()];
-        for (int i = 0; i < allFriends.size(); i++){
-            if (!allFriends.get(i).equals(user)) {
+        for (int i = 0; i < allFriends.size(); i++){ //här inget mellanslag
+            if (!allFriends.get(i).equals(user)) { //här är ett, håll det konsistent
                 if (allFriends.get(i).getInUtStatus().isIncheckad() == true) {
             allaincheckade[i] = allFriends.get(i).getUserName();
                 }

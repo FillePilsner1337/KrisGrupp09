@@ -20,7 +20,7 @@ public class ControllerServer {
 
 
 
-
+    //samma här, med stor bokstav
     public ControllerServer() {
         this.connectedClients = new ConnectedClients();
         this.serverInputHandler = new ServerInputHandler(this);
@@ -55,7 +55,7 @@ public class ControllerServer {
         for (int i = 0; i < connectedClients.getListOfConnected().size(); i++){
             User user = connectedClients.getListOfConnected().get(i);
             System.out.println("1");
-           Connection c = connectedClients.getConnectionForUser(user);
+           Connection c = connectedClients.getConnectionForUser(user); //denna rad ska ett mellanslag in
             System.out.println("2");
             c.sendObject(new ContactListUpdate(contactList.getContactlist(user)));
             //c.sendObject(contactList.getContactlist(user));
@@ -67,7 +67,7 @@ public class ControllerServer {
     }
     public void sendSelfUpdate(User user) {
         connectedClients.getConnectionForUser(user).sendObject(user);
-
+                                                            //vissa metoder som denna har en blankrad och vissa inte i slutet, förslagsvis bör vi ha ingen?
     }
 
     public void sendMessageToUser(User user, String msg){

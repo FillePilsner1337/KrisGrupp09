@@ -21,11 +21,13 @@ import org.jxmapviewer.viewer.*;
 
 
 public class KartaController {
+    //Saknas deklarering om dem är private, protected eller public
     HashSet<KrisWayPoint> waypoints = new HashSet<KrisWayPoint>();
     ArrayList<SrObject> srObjects;
     MainFrame mainFrame;
     ControllerKlient controllerKlient;
 
+    //Bör vara kartaController
     public KartaController(MainFrame m, ControllerKlient c) {
         this.mainFrame = m;
         this.controllerKlient = c;
@@ -37,7 +39,7 @@ public class KartaController {
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
         tileFactory.setThreadPoolSize(16);
-
+                                            //Inget vi tagit upp men är två blankrader här, förslagsvis bara köra på en? iaf alltid göra samma
 
         File cacheDir = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
         tileFactory.setLocalCache(new FileBasedLocalCache(cacheDir, false));
@@ -51,7 +53,7 @@ public class KartaController {
         angePlats.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String malmö = "Malmö, 55.6088535, 12.9941134";
+                String malmö = "Malmö, 55.6088535, 12.9941134"; //namnge stringarna på engelska kanske? åtminstonde inte använda ö? diskutera
                 String lund = "Lund, 55.704551, 13.192441";
                 String stockholm = "Stockholm, 59.325587, 18.0552665";
                 String göteborg = "Göteborg, 57.7078558, 11.9732139";
@@ -66,7 +68,7 @@ public class KartaController {
                         "\n Lund : 55.704551, 13.192441 \n Stockholm: 59.325587, 18.0552665 \n Göteborg: 57.7078558,11.9732139");
 
                  */
-                Object start1 = JOptionPane.showInputDialog(mapViewer, "Välj stad. Cancel för manuel inmatning", "Ange plats", JOptionPane.QUESTION_MESSAGE, null, menyval, null);
+                Object start1 = JOptionPane.showInputDialog(mapViewer, "Välj stad. Cancel för manuel inmatning", "Ange plats", JOptionPane.QUESTION_MESSAGE, null, menyval, null); //stavfel på manuell
                 if (start1 == null){
                     String start = JOptionPane.showInputDialog(mapViewer, "Ange koordinater (latitude, longitude): \n På detta sätt: " +
                             "55.6088535, 12.9941134" +
@@ -76,7 +78,7 @@ public class KartaController {
                     mapViewer.setAddressLocation(home);
                     mapViewer.setZoom(5);
                 }
-                else if (start1!=null) {
+                else if (start1!=null) { // mellanslag här efter if statementen men inte däruppe återigen bör de vara konsistent iaf
                     String start = start1.toString();
                     String[] parts = start.split(",", 3);
                     GeoPosition home = new GeoPosition(Double.parseDouble(parts[1]), Double.parseDouble(parts[2]));

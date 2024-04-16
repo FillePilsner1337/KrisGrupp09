@@ -35,16 +35,16 @@ public class ServerConnection {
         outputHandler.start();
 
 
-
+                                            //massa blankrader här helt random
     }
 
     public void sendObject(Object o){
         outputBuffer.put(o);
-    }
+    } //måsvingar är fel här, ska ner en rad på outputBUffer osv
     public void receivedObject(Object o){
         controllerKlient.recivedObject(o);
 
-
+                    //blankrader
     }
 
 
@@ -55,7 +55,7 @@ public class ServerConnection {
         public OutputHandler(Socket socket) {
 
             this.socket = socket;
-
+                                        //blankrader
         }
 
         public void run() {
@@ -93,7 +93,7 @@ public class ServerConnection {
         private Socket socket;
 
         public InputHandler(Socket socket) {
-
+                    //random blankrad
             this.socket = socket;
         }
 
@@ -117,7 +117,7 @@ public class ServerConnection {
             }
 
         }
-
+        //random blankrader
 
     }
 }
