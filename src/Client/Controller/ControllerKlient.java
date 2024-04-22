@@ -1,13 +1,15 @@
+package Client.Controller;
+
 import Server.Model.ContactListUpdate;
 import Server.Model.InUtStatus;
 import Server.Model.Message;
 import Server.Model.User;
-import Server.Model.*;
 import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Date;
+import Client.View.*;
 
 public class ControllerKlient {
 

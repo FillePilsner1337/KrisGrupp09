@@ -1,5 +1,7 @@
+package Client.View;
+
+import Client.Controller.ControllerKlient;
 import Server.Model.Buffer;
-import Server.Model.ContactList;
 import Server.Model.User;
 
 import java.io.IOException;

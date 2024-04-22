@@ -1,3 +1,5 @@
+package Client.Controller;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,10 +8,14 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.io.*;
 import java.util.*;
+import Client.Model.*;
+import Client.View.*;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 
+import Client.Controller.ControllerKlient;
+import Client.Model.SrObject;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;
@@ -30,6 +36,8 @@ public class KartaController {
         this.mainFrame = m;
         this.controllerKlient = c;
         loadFile();
+        //srObjects = readSrObject();
+       // saveFile();
         start();
     }
 
@@ -92,7 +100,7 @@ public class KartaController {
         mapViewer.setAddressLocation(start);
         System.out.println(new Date());
         for (int i = 0; i < srObjects.size(); i++){
-            waypoints.add(new KrisWayPoint(srObjects.get(i).pos, srObjects.get(i).adress, srObjects.get(i).idNummer, srObjects.get(i).kapacitet));
+            waypoints.add(new KrisWayPoint(srObjects.get(i).getPos(), srObjects.get(i).getAdress(), srObjects.get(i).getIdNummer(), srObjects.get(i).getKapacitet()));
 
         }
         System.out.println(new Date());
@@ -219,15 +227,6 @@ public class KartaController {
         mainFrame.setKartPanel(mapViewer);
     }
 
-    public void saveFile() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/srOb.dat"))) {
-            oos.writeObject(srObjects);
-            oos.flush();
-
-        } catch (IOException e){
-            System.out.println("Kunde inte spara fil");
-        }
-    }
 
     public void loadFile() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/srOB.dat"))) {
@@ -245,6 +244,35 @@ public class KartaController {
             }
         } catch (ClassNotFoundException e) {
             System.out.println("Kunde inte ladda fil ClassNotFoundException");
+        }
+    }
+    public static ArrayList<SrObject> readSrObject() {
+        ArrayList<SrObject> srObjects1 = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader( new FileReader("files/SR.csv"));
+            String[] parts;
+            SrObject srObject;
+            String str = br.readLine();
+            while( str != null ) {
+                parts = str.split( "," );
+                srObject = new SrObject(new GeoPosition(Double.parseDouble(parts[0]),Double.parseDouble(parts[1])),parts[2],parts[3],parts[4]);
+                srObjects1.add(srObject);
+                str = br.readLine();
+            }
+            br.close();
+        } catch( IOException e ) {
+            System.out.println( "readPersons: " + e );
+        }
+        return srObjects1;
+    }
+
+    public void saveFile() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/srOb.dat"))) {
+            oos.writeObject(srObjects);
+            oos.flush();
+
+        } catch (IOException e){
+            System.out.println("Kunde inte spara fil");
         }
     }
 }

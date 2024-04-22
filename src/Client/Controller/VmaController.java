@@ -1,3 +1,5 @@
+package Client.Controller;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -10,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import Client.View.*;
 
 public class VmaController {
     @JsonIgnoreProperties(ignoreUnknown = true)

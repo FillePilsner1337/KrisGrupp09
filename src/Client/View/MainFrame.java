@@ -1,5 +1,11 @@
+package Client.View;
+
+import Client.View.CheckInPanel;
+import Client.View.KartPanel;
+
 import javax.swing.*;
 import java.awt.*;
+import Client.Controller.*;
 
 public class MainFrame extends JFrame {
 
