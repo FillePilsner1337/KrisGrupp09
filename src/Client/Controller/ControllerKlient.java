@@ -1,9 +1,9 @@
 package Client.Controller;
 
-import Server.Model.ContactListUpdate;
-import Server.Model.InUtStatus;
-import Server.Model.Message;
-import Server.Model.User;
+import SharedModel.ContactListUpdate;
+import SharedModel.InUtStatus;
+import SharedModel.Message;
+import SharedModel.User;
 import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.swing.*;
@@ -13,19 +13,29 @@ import Client.View.*;
 
 public class ControllerKlient {
 
-    private MainFrame mainFrame;
     private KartaController kc;
     private ServerConnection serverConnection;
     private ArrayList<User> allFriends = new ArrayList<>();
+    private VmaController vmaController;
+    private GUIcontroller guIcontroller;
+    private IinfoFriends displayer;
 
 
     private User user;
     public ControllerKlient(String username){
         this.user = new User(username);
         user.setInUtStatus(new InUtStatus(false,null,null));
-        this.mainFrame = new MainFrame();
+        this.vmaController = new VmaController(this);
+        this.guIcontroller = new GUIcontroller(kc,this,vmaController);
+        this.kc = new KartaController(this);
+        guIcontroller.setKartaController(kc);
+        kc.setDisplayer(guIcontroller);
+        kc.start();
+        vmaController.setDisplayer(guIcontroller);
+        this.displayer=guIcontroller;
         this.serverConnection = new ServerConnection(user, this);
-        this.kc = new KartaController(mainFrame, this);
+
+        vmaController.fetchAndDisplayVmaData();
     }
 
     public void recivedObject(Object o){
@@ -51,41 +61,34 @@ public class ControllerKlient {
 
     private void updateLists() {
 
-        String[] allaSomArray = new String[allFriends.size()];
+        String[] friendList = new String[allFriends.size()];
         for (int i = 0; i < allFriends.size(); i++){
             if (!allFriends.get(i).equals(user) ){
-            allaSomArray[i] = allFriends.get(i).getUserName();
+            friendList[i] = allFriends.get(i).getUserName();
             }
         }
-        mainFrame.getCheckInPanel().getListAllaVanner().setListData(allaSomArray);
+        displayer.displayFriends(friendList);
 
 
-        String[] allaincheckade = new String[allFriends.size()];
-        for (int i = 0; i < allFriends.size(); i++){
+        String[] friendsInShelter = new String[allFriends.size()];
+        for (int i = 0; i < allFriends.size(); i++) {
             if (!allFriends.get(i).equals(user)) {
                 if (allFriends.get(i).getInUtStatus().isIncheckad() == true) {
-            allaincheckade[i] = allFriends.get(i).getUserName();
+                    friendsInShelter[i] = allFriends.get(i).getUserName();
                 }
             }
         }
-        mainFrame.getCheckInPanel().getListIncheckadeVanner().setListData(allaincheckade);
-        mainFrame.getCheckInPanel().repaint();
-        mainFrame.getCheckInPanel().revalidate();
-       // mainFrame.getCheckInPanel().getListIncheckadeVanner().setListData(allaincheckade);
+        displayer.displayFriendsInShelter(friendsInShelter);
+
     }
 
 
 
     public void checkIn(String id) {
-        mainFrame.getCheckInPanel().getCheckaUt().setEnabled(true);
+        guIcontroller.enableCheckOutButton();
         InUtStatus status = new InUtStatus(true, id, new Date());
         user.setInUtStatus(status);
         serverConnection.sendObject(status);
-        mainFrame.getCheckInPanel().getCheckaUt().addActionListener(new CheckoutActionListener(this));
-    }
-
-    public MainFrame getMainFrame(){
-        return mainFrame;
     }
 
     public User getUser(){
@@ -96,9 +99,16 @@ public class ControllerKlient {
         return serverConnection;
     }
 
-    public ArrayList<User> getAllFriends(){
+    public ArrayList<User> getAllFriends() {
         return allFriends;
     }
+
+    public void checkout(){
+        InUtStatus checkoutStatus = new InUtStatus(false,null,null);
+        user.setInUtStatus(checkoutStatus);
+        serverConnection.sendObject(checkoutStatus);
+    }
+
 
 
     public static void main(String[] args) {

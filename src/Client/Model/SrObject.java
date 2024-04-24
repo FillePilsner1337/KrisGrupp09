@@ -34,6 +34,8 @@ public class SrObject implements Serializable {
     public String getKapacitet() {
         return kapacitet;
     }
+
+
 }
 
 

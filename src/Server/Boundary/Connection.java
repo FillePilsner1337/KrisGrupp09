@@ -6,7 +6,7 @@ import Server.Controller.ControllerServer;
 import Server.Controller.ServerInputHandler;
 import Server.Model.Buffer;
 import Server.Model.ConnectedClients;
-import Server.Model.User;
+import SharedModel.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

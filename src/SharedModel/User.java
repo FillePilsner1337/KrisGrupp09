@@ -1,7 +1,6 @@
-package Server.Model;
+package SharedModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class User implements Serializable {
 

@@ -1,20 +1,24 @@
 package Client.View;
 
+import Client.Controller.GUIcontroller;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class CheckInPanel extends JPanel {
     private JLabel incheckad;
     private JButton checkaUtBtn;
     private JButton laggTillVannBtn;
-
     private  JList<String>  listAllaVanner;
-
     private  JList<String> listIncheckadeVanner;
+    private GUIcontroller guIcontroller;
 
 
 
-    public CheckInPanel(){
+    public CheckInPanel(GUIcontroller guIcontroller){
+        this.guIcontroller = guIcontroller;
         incheckad = new JLabel("Du är inte incheckad");
         checkaUtBtn = new JButton("Checka ut");
         laggTillVannBtn = new JButton("Lägg till vän");
@@ -39,6 +43,7 @@ public class CheckInPanel extends JPanel {
 
         add(incheckad);
         add(checkaUtBtn);
+        setCheckoutActionListener(checkaUtBtn);
         add(laggTillVannBtn);
 
         JLabel allaVanner = new JLabel("Alla vänner");
@@ -85,4 +90,13 @@ public class CheckInPanel extends JPanel {
         return checkaUtBtn;
     }
 
+    public void setCheckoutActionListener(JButton checkout){
+        checkout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkaUtBtn.setEnabled(false);
+                guIcontroller.checkout();
+            }
+        });
+    }
 }

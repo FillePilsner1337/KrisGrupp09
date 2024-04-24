@@ -1,6 +1,7 @@
 package Server.Model;
 
 import Server.Boundary.Connection;
+import SharedModel.User;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,5 +1,6 @@
 package Client.Controller;
 
+import Client.Model.VMAobject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -11,10 +12,20 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import Client.View.*;
 
 public class VmaController {
+    private Ivma displayer;
+    ArrayList<VMAobject> vmaObjects = new ArrayList<>();
+
+    ControllerKlient controllerKlient;
+
+    public VmaController(ControllerKlient controllerKlient) {
+        this.controllerKlient = controllerKlient;
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class VmaMessage {
         @JsonProperty("Identifier")
@@ -69,7 +80,7 @@ public class VmaController {
         public String altitude;
     }
 
-    public static void fetchAndDisplayVmaData(VmaPanel panel) {
+    public void fetchAndDisplayVmaData() {
         SwingUtilities.invokeLater(() -> {
             String url = "https://api.krisinformation.se/v3/testvmas";
             HttpClient client = HttpClient.newHttpClient();
@@ -87,28 +98,38 @@ public class VmaController {
                 VmaMessage[] vmaMessages = objectMapper.readValue(response.body(), VmaMessage[].class);
 
                 for (VmaMessage vmaMessage : vmaMessages) {
-                    panel.appendText("Identifier: " + vmaMessage.identifier);
-                    panel.appendText("Headline: " + vmaMessage.headline);
-                    panel.appendText("BodyText: " + vmaMessage.bodyText);
-                    panel.appendText("Web: " + vmaMessage.web);
+
+                    String headline = vmaMessage.headline;
+                    String published = vmaMessage.published;
+                    String bodyText = vmaMessage.bodyText;
+
+
                     if (vmaMessage.areas != null) {
                         for (Area area : vmaMessage.areas) {
-                            panel.appendText("Area Type: " + area.type);
-                            panel.appendText("Area Description: " + area.description);
-                            panel.appendText("Area Coordinate: " + area.coordinate);
+                            String plats = area.description;
+
                             if (area.coordinateObject != null) {
-                                panel.appendText("Latitude: " + area.coordinateObject.latitude);
-                                panel.appendText("Longitude: " + area.coordinateObject.longitude);
-                                panel.appendText("Altitude: " + area.coordinateObject.altitude);
+                                String lon = area.coordinateObject.longitude;
+                                String lat = area.coordinateObject.latitude;
+
+                                vmaObjects.add(new VMAobject(headline, published, bodyText, plats, lon, lat));
                             }
                         }
                     }
-                    panel.appendText("-----------------------------------");
+
+
                 }
+
+                displayer.displayVMA(vmaObjects);
+
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void setDisplayer(Ivma displauyer){
+        this.displayer = displauyer;
     }
 }
 

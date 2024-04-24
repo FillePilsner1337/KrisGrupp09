@@ -2,7 +2,7 @@ package Client.View;
 
 import Client.Controller.ControllerKlient;
 import Server.Model.Buffer;
-import Server.Model.User;
+import SharedModel.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

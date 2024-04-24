@@ -1,6 +1,6 @@
 package Server.Controller;
 
-import Server.Model.*;
+import SharedModel.*;
 
 public class ServerInputHandler {
 
@@ -12,7 +12,7 @@ public class ServerInputHandler {
     }
 
     public void newObjectReceived(Object o, User user){
-        if (o instanceof InUtStatus ){
+        if (o instanceof InUtStatus){
             InUtStatus status = (InUtStatus) o;
             System.out.println(status.toString());
             controllerServer.changeStatus(status, user);

@@ -11,16 +11,20 @@ public class MainFrame extends JFrame {
 
     private JTabbedPane tabs = new JTabbedPane();
     private KartPanel kartPanel = new KartPanel();
-    private CheckInPanel checkInPanel = new CheckInPanel();
+    private CheckInPanel checkInPanel;
+    private GUIcontroller guIcontroller;
 
-    private VmaPanel vmaPanel = new VmaPanel();
+    private VmaPanel vmaPanel;
 
 
-    public  MainFrame() {
+    public  MainFrame(GUIcontroller guIcontroller) {
+        this.guIcontroller = guIcontroller;
         this.setTitle("KRIS");
         this.setSize(800,600);
+        this.checkInPanel = new CheckInPanel(guIcontroller);
+        this.vmaPanel =new VmaPanel(this);
         setupGUI();
-        VmaController.fetchAndDisplayVmaData(vmaPanel);
+
     }
 
     private void setupGUI() {
@@ -40,6 +44,18 @@ public class MainFrame extends JFrame {
 
     public CheckInPanel getCheckInPanel() {
         return checkInPanel;
+    }
+
+    public VmaPanel getVmaPanel() {
+        return vmaPanel;
+    }
+
+    public GUIcontroller getGuIcontroller() {
+        return guIcontroller;
+    }
+
+    public JTabbedPane getTabs() {
+        return tabs;
     }
 }
 

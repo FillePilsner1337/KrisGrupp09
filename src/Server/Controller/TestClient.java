@@ -1,6 +1,6 @@
 package Server.Controller;
 
-import Server.Model.User;
+import SharedModel.User;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;

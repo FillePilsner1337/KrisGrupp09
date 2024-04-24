@@ -1,4 +1,4 @@
-package Server.Model;
+package SharedModel;
 
 public class Message {
     private String msg;
