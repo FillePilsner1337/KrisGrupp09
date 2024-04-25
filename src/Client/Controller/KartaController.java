@@ -52,7 +52,6 @@ public class KartaController {
         File cacheDir = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
         tileFactory.setLocalCache(new FileBasedLocalCache(cacheDir, false));
 
-        //final JXMapViewer mapViewer = new JXMapViewer();
         mapViewer.setTileFactory(tileFactory);
         JButton angePlats = new JButton("Ange plats");
         mapViewer.add(angePlats);
@@ -61,33 +60,31 @@ public class KartaController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String start1 = displayer.chooseLocationDialog(cities);
-                if (start1 == null) {
-                    String start = displayer.enterManually();
-                    if (start == null){
-                        GeoPosition myStartPos = new GeoPosition(55.610348059975394, 12.994770622696002);
-                        mapViewer.setAddressLocation(myStartPos);
-                        mapViewer.setZoom(5);
-                    }
-                    else {
-                        String[] parts = start.split(",", 2);
-                        GeoPosition home = new GeoPosition(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
-                        mapViewer.setAddressLocation(home);
-                        mapViewer.setZoom(5);
-                    }
-                } else if (start1 != null) {
+                if (start1 != null){
                     String[] parts = start1.split(",", 3);
                     GeoPosition home = new GeoPosition(Double.parseDouble(parts[1]), Double.parseDouble(parts[2]));
-                    mapViewer.setAddressLocation(home);
-                    mapViewer.setZoom(5);
+                    startPos(home);
+                }
+                else {
+                   String start = displayer.enterManually();
+                   if (start != null){
+                       String[] parts = start.split(",", 2);
+                       try { //felhantering om man skulle skriva input på fel sätt.
+                           GeoPosition home = new GeoPosition(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
+                           startPos(home);
+                       }catch (Exception ex){
+                           startPos(null); //tar dig till niagara om exception inträffar.
+                       }
+                   }
+                   else{
+                       GeoPosition home = null;
+                       startPos(home);
+                   }
                 }
             }
         });
 
-        GeoPosition start = new GeoPosition(55.610348059975394, 12.994770622696002);
-
-        mapViewer.setZoom(5);
-        mapViewer.setAddressLocation(start);
-        System.out.println(new Date());
+        startPos(null);
         for (int i = 0; i < srObjects.size(); i++) {
             waypoints.add(new KrisWayPoint(srObjects.get(i).getPos(), srObjects.get(i).getAdress(), srObjects.get(i).getIdNummer(), srObjects.get(i).getKapacitet()));
         }
@@ -131,7 +128,6 @@ public class KartaController {
         mapViewer.setOverlayPainter(waypointPainter);
 
         mapViewer.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent me) {
                 Point clickedPoint = me.getPoint();
@@ -142,49 +138,42 @@ public class KartaController {
                 ArrayList<KrisWayPoint> foundShelters = new ArrayList<>();
                 for (KrisWayPoint waypoint : waypoints) {
                     String waypointString = String.valueOf(waypoint.getGeo());
-
                     String[] waypointStringSplit = waypointString.split(",", 2);
-
                     if ((clickedpointStringSplit[0].substring(0, 8).equals(waypointStringSplit[0].substring(0, 8))) && (clickedpointStringSplit[1].substring(0, 8).equals(waypointStringSplit[1].substring(0, 8)))) {
-                        foundShelters.add(waypoint);
+                        foundShelters.add(waypoint); //Bryt ut denna delen till en egen metod och gör den beroende på getZoomLevel
                     }
                 }
-
+                /*
+                Ska mest troligt ska denna delen flyttas till det nya framefönstret.
+                 */
                 ImageIcon img = new ImageIcon("files/1.png");
                 Image imgRescale = img.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
                 ImageIcon img2 = new ImageIcon(imgRescale);
 
                 if (foundShelters.size() > 1) {
                     int numberOfShelters = foundShelters.size();
-                    System.out.println(numberOfShelters);
                     for (int i = 0; i < foundShelters.size(); i++) {
                         if (numberOfShelters > 1) {
-                            int choice = displayer.displayShelterInfo(foundShelters, i, img2);
+                            int choice = displayer.displayShelterInfo(foundShelters, i, img2); //Kan kommat att ändras i framtiden
                             numberOfShelters--;
                             if (choice == 0) {
-                                displayer.setCheckinText(foundShelters.get(i).getId());
-                                controllerKlient.checkIn(foundShelters.get(i).getId());
+                                checkIn(foundShelters, i);
                                 foundShelters.clear();
-                                mapViewer.repaint();
                                 break;
                             }
                         } else {
-                            int choice = displayer.displayShelterInfo(foundShelters, i, img2);
+                            int choice = displayer.displayShelterInfo(foundShelters, i, img2); //Kan kommat att ändras i framtiden
                             numberOfShelters = 0;
                             if (choice == 0) {
-                                displayer.setCheckinText(foundShelters.get(i).getId());
-                                controllerKlient.checkIn(foundShelters.get(i).getId());
-                                mapViewer.repaint();
+                                checkIn(foundShelters,i);
                             }
                         }
                     }
                 } else if (foundShelters.size() == 1) {
-                    int choice = displayer.displayShelterInfo(foundShelters, foundShelters.size() - 1, img2);
+                    int i = foundShelters.size()-1;
+                    int choice = displayer.displayShelterInfo(foundShelters, i, img2); //Kan kommat att ändras i framtiden
                     if (choice == 0) {
-                        displayer.setCheckinText(foundShelters.get(0).getId());
-                        controllerKlient.checkIn(foundShelters.get(0).getId());
-                        //guiController.repaintGUI();
-                        mapViewer.repaint();
+                        checkIn(foundShelters, i);
                     }
                 }
             }
@@ -197,6 +186,19 @@ public class KartaController {
         mapViewer.setZoom(7);
     }
 
+    public void startPos(GeoPosition geoPosition){
+        if (geoPosition == null) {
+             geoPosition = new GeoPosition(55.610348059975394, 12.994770622696002);
+        }
+        mapViewer.setZoom(5);
+        mapViewer.setAddressLocation(geoPosition);
+    }
+
+    public void checkIn(ArrayList<KrisWayPoint> foundShelters, int i){
+        displayer.setCheckinText(foundShelters.get(i).getId());
+        controllerKlient.checkIn(foundShelters.get(i).getId());
+        mapViewer.repaint();
+    }
 
     public void loadFile() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/srOB.dat"))) {
