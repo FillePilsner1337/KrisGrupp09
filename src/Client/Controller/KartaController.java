@@ -34,7 +34,7 @@ public class KartaController {
     final JXMapViewer mapViewer = new JXMapViewer();
     ControllerKlient controllerKlient;
     private String[] cities = new String[]{"Malmö, 55.6088535, 12.9941134", "Lund, 55.704551, 13.192441", "Stockholm, 59.325587, 18.0552665",
-            "Göteborg, 57.7078558, 11.9732139"};
+            "Göteborg, 57.7078558, 11.9732139", "Ronneby, 56.210434, 15.276022900000043"};
 
     public KartaController(ControllerKlient ck) {
         this.controllerKlient = ck;
