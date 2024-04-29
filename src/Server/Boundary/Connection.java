@@ -6,6 +6,8 @@ import Server.Controller.ControllerServer;
 import Server.Controller.ServerInputHandler;
 import Server.Model.Buffer;
 import Server.Model.ConnectedClients;
+import SharedModel.ConfirmLogon;
+import SharedModel.Message;
 import SharedModel.User;
 
 import java.io.IOException;
@@ -32,6 +34,8 @@ public class Connection {
 
     private User user;
 
+    private boolean loggingOn = true;
+
     public Connection(Socket socket, ControllerServer controllerServer, ServerInputHandler serverInputHandler)  {
         System.out.println("Connection konstruktor rad 1");
         this.controllerServer = controllerServer;
@@ -55,11 +59,34 @@ public class Connection {
 
     public void newConnection(){
         controllerServer.newLogIn(user, this);
+        sendObject(new ConfirmLogon());
     }
 
     public void sendObject(Object object){
         outputBuffer.put(object);
 
+
+    }
+
+    private void checkUserNamneAndPassword(User u) {
+        boolean exists = controllerServer.checkUserExists(u);
+         if (!exists){
+            sendObject(new Message("Felaktigt användarnamn"));
+             System.out.println("Användare finns ej");
+
+         }
+         boolean password = controllerServer.checkPassword(u);
+         if (exists && password){
+             user = u;
+             newConnection();
+             loggingOn = false;
+             System.out.println("Rätt användarnamn och lösenord");
+         }
+         if (exists && !password) {
+             sendObject(new Message("Felaktigt lösenord"));
+             System.out.println("Fel lösenord");
+
+         }
 
     }
 
@@ -122,33 +149,33 @@ public class Connection {
 
         public void run() {
             try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());) {
+                while (loggingOn){
+                    Object o = ois.readObject();
+                    if (o instanceof User){
+
+                        checkUserNamneAndPassword((User)o);
+                    }
+
+                }
 
 
                 while (!Thread.interrupted()) {
                     Object o = ois.readObject();
-                    if (o instanceof User){
-                        user = (User)o;
-                        newConnection();
-                        System.out.println("User objekt mottagit");
-                    }
-                    else {
-                        System.out.println("Annat ob mottaget");
+
                         serverInputHandler.newObjectReceived(o, user);
                     }
 
 
 
-                }
-            } catch (IOException e) {
+
+            } catch (Exception e) {
                 System.out.println("FEL Run metoden i InputHandler IOException");
                 System.out.println(e.getMessage());
 
-            } catch (ClassNotFoundException e) {
-                System.out.println("FEL Run metoden i InputHandler InterruptedException");
-                System.out.println(e.getMessage());
+            }
 
-            } finally {
-                controllerServer.userDisconnect(user);
+             finally {
+                //controllerServer.userDisconnect(user);
                 try{
                     this.socket.close();
                 }
@@ -163,6 +190,8 @@ public class Connection {
 
 
     }
+
+
 }
 
 

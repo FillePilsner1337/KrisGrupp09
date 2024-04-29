@@ -1,9 +1,6 @@
 package Client.Controller;
 
-import SharedModel.ContactListUpdate;
-import SharedModel.InUtStatus;
-import SharedModel.Message;
-import SharedModel.User;
+import SharedModel.*;
 import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.swing.*;
@@ -23,7 +20,7 @@ public class ControllerKlient {
 
     private User user;
     public ControllerKlient(String username){
-        this.user = new User(username);
+        this.user = new User(username, "test");
         user.setInUtStatus(new InUtStatus(false,null,null));
         this.vmaController = new VmaController(this);
         this.guIcontroller = new GUIcontroller(kc,this,vmaController);
@@ -38,10 +35,16 @@ public class ControllerKlient {
         vmaController.fetchAndDisplayVmaData();
     }
 
+    
+
     public void recivedObject(Object o){
         if (o instanceof User){
             user = (User)o;
             System.out.println(user.getInUtStatus().toString());
+        }
+        if (o instanceof ConfirmLogon){
+            guIcontroller.userAndPassOk();
+
         }
          if (o instanceof ContactListUpdate){
              System.out.println("Tog emot ContactListUpdate ");
@@ -117,10 +120,14 @@ public class ControllerKlient {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        logInDialog();
+        new ControllerKlient("Test");
     }
 
-    public static void logInDialog() {
+    public void logon(String userName, String password) {
+        serverConnection.sendObject(new User(userName, password));
+    }
+
+    /*public static void logInDialog() {
         String username = JOptionPane.showInputDialog(null, "Ange användarnamn");
 
         if (username == null || username.isEmpty()){
@@ -131,5 +138,7 @@ public class ControllerKlient {
             new ControllerKlient(username);
         }
     }
+
+     */
 }
 

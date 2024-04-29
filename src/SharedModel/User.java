@@ -6,9 +6,11 @@ public class User implements Serializable {
 
     private String userName;
     private InUtStatus inUtStatus;
+    private String password;
 
-    public User(String userName) {
+    public User(String userName, String password) {
         this.userName = userName;
+        this.password = password;
 
 
 
@@ -36,6 +38,14 @@ public class User implements Serializable {
         if(obj!=null && obj instanceof User)
             return userName.equals(((User)obj).getUserName());
         return false;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getUserName() {

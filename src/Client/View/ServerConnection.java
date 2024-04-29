@@ -63,8 +63,7 @@ public class ServerConnection {
         public void run() {
 
             try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());) {
-                oos.writeObject(user);
-                oos.flush();
+
 
                 while (!Thread.interrupted()) {
                     Object obj = outputBuffer.get();
