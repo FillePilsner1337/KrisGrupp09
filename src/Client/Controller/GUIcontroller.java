@@ -2,9 +2,11 @@ package Client.Controller;
 import Client.Model.KrisWayPoint;
 import Client.Model.VMAobject;
 import Client.View.*;
+import SharedModel.User;
 import org.jxmapviewer.JXMapViewer;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
@@ -60,22 +62,63 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         mainFrame.getCheckInPanel().getIncheckad().setText(controllerKlient.getUser().getUserName() + ", Du är nu incheckad i " + shelter);
     }
     
-    public int displayShelterInfo(ArrayList<KrisWayPoint> foundShelters, int i,ImageIcon img2){
-        int choice = JOptionPane.showConfirmDialog(mainFrame, " ID: " + foundShelters.get(i).getId() +
-                "\n Fastighet: " + foundShelters.get(i).getAddress() +
-                "\n Platser: " + foundShelters.get(i).getCapacaty() +
-                "\n Vill du checka in? ", foundShelters.get(i).getId(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,img2);
+    public int displayShelterInfo(ArrayList<KrisWayPoint> foundShelters, int i){
+        ImageIcon img = new ImageIcon("files/1.png");
+        Image imgRescale = img.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+        ImageIcon img2 = new ImageIcon(imgRescale);
+
+        StringBuilder friendsInShelterBuilder= new StringBuilder();
+        for (int j = 0; j < controllerKlient.getAllFriends().size(); j++){
+            if (controllerKlient.getAllFriends().get(j).getInUtStatus().isIncheckad()) {
+
+                if (controllerKlient.getAllFriends().get(j).getInUtStatus().getId().equals(foundShelters.get(i).getId())) {
+                    friendsInShelterBuilder.append(controllerKlient.getAllFriends().get(j).getUserName()).append("\n ");
+                }
+            }
+        };
+        String friendsInShelter = friendsInShelterBuilder.toString();
+        System.out.println(friendsInShelter);
+
+        int choice;
+        if (!friendsInShelter.isEmpty()) {
+             choice = JOptionPane.showConfirmDialog(mainFrame, " ID: " + foundShelters.get(i).getId() +
+                    "\n Fastighet: " + foundShelters.get(i).getAddress() +
+                    "\n Platser: " + foundShelters.get(i).getCapacaty() + "\n" +
+                    "\n Incheckade vänner: " +
+                    "\n " + friendsInShelter +
+                    "\n Vill du checka in? ", foundShelters.get(i).getId(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, img2);
+        }
+        else {
+            choice = JOptionPane.showConfirmDialog(mainFrame, " ID: " + foundShelters.get(i).getId() +
+                    "\n Fastighet: " + foundShelters.get(i).getAddress() +
+                    "\n Platser: " + foundShelters.get(i).getCapacaty() +
+                    "\n Vill du checka in? ", foundShelters.get(i).getId(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, img2);
+        }
         return choice;
     }
 
     public String chooseLocationDialog(String[] cities){
-        Object start1 = JOptionPane.showInputDialog(mainFrame, "Välj stad. Cancel för manuel inmatning", "Ange plats", JOptionPane.QUESTION_MESSAGE, null, cities, null);
-        String returnString = null;
-        try {
-             returnString = start1.toString();
+        String[] options = {"Ok", "Manuell inmatning"};
+        JComboBox menuBar = new JComboBox(cities);
+
+        //Object start1 = JOptionPane.showInputDialog(mainFrame, "Välj stad.", "Ange plats", JOptionPane.QUESTION_MESSAGE, null, cities, null);
+        int choice = JOptionPane.showOptionDialog(
+                mainFrame,
+                menuBar,
+                "Välj stad",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                options[0]);
+        if (choice == 0){
+            String pickedCity = cities[menuBar.getSelectedIndex()];
+            return pickedCity;
         }
-        catch (Exception e){}
-            return returnString;
+        else if (choice == 1){
+            String nullValue = null;
+        }
+        return null;
     }
     public String enterManually(){
         String manualInput = JOptionPane.showInputDialog(mainFrame, "Ange koordinater (latitude, longitude): \n På detta sätt: " +

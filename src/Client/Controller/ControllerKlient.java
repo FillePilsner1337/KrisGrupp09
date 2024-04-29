@@ -16,6 +16,7 @@ public class ControllerKlient {
     private KartaController kc;
     private ServerConnection serverConnection;
     private ArrayList<User> allFriends = new ArrayList<>();
+
     private VmaController vmaController;
     private GUIcontroller guIcontroller;
     private IinfoFriends displayer;

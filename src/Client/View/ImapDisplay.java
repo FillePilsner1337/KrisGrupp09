@@ -9,7 +9,7 @@ public interface ImapDisplay {
 
     public void displayMap(JXMapViewer mapViewer);
     public void setCheckinText(String shelter);
-    public int displayShelterInfo(ArrayList<KrisWayPoint> foundShelters, int i, ImageIcon img);
+    public int displayShelterInfo(ArrayList<KrisWayPoint> foundShelters, int i);
     public String chooseLocationDialog(String[] cities);
     public String enterManually();
 }

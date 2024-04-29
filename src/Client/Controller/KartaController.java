@@ -39,6 +39,10 @@ public class KartaController {
     public KartaController(ControllerKlient ck) {
         this.controllerKlient = ck;
         loadFile();
+        /*
+        Dessa används inte för tillfället men de kommer ligga kvar då de kan behövas första gången man startar applikationen från
+        en ny dator.
+         */
         //srObjects = readSrObject();
         // saveFile();
         //start();
@@ -136,25 +140,38 @@ public class KartaController {
                 String[] clickedpointStringSplit = clickedpointString.split(",", 2);
                 int numberOfResults = 0;
                 ArrayList<KrisWayPoint> foundShelters = new ArrayList<>();
+                System.out.println(mapViewer.getZoom());
+                System.out.println(clickedpointString);
                 for (KrisWayPoint waypoint : waypoints) {
+                    int[] howClose = clickDependingOnZoom(mapViewer.getZoom());
                     String waypointString = String.valueOf(waypoint.getGeo());
                     String[] waypointStringSplit = waypointString.split(",", 2);
-                    if ((clickedpointStringSplit[0].substring(0, 8).equals(waypointStringSplit[0].substring(0, 8))) && (clickedpointStringSplit[1].substring(0, 8).equals(waypointStringSplit[1].substring(0, 8)))) {
-                        foundShelters.add(waypoint); //Bryt ut denna delen till en egen metod och gör den beroende på getZoomLevel
+
+                    /*
+                    Om man är på zoomnivå 5 eller högre kommer det inte gå att klicka på ett skyddsrum som koden är implementerad
+                    i detta läget. Men det är lättare att klicka på ett skyddsrum om man befinner sig i zoomnivå 3-4.
+                     */
+                    try {
+                        if ((clickedpointStringSplit[0].substring(1, 15).regionMatches(0, waypointStringSplit[0], 1, howClose[0])) && (clickedpointStringSplit[1].substring(0, 15).regionMatches(0, waypointStringSplit[1], 0, howClose[1]))) {
+                            foundShelters.add(waypoint);
+                        }
+                    }catch (Exception exceptionClickedWaypoint) {
                     }
                 }
                 /*
                 Ska mest troligt ska denna delen flyttas till det nya framefönstret.
-                 */
+
                 ImageIcon img = new ImageIcon("files/1.png");
                 Image imgRescale = img.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
                 ImageIcon img2 = new ImageIcon(imgRescale);
+
+                 */
 
                 if (foundShelters.size() > 1) {
                     int numberOfShelters = foundShelters.size();
                     for (int i = 0; i < foundShelters.size(); i++) {
                         if (numberOfShelters > 1) {
-                            int choice = displayer.displayShelterInfo(foundShelters, i, img2); //Kan kommat att ändras i framtiden
+                            int choice = displayer.displayShelterInfo(foundShelters,i); //Kan kommat att ändras i framtiden
                             numberOfShelters--;
                             if (choice == 0) {
                                 checkIn(foundShelters, i);
@@ -162,7 +179,7 @@ public class KartaController {
                                 break;
                             }
                         } else {
-                            int choice = displayer.displayShelterInfo(foundShelters, i, img2); //Kan kommat att ändras i framtiden
+                            int choice = displayer.displayShelterInfo(foundShelters, i); //Kan kommat att ändras i framtiden
                             numberOfShelters = 0;
                             if (choice == 0) {
                                 checkIn(foundShelters,i);
@@ -171,7 +188,7 @@ public class KartaController {
                     }
                 } else if (foundShelters.size() == 1) {
                     int i = foundShelters.size()-1;
-                    int choice = displayer.displayShelterInfo(foundShelters, i, img2); //Kan kommat att ändras i framtiden
+                    int choice = displayer.displayShelterInfo(foundShelters, i); //Kan kommat att ändras i framtiden
                     if (choice == 0) {
                         checkIn(foundShelters, i);
                     }
@@ -198,6 +215,28 @@ public class KartaController {
         displayer.setCheckinText(foundShelters.get(i).getId());
         controllerKlient.checkIn(foundShelters.get(i).getId());
         mapViewer.repaint();
+    }
+
+    public int[] clickDependingOnZoom(int mapZoom){
+        int[] howClose = new int[2];
+        int howCloseLong = 0;
+        int howCloseLat = 0;
+        if (mapZoom == 0 || mapZoom <= 2){
+            howCloseLong = 8;
+            howCloseLat = 8;
+            howClose[0] = howCloseLong;
+            howClose[1] = howCloseLat;
+        }
+        else if (mapZoom >= 3 && mapZoom < 5){
+            howCloseLong = 6;
+            howCloseLat = 7;
+            howClose[0] = howCloseLong;
+            howClose[1] = howCloseLat;
+        }
+        else {
+            howClose = null;
+        }
+        return howClose;
     }
 
     public void loadFile() {
