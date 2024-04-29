@@ -11,9 +11,6 @@ public class User implements Serializable {
     public User(String userName, String password) {
         this.userName = userName;
         this.password = password;
-
-
-
     }
 
     public void setUserName(String userName) {

@@ -20,20 +20,14 @@ import java.net.Socket;
 
 public class Connection {
 
-
     private InputHandler inputHandler;
     private Socket socket;
-
     private Buffer<Object> outputBuffer;
-
     private ControllerServer controllerServer;
     private OutputHandler outputHandler;
-
     private ConnectedClients connectedClients;
     private ServerInputHandler serverInputHandler;
-
     private User user;
-
     private boolean loggingOn = true;
 
     public Connection(Socket socket, ControllerServer controllerServer, ServerInputHandler serverInputHandler)  {
@@ -41,16 +35,12 @@ public class Connection {
         this.controllerServer = controllerServer;
         this.socket = socket;
         this.serverInputHandler = serverInputHandler;
-
         this.inputHandler = new InputHandler(socket);
         inputHandler.start();
         this.outputBuffer = new Buffer<Object>();
         this.outputHandler = new OutputHandler(socket);
         outputHandler.start();
         System.out.println("new connection objekt");
-
-
-
     }
 
     public Socket getSocket() {
@@ -58,14 +48,14 @@ public class Connection {
     }
 
     public void newConnection(){
-        controllerServer.newLogIn(user, this);
+        user.setInUtStatus(controllerServer.getStatusForUser(user));
+        sendObject(user);
         sendObject(new ConfirmLogon());
+        controllerServer.newLogIn(user, this);
     }
 
     public void sendObject(Object object){
         outputBuffer.put(object);
-
-
     }
 
     private void checkUserNamneAndPassword(User u) {
@@ -73,7 +63,6 @@ public class Connection {
          if (!exists){
             sendObject(new Message("Felaktigt användarnamn"));
              System.out.println("Användare finns ej");
-
          }
          boolean password = controllerServer.checkPassword(u);
          if (exists && password){
@@ -85,65 +74,48 @@ public class Connection {
          if (exists && !password) {
              sendObject(new Message("Felaktigt lösenord"));
              System.out.println("Fel lösenord");
-
          }
-
     }
 
 
     private class OutputHandler extends Thread {
         private Socket socket;
 
-
         public OutputHandler(Socket socket) {
-
             this.socket = socket;
-
         }
 
         public void run() {
-
             try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());) {
                 while (!Thread.interrupted()) {
                     Object obj = outputBuffer.get();
-
                     oos.writeObject(obj);
                     oos.flush();
                 }
             } catch (IOException e) {
                 System.out.println("FEL Run metoden i InputHandler IOException");
                 System.out.println(e.getMessage());
-
-
             } catch (InterruptedException e) {
                 System.out.println("FEL Run metoden i InputHandler InterruptedException");
                 System.out.println(e.getMessage());
             }
             finally {
-                controllerServer.userDisconnect(user);
-
+               // controllerServer.userDisconnect(user);
                 try{
                     this.socket.close();
                 }
                 catch (IOException e){
                     System.out.println(e.getMessage());
                     System.out.println("Kunde ej stänga socket");
-
                 }
             }
-
-
         }
-
-
     }
-
 
     private class InputHandler extends Thread {
         private Socket socket;
 
         public InputHandler(Socket socket) {
-
             this.socket = socket;
         }
 
@@ -152,46 +124,29 @@ public class Connection {
                 while (loggingOn){
                     Object o = ois.readObject();
                     if (o instanceof User){
-
                         checkUserNamneAndPassword((User)o);
                     }
-
                 }
-
-
                 while (!Thread.interrupted()) {
                     Object o = ois.readObject();
-
                         serverInputHandler.newObjectReceived(o, user);
                     }
-
-
-
-
             } catch (Exception e) {
                 System.out.println("FEL Run metoden i InputHandler IOException");
                 System.out.println(e.getMessage());
-
             }
-
              finally {
-                //controllerServer.userDisconnect(user);
+                controllerServer.userDisconnect(user);
                 try{
                     this.socket.close();
                 }
-
                 catch (IOException e){
                     System.out.println(e.getMessage());
                     System.out.println("Kunde inte stänga socket");
                 }
             }
-
         }
-
-
     }
-
-
 }
 
 

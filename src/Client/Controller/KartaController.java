@@ -112,12 +112,14 @@ public class KartaController {
                 int height = 8;
                 int width = 8;
                 graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
-                if (krisWayPoint.getId().equals(controllerKlient.getUser().getInUtStatus().getId())) {
-                    graphics2D.setColor(Color.BLUE);
-                    height = 8;
-                    width = 8;
-                    graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
-                }
+                try {
+                    if (krisWayPoint.getId().equals(controllerKlient.getUser().getInUtStatus().getId())) {
+                        graphics2D.setColor(Color.BLUE);
+                        height = 8;
+                        width = 8;
+                        graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
+                    }
+                }catch (Exception e){}
                 for (int i = 0; i < controllerKlient.getAllFriends().size(); i++) {
                     if (krisWayPoint.getId().equals(controllerKlient.getAllFriends().get(i).getInUtStatus().getId())) {
                         graphics2D.setColor(Color.GREEN);
@@ -195,7 +197,7 @@ public class KartaController {
                 }
             }
         });
-        //displayer.displayMap(mapViewer);
+        displayer.displayMap(mapViewer);
     }
 
     public void takeMeHere(GeoPosition geoPosition){

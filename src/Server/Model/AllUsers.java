@@ -62,4 +62,13 @@ public class AllUsers {
     public ArrayList<User> getAllUsers() {
         return allUsers;
     }
+
+    public InUtStatus getStatusForUser(User user) {
+        for (int i = 0; i < allUsers.size() ; i++) {
+            if (user.equals(allUsers.get(i))){
+                return allUsers.get(i).getInUtStatus();
+            }
+        }
+        return new InUtStatus(false, null,null);
+    }
 }

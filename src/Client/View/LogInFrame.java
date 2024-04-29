@@ -22,13 +22,13 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
     private JLabel passwordLabel;
     private ControllerKlient controllerKlient;
 
-    public LogInFrame(GUIcontroller guIcontroller, ControllerKlient controllerKlient){
+    public LogInFrame(GUIcontroller guIcontroller, ControllerKlient controllerKlient) {
         this.guIcontroller = guIcontroller;
         this.controllerKlient = controllerKlient;
         setUpFrame();
     }
 
-    public void setUpFrame(){
+    public void setUpFrame() {
         setLayout(null);
         setSize(200, 450);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -43,18 +43,19 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
         add(password);
         login = new JButton("Logga in");
         register = new JButton("Registrera");
-        usernameLabel.setLocation(28,15);
-        usernameLabel.setSize(200,15);
-        username.setLocation(25,30);
-        username.setSize(150,30);
+        usernameLabel.setLocation(28, 15);
+        usernameLabel.setSize(200, 15);
+        username.setLocation(25, 30);
+        username.setSize(150, 30);
         password.setSize(150, 30);
         passwordLabel.setLocation(28, 65);
         passwordLabel.setSize(200, 15);
         password.setLocation(25, 80);
         login.setEnabled(true);
-        login.setSize(100,50);
+        login.setSize(100, 50);
         login.setLocation(50, 130);
         login.addActionListener(this);
+        password.addKeyListener(this);
         register.setSize(100, 50);
         register.setLocation(50, 300);
         add(login);
@@ -66,45 +67,33 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
         usernameLabel.setVisible(true);
         passwordLabel.setVisible(true);
         setVisible(true);
-
     }
 
-    public void login(){
-        this.setVisible(false);
-        //Kalla på guiController att skapa mainframe här kanske?
+    public void login() {
+        String s = new String(password.getPassword());
+        controllerKlient.logon(username.getText(), s);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == login){
-            String s = new String(password.getPassword());
-            controllerKlient.logon(username.getText(), s);
-
-
-
+        if (e.getSource() == login) {
+            login();
         }
-
-
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER){
-            //Någon login-metod här också
+        if (e.getKeyCode() == KeyEvent.VK_ENTER && login.isEnabled()) {
+            login();
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
-    }
-
-    public static void main(String[] args) {
-        new LogInFrame(null,null);
     }
 }
+

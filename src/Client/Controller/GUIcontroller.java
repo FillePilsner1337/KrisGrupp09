@@ -21,7 +21,7 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
 
     private LogInFrame logInFrame;
 
-    public GUIcontroller(KartaController kartaController, ControllerKlient controllerKlient, VmaController vmaController) {
+    public GUIcontroller(ControllerKlient controllerKlient){
         this.kartaController = kartaController;
         this.controllerKlient = controllerKlient;
         this.vmaController = vmaController;
@@ -133,6 +133,10 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         mainFrame.getCheckInPanel().revalidate();
     }
 
+    public void displayMessage(String msg){
+        JOptionPane.showMessageDialog(null,msg);
+    }
+
 
     public KartaController getKartaController() {
         return kartaController;
@@ -141,11 +145,12 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
     public void setKartaController(KartaController kartaController){
         this.kartaController=kartaController;
     }
+    public void setVmaController(VmaController vmaController){this.vmaController = vmaController;}
 
     public void userAndPassOk() {
         logInFrame.setVisible(false);
         logInFrame = null;
         this.mainFrame = new MainFrame(this);
-
+        controllerKlient.setUp();
     }
 }

@@ -24,16 +24,13 @@ public class MainFrame extends JFrame {
         this.checkInPanel = new CheckInPanel(guIcontroller);
         this.vmaPanel =new VmaPanel(this);
         setupGUI();
-
     }
 
     private void setupGUI() {
-
         tabs.addTab("Karta", kartPanel);
         tabs.addTab("Checka in/ut", checkInPanel);
         tabs.addTab("Visa VMA-meddelande",vmaPanel);
         this.add(tabs, BorderLayout.CENTER);
-
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
     }

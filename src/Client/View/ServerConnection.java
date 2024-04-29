@@ -11,7 +11,6 @@ import java.net.Socket;
 
 public class ServerConnection {
 
-    private User user;
     private Socket socket;
 
     private InputHandler inputHandler;
@@ -20,9 +19,9 @@ public class ServerConnection {
 
     private ControllerKlient controllerKlient;
 
-    public ServerConnection(User user, ControllerKlient controllerKlient)  {
+    public ServerConnection(ControllerKlient controllerKlient)  {
         this.controllerKlient = controllerKlient;
-        this.user = user;
+
 
         try {
             this.socket = new Socket("127.0.0.1", 20000);
@@ -35,9 +34,6 @@ public class ServerConnection {
         this.outputHandler = new OutputHandler(socket);
         inputHandler.start();
         outputHandler.start();
-
-
-
     }
 
     public void sendObject(Object o){
@@ -45,8 +41,6 @@ public class ServerConnection {
     }
     public void receivedObject(Object o){
         controllerKlient.recivedObject(o);
-
-
     }
 
 
@@ -55,38 +49,24 @@ public class ServerConnection {
 
 
         public OutputHandler(Socket socket) {
-
             this.socket = socket;
-
         }
 
         public void run() {
-
             try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());) {
-
-
                 while (!Thread.interrupted()) {
                     Object obj = outputBuffer.get();
-
                     oos.writeObject(obj);
                     oos.flush();
                 }
             } catch (IOException e) {
                 System.out.println("FEL Run metoden i OutputHandler IOException");
                 System.out.println(e.getMessage());
-
-
             } catch (InterruptedException e) {
                 System.out.println("FEL Run metoden i OutputHandler InterruptedException");
                 System.out.println(e.getMessage());
             }
-
-
-
-
         }
-
-
     }
 
 
@@ -94,18 +74,23 @@ public class ServerConnection {
         private Socket socket;
 
         public InputHandler(Socket socket) {
-
             this.socket = socket;
         }
 
         public void run() {
             try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());) {
+                boolean loggingOn = true;
+                while (loggingOn) {
+                    Object o = ois.readObject();
+                    if (o instanceof User){
+                        controllerKlient.setUser((User)o);
+                        loggingOn = false;
 
-
+                    }
+                }
                 while (!Thread.interrupted()) {
                     Object o = ois.readObject();
                     receivedObject(o);
-
                 }
             } catch (IOException e) {
                 System.out.println("FEL Run metoden i InputHandler IOException");
@@ -114,11 +99,7 @@ public class ServerConnection {
             } catch (ClassNotFoundException e) {
                 System.out.println("FEL Run metoden i InputHandler InterruptedException");
                 System.out.println(e.getMessage());
-
             }
-
         }
-
-
     }
 }
