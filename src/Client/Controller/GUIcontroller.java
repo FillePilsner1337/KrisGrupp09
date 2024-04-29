@@ -19,23 +19,25 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
 
     private MainFrame mainFrame;
 
+    private LogInFrame logInFrame;
+
     public GUIcontroller(KartaController kartaController, ControllerKlient controllerKlient, VmaController vmaController) {
         this.kartaController = kartaController;
         this.controllerKlient = controllerKlient;
         this.vmaController = vmaController;
-        this.mainFrame = new MainFrame(this);
+        logInFrame = new LogInFrame(this, controllerKlient);
+
     }
 
+    public void startMainFrame(){
+
+
+    }
     @Override
     public void displayVMA(ArrayList<VMAobject> vmaObjects) {
-
-
+        if (mainFrame != null) {
             mainFrame.getVmaPanel().addVma(vmaObjects);
-
-
-
-
-
+        }
     }
 
     public void displayMap(JXMapViewer mapViewer){
@@ -138,5 +140,12 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
 
     public void setKartaController(KartaController kartaController){
         this.kartaController=kartaController;
+    }
+
+    public void userAndPassOk() {
+        logInFrame.setVisible(false);
+        logInFrame = null;
+        this.mainFrame = new MainFrame(this);
+
     }
 }

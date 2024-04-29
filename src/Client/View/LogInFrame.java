@@ -1,12 +1,15 @@
 package Client.View;
 
+import Client.Controller.ControllerKlient;
 import Client.Controller.GUIcontroller;
+import SharedModel.User;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
 
 public class LogInFrame extends JFrame implements ActionListener, KeyListener {
 
@@ -17,8 +20,15 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
     private JButton register;
     private JLabel usernameLabel;
     private JLabel passwordLabel;
+    private ControllerKlient controllerKlient;
 
-    public LogInFrame(GUIcontroller guIcontroller){
+    public LogInFrame(GUIcontroller guIcontroller, ControllerKlient controllerKlient){
+        this.guIcontroller = guIcontroller;
+        this.controllerKlient = controllerKlient;
+        setUpFrame();
+    }
+
+    public void setUpFrame(){
         setLayout(null);
         setSize(200, 450);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -44,6 +54,7 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
         login.setEnabled(true);
         login.setSize(100,50);
         login.setLocation(50, 130);
+        login.addActionListener(this);
         register.setSize(100, 50);
         register.setLocation(50, 300);
         add(login);
@@ -55,6 +66,7 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
         usernameLabel.setVisible(true);
         passwordLabel.setVisible(true);
         setVisible(true);
+
     }
 
     public void login(){
@@ -65,11 +77,13 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == login){
-            //Någon Login-metod här
+            String s = new String(password.getPassword());
+            controllerKlient.logon(username.getText(), s);
+
+
+
         }
-        else{
-            // Skicka vidare till GUIController och öppna ett RegistreraFönster
-        }
+
 
     }
 
@@ -91,6 +105,6 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
     }
 
     public static void main(String[] args) {
-        //new LogInFrame(new GUIcontroller());
+        new LogInFrame(null,null);
     }
 }

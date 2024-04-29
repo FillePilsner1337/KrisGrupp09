@@ -19,8 +19,11 @@ public class AllUsers {
     }
 
     private void fillWithDummyData() {
+        allUsers.add(new User("Ola", "Ola"));
+        allUsers.get(0).setInUtStatus(new InUtStatus(false,null,null) );
+
         for (int i = 0; i < 10; i++){
-            User user = new User("Test" + i);
+            User user = new User("Test" + i, "Ola");
             user.setInUtStatus(new InUtStatus(false,null,null));
             allUsers.add(user);
         }

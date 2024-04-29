@@ -195,7 +195,7 @@ public class KartaController {
                 }
             }
         });
-        displayer.displayMap(mapViewer);
+        //displayer.displayMap(mapViewer);
     }
 
     public void takeMeHere(GeoPosition geoPosition){
@@ -290,6 +290,10 @@ public class KartaController {
 
     public void setDisplayer(ImapDisplay displayer) {
         this.displayer = displayer;
+    }
+
+    public void displayMapViewer(){
+        displayer.displayMap(mapViewer);
     }
 
 }

@@ -5,6 +5,7 @@ import Server.Boundary.*;
 import Server.Model.*;
 import SharedModel.*;
 
+import java.util.ArrayList;
 
 
 public class ControllerServer {
@@ -82,5 +83,30 @@ public class ControllerServer {
 
     public void updateContactlistFromUser(ContactListUpdate update, User user) {
         contactList.put(user, update.getList());
+    }
+
+    public boolean checkUserExists(User user) {
+
+        ArrayList<User> list = allUsers.getAllUsers();
+        for (int i = 0; i< list.size(); i++){
+            if (list.get(i).equals(user))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean checkPassword(User user) {
+        ArrayList<User> list = allUsers.getAllUsers();
+        for (int i = 0; i< list.size(); i++){
+            if (list.get(i).equals(user) && list.get(i).getPassword().equals(user.getPassword())){
+                return true;
+            }
+        }
+
+        return false;
+
     }
 }
