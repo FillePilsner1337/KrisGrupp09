@@ -50,10 +50,6 @@ public class VmaPanel extends JPanel {
         info.setSize(250,50);
         this.add(info);
 
-
-
-
-
         vmaHeadlines.setSize(180, 300);
         vmaHeadlines.setLocation(100, 100);
         vmaHeadlines.setVisible(true);
@@ -71,9 +67,6 @@ public class VmaPanel extends JPanel {
         showOnMap.setSize(300, 40);
         showOnMap.setLocation(350,420);
         this.add(showOnMap);
-
-
-
     }
     private void setUpListeners() {
         vmaHeadlines.addListSelectionListener(new ListSelectionListener() {

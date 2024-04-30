@@ -25,8 +25,5 @@ public class ServerInputHandler {
             System.out.println("instance of funkar inte");
             o.toString();
         }
-
-
     }
-
 }

@@ -58,10 +58,7 @@ public class VMAobject {
         this.position = position;
     }
     public String toString(){
-
-
         return  "Nytt VMA i " + description;
-
     }
 
 
@@ -70,11 +67,8 @@ public class VMAobject {
         String time = published.substring(11,16);
         return "Datum: " + date + "\n" +
                 "Tidpunkt: " + time + "\n\n"+
-
                 headline + "\n\n" +
                 bodyText + "Dummy text eftersom test VMA inte ger någon text. Dummy text eftersom test VMA inte ger någon text. Dummy text eftersom test VMA inte ger någon text. ";
-
-
     }
 
     public GeoPosition getLocation() {

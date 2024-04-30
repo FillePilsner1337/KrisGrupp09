@@ -15,14 +15,11 @@ public class TestClient {
         try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()))) {
             oos.writeObject(u);
             oos.flush();
-
             while (!Thread.interrupted()) {
-
             }
         } catch (IOException e) {
             System.err.println("I/O exception at Output: " + e);
             e.printStackTrace();
-
         }
     }
 }
