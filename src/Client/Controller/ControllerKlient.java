@@ -58,10 +58,10 @@ public class ControllerKlient {
              System.out.println("Tog emot ContactListUpdate ");
             this.allFriends = ((ContactListUpdate) o).getList();
             if (!allFriends.isEmpty()) {
-                System.out.println(allFriends.get(0).getUserName());
                 updateLists();
             }
         }
+
         if (o instanceof Message){
             String msg = ((Message) o).getMsg();
             guiController.displayMessage(msg);
@@ -133,6 +133,10 @@ public class ControllerKlient {
 
     public void closeRegisterFrame() {
         guiController.closeRegFrame();
+    }
+
+    public void sendFollowReq(String namn) {
+        serverConnection.sendObject(new FollowReq(user, namn));
     }
 
     /*public static void logInDialog() {

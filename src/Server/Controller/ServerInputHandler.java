@@ -2,6 +2,7 @@ package Server.Controller;
 
 import SharedModel.*;
 
+
 public class ServerInputHandler {
 
     private ControllerServer controllerServer;
@@ -18,12 +19,17 @@ public class ServerInputHandler {
             controllerServer.changeStatus(status, user);
             System.out.println("newObjectReceived i inputhandler");
         }
-        if (o instanceof ContactListUpdate){
+        if (o instanceof ContactListUpdate) {
             ContactListUpdate update = (ContactListUpdate) o;
             controllerServer.updateContactlistFromUser(update, user);
-        } else  {
+        }
+        if (o instanceof FollowReq){
+            FollowReq req = (FollowReq)o;
+            controllerServer.reqToFollow(req, user);
+        }
+         else  {
             System.out.println("instance of funkar inte");
-            o.toString();
+
         }
     }
 }

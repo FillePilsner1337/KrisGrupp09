@@ -44,6 +44,8 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
 
     public void displayFriends(String[] friendList){
         mainFrame.getCheckInPanel().getListAllaVanner().setListData(friendList);
+        mainFrame.getCheckInPanel().getListAllaVanner().revalidate();
+        mainFrame.getCheckInPanel().getListAllaVanner().repaint();
     }
     public void displayFriendsInShelter(String[] friendsInShelter){
         mainFrame.getCheckInPanel().getListIncheckadeVanner().setListData(friendsInShelter);
@@ -156,5 +158,10 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
 
     public void startRegFrame() {
         registerFrame = new RegisterFrame(this, controllerKlient);
+    }
+
+    public void reqToFollow() {
+        String namn = JOptionPane.showInputDialog("Ange användarnamn på den du vill följa");
+        controllerKlient.sendFollowReq(namn);
     }
 }

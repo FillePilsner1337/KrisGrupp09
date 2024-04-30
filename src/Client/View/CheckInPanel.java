@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CheckInPanel extends JPanel {
+public class CheckInPanel extends JPanel implements ActionListener {
     private JLabel incheckad;
     private JButton checkaUtBtn;
     private JButton laggTillVannBtn;
@@ -35,14 +35,14 @@ public class CheckInPanel extends JPanel {
         checkaUtBtn.setSize(180, 30);
         checkaUtBtn.setLocation(200, 100);
         checkaUtBtn.setEnabled(false);
-
+        checkaUtBtn.addActionListener(this);
         laggTillVannBtn.setSize(180, 30);
         laggTillVannBtn.setLocation(400, 100);
         laggTillVannBtn.setEnabled(true);
-
+        laggTillVannBtn.addActionListener(this);
         add(incheckad);
         add(checkaUtBtn);
-        setCheckoutActionListener(checkaUtBtn);
+
         add(laggTillVannBtn);
 
         JLabel allaVanner = new JLabel("Alla vänner");
@@ -86,14 +86,17 @@ public class CheckInPanel extends JPanel {
     public JButton getCheckaUt() {
         return checkaUtBtn;
     }
-
-    public void setCheckoutActionListener(JButton checkout){
-        checkout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                checkaUtBtn.setEnabled(false);
-                guIcontroller.checkout();
-            }
-        });
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == checkaUtBtn) {
+            checkaUtBtn.setEnabled(false);
+            guIcontroller.checkout();
+        }
+        if (e.getSource() == laggTillVannBtn){
+            guIcontroller.reqToFollow();
+        }
     }
+
+
+
 }

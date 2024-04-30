@@ -138,17 +138,11 @@ public class Connection {
                     }
             } catch (Exception e) {
                 System.out.println("FEL Run metoden i InputHandler IOException");
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
              finally {
-              //  controllerServer.userDisconnect(user);
-                try{
-                    this.socket.close();
-                }
-                catch (IOException e){
-                    System.out.println(e.getMessage());
-                    System.out.println("Kunde inte stänga socket");
-                }
+              controllerServer.userDisconnect(user);
+
             }
         }
     }

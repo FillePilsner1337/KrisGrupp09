@@ -24,7 +24,7 @@ public class ControllerServer {
         this.serverInputHandler = new ServerInputHandler(this);
         this.newClientConnection = new NewClientConnection(20000, this, serverInputHandler);
         this.allUsers = new AllUsers(this);
-        this.contactList = new ContactList(this, allUsers);
+        this.contactList = new ContactList(this);
         newClientConnection.start();
         System.out.println("Controller startad");
     }
@@ -46,12 +46,11 @@ public class ControllerServer {
 
         for (int i = 0; i < connectedClients.getListOfConnected().size(); i++){
             User user = connectedClients.getListOfConnected().get(i);
-            System.out.println("1");
+
             Connection c = connectedClients.getConnectionForUser(user);
-            System.out.println("2");
+
             c.sendObject(new ContactListUpdate(contactList.getContactlist(user)));
-            c.sendObject(contactList.getContactlist(user));
-            System.out.println(user.getUserName());
+
         }
     }
     public void sendSelfUpdate(User user) {
@@ -64,11 +63,11 @@ public class ControllerServer {
 
     public void changeStatus(InUtStatus status, User user) {
         allUsers.updateStatus(status, user);
-        System.out.println("changeStatus i serverController");
+        allContactUpdatesToAll();
     }
 
     public void updateContactlistFromUser(ContactListUpdate update, User user) {
-        contactList.put(user, update.getList());
+      //  contactList.put(user, update.getList());
     }
 
     public boolean checkUserExists(User user) {
@@ -104,5 +103,19 @@ public class ControllerServer {
         User u = user;
         u.setInUtStatus(new InUtStatus(false,null,null));
         allUsers.put(u);
+    }
+
+    public void reqToFollow(FollowReq req, User user) {
+       if (!checkUserExists(req.getPersonToBeFollowd())){
+           connectedClients.getConnectionForUser(user).sendObject(new Message("Användaren finns ej"));
+       }
+       if (checkUserExists(req.getPersonToBeFollowd())){
+           //Byt denna koden mot att skicka ut till användare. Nu kan alla lägga till alla
+           contactList.addContact(user, getRealUser(req.getPersonToBeFollowd()));
+          connectedClients.getConnectionForUser(user).sendObject(new Message("Användare tillagd"));
+           connectedClients.getConnectionForUser(user).sendObject(new ContactListUpdate(contactList.getContactlist(user)));
+       }
+
+
     }
 }
