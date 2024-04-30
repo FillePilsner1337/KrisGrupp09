@@ -48,13 +48,15 @@ public class ControllerKlient {
             this.user = (User)o;
             System.out.println(user.getInUtStatus().toString());
         }
+        if (o instanceof ConfirmReg){
+            guiController.closeRegFrame();
+        }
         if (o instanceof ConfirmLogon){
             guiController.userAndPassOk();
         }
-         if (o instanceof ContactListUpdate){
+         if (o instanceof ContactListUpdate && user != null){
              System.out.println("Tog emot ContactListUpdate ");
             this.allFriends = ((ContactListUpdate) o).getList();
-             System.out.println(allFriends.get(10).getInUtStatus().isIncheckad());
             if (!allFriends.isEmpty()) {
                 System.out.println(allFriends.get(0).getUserName());
                 updateLists();
@@ -85,7 +87,10 @@ public class ControllerKlient {
         }
         displayer.displayFriendsInShelter(friendsInShelter);
     }
+    public void register(String userName, String password){
+        serverConnection.sendObject(new RegReq(userName,password));
 
+    }
     public void checkIn(String id) {
         guiController.enableCheckOutButton();
         InUtStatus status = new InUtStatus(true, id, new Date());
@@ -124,6 +129,10 @@ public class ControllerKlient {
         User u = new User(userName, password);
         u.setInUtStatus(new InUtStatus(false,null,null));
         serverConnection.sendObject(u);
+    }
+
+    public void closeRegisterFrame() {
+        guiController.closeRegFrame();
     }
 
     /*public static void logInDialog() {

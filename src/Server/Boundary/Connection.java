@@ -6,9 +6,7 @@ import Server.Controller.ControllerServer;
 import Server.Controller.ServerInputHandler;
 import Server.Model.Buffer;
 import Server.Model.ConnectedClients;
-import SharedModel.ConfirmLogon;
-import SharedModel.Message;
-import SharedModel.User;
+import SharedModel.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -66,7 +64,8 @@ public class Connection {
          }
          boolean password = controllerServer.checkPassword(u);
          if (exists && password){
-             user = u;
+
+             user = controllerServer.getRealUser(u);
              newConnection();
              loggingOn = false;
              System.out.println("Rätt användarnamn och lösenord");
@@ -126,6 +125,12 @@ public class Connection {
                     if (o instanceof User){
                         checkUserNamneAndPassword((User)o);
                     }
+
+                    if (o instanceof RegReq){
+                        registrationRequest((RegReq)o);
+                        System.out.println("Tagit emot RegReq");
+                    }
+
                 }
                 while (!Thread.interrupted()) {
                     Object o = ois.readObject();
@@ -136,7 +141,7 @@ public class Connection {
                 System.out.println(e.getMessage());
             }
              finally {
-                controllerServer.userDisconnect(user);
+              //  controllerServer.userDisconnect(user);
                 try{
                     this.socket.close();
                 }
@@ -146,6 +151,20 @@ public class Connection {
                 }
             }
         }
+    }
+
+    private void registrationRequest(RegReq o) {
+       boolean allredyregisterd = controllerServer.registrationRequest(o);
+       if (allredyregisterd){
+           sendObject(new Message("Användarnamnet används redan"));
+           System.out.println("registrationRequest redan reggas");
+       }
+       if (!allredyregisterd){
+           controllerServer.registerNewUser(new User(o.getUserName(), o.getPassword()));
+           sendObject(new Message("Ditt konto är registrerat"));
+           sendObject(new ConfirmReg());
+           System.out.println("registrationRequest redan reggas");
+       }
     }
 }
 

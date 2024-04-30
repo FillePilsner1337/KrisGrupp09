@@ -1,5 +1,6 @@
 package Client.View;
 
+
 import Client.Controller.ControllerKlient;
 import Client.Controller.GUIcontroller;
 import SharedModel.User;
@@ -11,18 +12,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
 
-public class LogInFrame extends JFrame implements ActionListener, KeyListener {
+public class RegisterFrame extends JFrame implements ActionListener, KeyListener {
 
     private GUIcontroller guIcontroller;
     private JTextField username;
     private JPasswordField password;
-    private JButton login;
     private JButton register;
     private JLabel usernameLabel;
     private JLabel passwordLabel;
     private ControllerKlient controllerKlient;
 
-    public LogInFrame(GUIcontroller guIcontroller, ControllerKlient controllerKlient) {
+    public RegisterFrame(GUIcontroller guIcontroller, ControllerKlient controllerKlient) {
         this.guIcontroller = guIcontroller;
         this.controllerKlient = controllerKlient;
         setUpFrame();
@@ -31,8 +31,13 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
     public void setUpFrame() {
         setLayout(null);
         setSize(200, 450);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
         setResizable(false);
+        JLabel headline = new JLabel("Registrera nytt konto");
+        headline.setLocation(0,0);
+        headline.setVisible(true);
+        headline.setSize(200,40);
+        add(headline);
         username = new JTextField();
         password = new JPasswordField();
         usernameLabel = new JLabel("Användarnamn: ");
@@ -41,8 +46,8 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
         add(passwordLabel);
         add(username);
         add(password);
-        login = new JButton("Logga in");
-        register = new JButton("Registrera");
+        register = new JButton("Registrera nytt Konto");
+
         usernameLabel.setLocation(28, 15);
         usernameLabel.setSize(200, 15);
         username.setLocation(25, 30);
@@ -51,18 +56,13 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
         passwordLabel.setLocation(28, 65);
         passwordLabel.setSize(200, 15);
         password.setLocation(25, 80);
-        login.setEnabled(true);
-        login.setSize(100, 50);
-        login.setLocation(50, 130);
-        login.addActionListener(this);
+
         password.addKeyListener(this);
         register.setSize(100, 50);
         register.setLocation(50, 300);
         register.addActionListener(this);
-        add(login);
         add(register);
         username.setVisible(true);
-        login.setVisible(true);
         password.setVisible(true);
         register.setVisible(true);
         usernameLabel.setVisible(true);
@@ -70,18 +70,15 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
         setVisible(true);
     }
 
-    public void login() {
+    public void register() {
         String s = new String(password.getPassword());
-        controllerKlient.logon(username.getText(), s);
+        controllerKlient.register(username.getText(), s);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == login) {
-            login();
-        }
-        if (e.getSource() == register){
-            guIcontroller.startRegFrame();
+        if (e.getSource() == register) {
+            register();
         }
     }
 
@@ -91,13 +88,15 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER && login.isEnabled()) {
-            login();
+        if (e.getKeyCode() == KeyEvent.VK_ENTER && register.isEnabled()) {
+            register();
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
     }
+
+
 }
 

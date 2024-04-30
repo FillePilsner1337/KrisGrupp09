@@ -28,7 +28,10 @@ public class ControllerServer {
         newClientConnection.start();
         System.out.println("Controller startad");
     }
+    public boolean registrationRequest(RegReq r){
+        return allUsers.checkIfExists(r);
 
+    }
     public void userDisconnect(User user) {
         connectedClients.removeUser(user);
     }
@@ -91,5 +94,15 @@ public class ControllerServer {
 
     public InUtStatus getStatusForUser(User user) {
         return allUsers.getStatusForUser(user);
+    }
+
+    public User getRealUser(User u) {
+        return allUsers.getRealUser(u);
+    }
+
+    public void registerNewUser(User user) {
+        User u = user;
+        u.setInUtStatus(new InUtStatus(false,null,null));
+        allUsers.put(u);
     }
 }

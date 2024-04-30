@@ -2,7 +2,6 @@ package Client.View;
 
 import Client.Controller.ControllerKlient;
 import Server.Model.Buffer;
-import SharedModel.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -77,14 +76,7 @@ public class ServerConnection {
 
         public void run() {
             try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());) {
-                boolean loggingOn = true;
-                while (loggingOn) {
-                    Object o = ois.readObject();
-                    if (o instanceof User){
-                        controllerKlient.setUser((User)o);
-                        loggingOn = false;
-                    }
-                }
+
                 while (!Thread.interrupted()) {
                     Object o = ois.readObject();
                     receivedObject(o);

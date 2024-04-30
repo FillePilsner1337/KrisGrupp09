@@ -21,6 +21,8 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
 
     private LogInFrame logInFrame;
 
+    private RegisterFrame registerFrame;
+
     public GUIcontroller(ControllerKlient controllerKlient){
         this.kartaController = kartaController;
         this.controllerKlient = controllerKlient;
@@ -145,5 +147,14 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         logInFrame = null;
         this.mainFrame = new MainFrame(this);
         controllerKlient.setUp();
+    }
+
+    public void closeRegFrame() {
+        registerFrame.setVisible(false);
+        registerFrame = null;
+    }
+
+    public void startRegFrame() {
+        registerFrame = new RegisterFrame(this, controllerKlient);
     }
 }
