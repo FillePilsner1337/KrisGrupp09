@@ -112,6 +112,14 @@ public class KartaController {
                 int height = 8;
                 int width = 8;
                 graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
+                for (int i = 0; i < controllerKlient.getAllFriends().size(); i++) {
+                    if (krisWayPoint.getId().equals(controllerKlient.getAllFriends().get(i).getInUtStatus().getId()) && !controllerKlient.getAllFriends().get(i).getUserName().equals(controllerKlient.getUser().getUserName())) {
+                        graphics2D.setColor(Color.GREEN);
+                        height = 8;
+                        width = 8;
+                        graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
+                    }
+                }
                 try {
                     if (krisWayPoint.getId().equals(controllerKlient.getUser().getInUtStatus().getId())) {
                         graphics2D.setColor(Color.BLUE);
@@ -120,14 +128,6 @@ public class KartaController {
                         graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
                     }
                 }catch (Exception e){}
-                for (int i = 0; i < controllerKlient.getAllFriends().size(); i++) {
-                    if (krisWayPoint.getId().equals(controllerKlient.getAllFriends().get(i).getInUtStatus().getId())) {
-                        graphics2D.setColor(Color.GREEN);
-                        height = 8;
-                        width = 8;
-                        graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
-                    }
-                }
             }
         });
         waypointPainter.setWaypoints(waypoints);
@@ -148,7 +148,6 @@ public class KartaController {
                     int[] howClose = clickDependingOnZoom(mapViewer.getZoom());
                     String waypointString = String.valueOf(waypoint.getGeo());
                     String[] waypointStringSplit = waypointString.split(",", 2);
-
                     /*
                     Om man är på zoomnivå 5 eller högre kommer det inte gå att klicka på ett skyddsrum som koden är implementerad
                     i detta läget. Men det är lättare att klicka på ett skyddsrum om man befinner sig i zoomnivå 3-4.
@@ -160,15 +159,6 @@ public class KartaController {
                     }catch (Exception exceptionClickedWaypoint) {
                     }
                 }
-                /*
-                Ska mest troligt ska denna delen flyttas till det nya framefönstret.
-
-                ImageIcon img = new ImageIcon("files/1.png");
-                Image imgRescale = img.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-                ImageIcon img2 = new ImageIcon(imgRescale);
-
-                 */
-
                 if (foundShelters.size() > 1) {
                     int numberOfShelters = foundShelters.size();
                     for (int i = 0; i < foundShelters.size(); i++) {
@@ -247,7 +237,6 @@ public class KartaController {
             System.out.println("Lästfil");
             srObjects = (ArrayList<SrObject>) o;
             System.out.println("Loaded");
-
         } catch (IOException e) {
             if (e instanceof EOFException) {
                 System.out.println("EOF fel");
@@ -284,7 +273,6 @@ public class KartaController {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/srOb.dat"))) {
             oos.writeObject(srObjects);
             oos.flush();
-
         } catch (IOException e) {
             System.out.println("Kunde inte spara fil");
         }

@@ -40,7 +40,6 @@ public class CheckInPanel extends JPanel {
         laggTillVannBtn.setLocation(400, 100);
         laggTillVannBtn.setEnabled(true);
 
-
         add(incheckad);
         add(checkaUtBtn);
         setCheckoutActionListener(checkaUtBtn);
@@ -52,14 +51,12 @@ public class CheckInPanel extends JPanel {
         allaVanner.setLocation(200, 150);
         allaVanner.setFont(new Font(null, Font.BOLD, 15));
 
-
         incheckadeVanner.setSize(200, 30);
         incheckadeVanner.setLocation(400, 150);
         incheckadeVanner.setFont(new Font(null, Font.BOLD, 15));
 
         add(allaVanner);
         add(incheckadeVanner);
-
 
         listIncheckadeVanner.setSize(180, 250);
         listIncheckadeVanner.setLocation(400 , 180);

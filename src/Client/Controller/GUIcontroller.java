@@ -26,13 +26,9 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         this.controllerKlient = controllerKlient;
         this.vmaController = vmaController;
         logInFrame = new LogInFrame(this, controllerKlient);
-
     }
 
-    public void startMainFrame(){
-
-
-    }
+    public void startMainFrame(){}
     @Override
     public void displayVMA(ArrayList<VMAobject> vmaObjects) {
         if (mainFrame != null) {
@@ -99,11 +95,9 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         return choice;
     }
 
-    public String chooseLocationDialog(String[] cities){
+    public String chooseLocationDialog(String[] cities) {
         String[] options = {"Ok", "Manuell inmatning"};
         JComboBox menuBar = new JComboBox(cities);
-
-        //Object start1 = JOptionPane.showInputDialog(mainFrame, "Välj stad.", "Ange plats", JOptionPane.QUESTION_MESSAGE, null, cities, null);
         int choice = JOptionPane.showOptionDialog(
                 mainFrame,
                 menuBar,
@@ -113,15 +107,14 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
                 null,
                 options,
                 options[0]);
-        if (choice == 0){
+        if (choice == 0) {
             String pickedCity = cities[menuBar.getSelectedIndex()];
             return pickedCity;
+        } else {
+            return null;
         }
-        else if (choice == 1){
-            String nullValue = null;
-        }
-        return null;
     }
+
     public String enterManually(){
         String manualInput = JOptionPane.showInputDialog(mainFrame, "Ange koordinater (latitude, longitude): \n På detta sätt: " +
                 "55.6088535, 12.9941134");

@@ -22,7 +22,6 @@ public class ServerConnection {
     public ServerConnection(ControllerKlient controllerKlient)  {
         this.controllerKlient = controllerKlient;
 
-
         try {
             this.socket = new Socket("127.0.0.1", 20000);
         } catch (IOException e) {
@@ -46,7 +45,6 @@ public class ServerConnection {
 
     private class OutputHandler extends Thread {
         private Socket socket;
-
 
         public OutputHandler(Socket socket) {
             this.socket = socket;
@@ -85,7 +83,6 @@ public class ServerConnection {
                     if (o instanceof User){
                         controllerKlient.setUser((User)o);
                         loggingOn = false;
-
                     }
                 }
                 while (!Thread.interrupted()) {

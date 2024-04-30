@@ -103,7 +103,6 @@ public class VmaController {
                     String published = vmaMessage.published;
                     String bodyText = vmaMessage.bodyText;
 
-
                     if (vmaMessage.areas != null) {
                         for (Area area : vmaMessage.areas) {
                             String plats = area.description;
@@ -116,12 +115,8 @@ public class VmaController {
                             }
                         }
                     }
-
-
                 }
-
                 displayer.displayVMA(vmaObjects);
-
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }

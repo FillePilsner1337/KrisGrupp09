@@ -33,6 +33,10 @@ public class ControllerKlient {
         vmaController.setDisplayer(guiController);
         vmaController.fetchAndDisplayVmaData();
         kc.start();
+        if (user.getInUtStatus().isIncheckad()) {
+            guiController.setCheckinText(user.getInUtStatus().getId());
+            checkIn(user.getInUtStatus().getId());
+        }
     }
 
     public void setUser(User user) {
@@ -42,9 +46,6 @@ public class ControllerKlient {
     public void recivedObject(Object o){
         if (o instanceof User){
             this.user = (User)o;
-            InUtStatus newInUtStatu = user.getInUtStatus();
-            user.setInUtStatus(newInUtStatu);
-            guiController.setCheckinText(newInUtStatu.getId());
             System.out.println(user.getInUtStatus().toString());
         }
         if (o instanceof ConfirmLogon){
