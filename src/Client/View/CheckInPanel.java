@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class CheckInPanel extends JPanel implements ActionListener {
     private JLabel incheckad;
@@ -13,6 +14,8 @@ public class CheckInPanel extends JPanel implements ActionListener {
     private JButton laggTillVannBtn;
     private  JList<String>  listAllaVanner;
     private  JList<String> listIncheckadeVanner;
+    private DefaultListModel<String> modelAllaVanner;
+    private DefaultListModel<String> modelIncheckaddeVanner;
     private GUIcontroller guIcontroller;
 
 
@@ -22,8 +25,11 @@ public class CheckInPanel extends JPanel implements ActionListener {
         incheckad = new JLabel("Du är inte incheckad");
         checkaUtBtn = new JButton("Checka ut");
         laggTillVannBtn = new JButton("Lägg till vän");
-        listAllaVanner = new JList<>();
-        listIncheckadeVanner = new JList<>();
+        this.modelIncheckaddeVanner = new DefaultListModel<>();
+        this.modelAllaVanner = new DefaultListModel<>();
+
+        listAllaVanner = new JList<>(modelAllaVanner);
+        listIncheckadeVanner = new JList<>(modelIncheckaddeVanner);
         setUp();
     }
 
@@ -85,6 +91,33 @@ public class CheckInPanel extends JPanel implements ActionListener {
 
     public JButton getCheckaUt() {
         return checkaUtBtn;
+    }
+    public void updateAllaVanner(ArrayList<String> vanner) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                modelAllaVanner.clear();
+                for (String van : vanner) {
+                    modelAllaVanner.addElement(van);
+                }
+            }
+        });
+
+    }
+
+    public void updateIncheckadeVanner(ArrayList<String> incheckade) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                modelIncheckaddeVanner.clear();
+                for (String incheckad : incheckade) {
+                    modelIncheckaddeVanner.addElement(incheckad);
+                    System.out.println(modelIncheckaddeVanner.get(0));
+                }
+            }
+
+        });
+
     }
     @Override
     public void actionPerformed(ActionEvent e) {

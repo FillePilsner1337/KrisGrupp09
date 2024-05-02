@@ -57,9 +57,13 @@ public class ControllerKlient {
          if (o instanceof ContactListUpdate && user != null){
              System.out.println("Tog emot ContactListUpdate ");
             this.allFriends = ((ContactListUpdate) o).getList();
-            if (!allFriends.isEmpty()) {
-                updateLists();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
+             updateLists();
+
         }
 
         if (o instanceof Message){
@@ -69,22 +73,24 @@ public class ControllerKlient {
     }
 
     private void updateLists() {
-        String[] friendList = new String[allFriends.size()];
+        System.out.println("inne i updateListsMetoden");
+        ArrayList<String> friendList = new ArrayList<>();
         for (int i = 0; i < allFriends.size(); i++){
-            if (!allFriends.get(i).equals(user) ){
-            friendList[i] = allFriends.get(i).getUserName();
+            friendList.add(allFriends.get(i).getUserName());
+            System.out.println("inne första for loop");
             }
-        }
         displayer.displayFriends(friendList);
 
-        String[] friendsInShelter = new String[allFriends.size()];
+        ArrayList<String> friendsInShelter = new ArrayList<>();
         for (int i = 0; i < allFriends.size(); i++) {
-            if (!allFriends.get(i).equals(user)) {
-                if (allFriends.get(i).getInUtStatus().isIncheckad() == true) {
-                    friendsInShelter[i] = allFriends.get(i).getUserName();
+            System.out.println("inne i andra for loop");
+            System.out.println(allFriends.get(i).getInUtStatus().isIncheckad());
+                if (allFriends.get(i).getInUtStatus().isIncheckad()) {
+                    System.out.println("Inne i for loop incheckad if sats");
+                    friendsInShelter.add(allFriends.get(i).getUserName());
                 }
-            }
         }
+
         displayer.displayFriendsInShelter(friendsInShelter);
     }
     public void register(String userName, String password){

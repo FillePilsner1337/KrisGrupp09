@@ -20,6 +20,9 @@ public class AllUsers {
         this.allUsers = new ArrayList<>();
         this.controllerServer = controllerServer;
         saveLoad();
+        //Nollar listorna
+        //allUsers.clear();
+        //saveLoad();
 
     }
     public void saveLoad(){
@@ -50,6 +53,7 @@ public class AllUsers {
                 System.out.println("uppdaterat status Update Status i All users update status  ");
             }
         }
+
         controllerServer.allContactUpdatesToAll();
     }
 

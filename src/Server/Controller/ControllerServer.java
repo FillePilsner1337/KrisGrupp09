@@ -43,9 +43,11 @@ public class ControllerServer {
     }
 
     public void allContactUpdatesToAll(){
+        System.out.println("allContactUpdatesToAll");
 
         for (int i = 0; i < connectedClients.getListOfConnected().size(); i++){
             User user = connectedClients.getListOfConnected().get(i);
+            System.out.println(user.getInUtStatus().isIncheckad());
 
             Connection c = connectedClients.getConnectionForUser(user);
 
@@ -63,7 +65,9 @@ public class ControllerServer {
 
     public void changeStatus(InUtStatus status, User user) {
         allUsers.updateStatus(status, user);
-        allContactUpdatesToAll();
+
+
+
     }
 
     public void updateContactlistFromUser(ContactListUpdate update, User user) {

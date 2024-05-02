@@ -18,7 +18,11 @@ public class ContactList {
         public ContactList(ControllerServer controller) {
 
             this.controllerServer = controller;
+            this.contactList = new ConcurrentHashMap<>();
             saveLoad();
+            //Nollar kontaktlistorna
+            //contactList.clear();
+            //saveLoad();
 
         }
 

@@ -42,13 +42,16 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         mainFrame.setKartPanel(mapViewer);
     }
 
-    public void displayFriends(String[] friendList){
-        mainFrame.getCheckInPanel().getListAllaVanner().setListData(friendList);
+    public void displayFriends(ArrayList<String> friendList){
+        mainFrame.getCheckInPanel().updateAllaVanner(friendList);
         mainFrame.getCheckInPanel().getListAllaVanner().revalidate();
         mainFrame.getCheckInPanel().getListAllaVanner().repaint();
     }
-    public void displayFriendsInShelter(String[] friendsInShelter){
-        mainFrame.getCheckInPanel().getListIncheckadeVanner().setListData(friendsInShelter);
+    public void displayFriendsInShelter(ArrayList<String> friendsInShelter){
+        mainFrame.getCheckInPanel().updateIncheckadeVanner(friendsInShelter);
+        mainFrame.getCheckInPanel().getListIncheckadeVanner().revalidate();
+        mainFrame.getCheckInPanel().getListIncheckadeVanner().repaint();
+
     }
 
     public void enableCheckOutButton(){
