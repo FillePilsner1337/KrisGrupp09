@@ -6,6 +6,7 @@ import Client.Controller.GUIcontroller;
 import SharedModel.User;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -30,14 +31,23 @@ public class RegisterFrame extends JFrame implements ActionListener, KeyListener
 
     public void setUpFrame() {
         setLayout(null);
-        setSize(200, 450);
+        setSize(200, 400);
 
         setResizable(false);
-        JLabel headline = new JLabel("Registrera nytt konto");
-        headline.setLocation(0,0);
-        headline.setVisible(true);
-        headline.setSize(200,40);
-        add(headline);
+
+        JLabel kris = new JLabel("KRIS");
+        kris.setFont(new Font("Congenial", Font.BOLD, 30));
+        kris.setSize(200, 40);
+        kris.setLocation(0,10);
+        kris.setHorizontalAlignment(SwingConstants.CENTER);
+        this.add(kris);
+        JLabel regi = new JLabel("NYTT KONTO");
+        regi.setFont(new Font("Congenial", Font.BOLD, 17));
+        regi.setSize(200, 40);
+        regi.setLocation(0,60);
+        regi.setHorizontalAlignment(SwingConstants.CENTER);
+
+        this.add(regi);
         username = new JTextField();
         password = new JPasswordField();
         usernameLabel = new JLabel("Användarnamn: ");
@@ -46,20 +56,20 @@ public class RegisterFrame extends JFrame implements ActionListener, KeyListener
         add(passwordLabel);
         add(username);
         add(password);
-        register = new JButton("Registrera nytt Konto");
+        register = new JButton("Registrera");
 
-        usernameLabel.setLocation(28, 15);
+        usernameLabel.setLocation(20, 115);
         usernameLabel.setSize(200, 15);
-        username.setLocation(25, 30);
+        username.setLocation(20, 130);
         username.setSize(150, 30);
         password.setSize(150, 30);
-        passwordLabel.setLocation(28, 65);
+        passwordLabel.setLocation(20, 165);
         passwordLabel.setSize(200, 15);
-        password.setLocation(25, 80);
+        password.setLocation(20, 180);
 
         password.addKeyListener(this);
         register.setSize(100, 50);
-        register.setLocation(50, 300);
+        register.setLocation(50, 250);
         register.addActionListener(this);
         add(register);
         username.setVisible(true);

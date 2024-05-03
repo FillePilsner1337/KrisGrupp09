@@ -18,6 +18,7 @@ public class ControllerServer {
 
     private AllUsers allUsers;
     private ContactList contactList;
+    private SavedOutgoingObj savedOutgoingObj;
 
     public ControllerServer() {
         this.connectedClients = new ConnectedClients();
@@ -25,6 +26,7 @@ public class ControllerServer {
         this.newClientConnection = new NewClientConnection(20000, this, serverInputHandler);
         this.allUsers = new AllUsers(this);
         this.contactList = new ContactList(this);
+        this.savedOutgoingObj = new SavedOutgoingObj(this);
         newClientConnection.start();
         System.out.println("Controller startad");
     }
@@ -39,7 +41,10 @@ public class ControllerServer {
     public void newLogIn(User user, Connection connection) {
         connectedClients.put(user, connection);
         connectedClients.getConnectionForUser(user).sendObject(new ContactListUpdate(contactList.getContactlist(user)));
-
+        ArrayList<Object> list = savedOutgoingObj.getObjToSend(user);
+        for (Object object : list) {
+            connectedClients.getConnectionForUser(user).sendObject(object);
+        }
     }
 
     public void allContactUpdatesToAll(){
@@ -115,10 +120,26 @@ public class ControllerServer {
        }
        if (checkUserExists(req.getPersonToBeFollowd())){
            //Byt denna koden mot att skicka ut till användare. Nu kan alla lägga till alla
-           contactList.addContact(user, getRealUser(req.getPersonToBeFollowd()));
-          connectedClients.getConnectionForUser(user).sendObject(new Message("Användare tillagd"));
-           connectedClients.getConnectionForUser(user).sendObject(new ContactListUpdate(contactList.getContactlist(user)));
+           //contactList.addContact(user, getRealUser(req.getPersonToBeFollowd()));
+           User toBeFollowd = getRealUser(req.getPersonToBeFollowd());
+           req.setPersonToBeFollowd(toBeFollowd);
+
+           if (connectedClients.isUserConnected(req.getPersonToBeFollowd())){
+               connectedClients.getConnectionForUser(req.getPersonToBeFollowd()).sendObject(req);
+
+           }
+           //connectedClients.getConnectionForUser(user).sendObject(new Message("Användare tillagd"));
+          // connectedClients.getConnectionForUser(user).sendObject(new ContactListUpdate(contactList.getContactlist(user)));
+            if (!connectedClients.isUserConnected(req.getPersonToBeFollowd())){
+                savedOutgoingObj.saveObj(req.getPersonToBeFollowd(), req);
+            }
+
        }
+
+
+    }
+
+    public void okToFollow(User u, User p){
 
 
     }

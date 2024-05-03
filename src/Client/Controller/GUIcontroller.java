@@ -167,4 +167,9 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         String namn = JOptionPane.showInputDialog("Ange användarnamn på den du vill följa");
         controllerKlient.sendFollowReq(namn);
     }
+
+    public boolean recivedFollowReq(String userName) {
+        int svar = JOptionPane.showConfirmDialog(null, userName + " vill följa dig", "Följförfrågan", JOptionPane.YES_NO_OPTION);
+        return svar == 0;
+    }
 }

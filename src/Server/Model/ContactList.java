@@ -20,9 +20,17 @@ public class ContactList {
             this.controllerServer = controller;
             this.contactList = new ConcurrentHashMap<>();
             saveLoad();
-            //Nollar kontaktlistorna
-            //contactList.clear();
-            //saveLoad();
+            /*Nollar kontaktlistorna
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            contactList.clear();
+            saveLoad();
+
+             */
 
         }
 
@@ -60,6 +68,7 @@ public class ContactList {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedContactLists.dat"))) {
                 oos.writeObject(contactList);
                 oos.flush();
+                System.out.println("fil sparad");
 
             } catch (IOException e) {
                 System.out.println("Kunde inte spara fil");

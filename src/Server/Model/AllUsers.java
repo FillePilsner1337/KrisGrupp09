@@ -20,9 +20,17 @@ public class AllUsers {
         this.allUsers = new ArrayList<>();
         this.controllerServer = controllerServer;
         saveLoad();
-        //Nollar listorna
-        //allUsers.clear();
-        //saveLoad();
+        /*Nollar listorna
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        allUsers.clear();
+
+        saveLoad();
+
+         */
 
     }
     public void saveLoad(){

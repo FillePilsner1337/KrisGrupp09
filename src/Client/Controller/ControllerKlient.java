@@ -56,7 +56,8 @@ public class ControllerKlient {
         }
          if (o instanceof ContactListUpdate && user != null){
              System.out.println("Tog emot ContactListUpdate ");
-            this.allFriends = ((ContactListUpdate) o).getList();
+
+            this.allFriends = ((ContactListUpdate)o).getList();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -65,10 +66,20 @@ public class ControllerKlient {
              updateLists();
 
         }
-
-        if (o instanceof Message){
+         if (o instanceof Message){
             String msg = ((Message) o).getMsg();
             guiController.displayMessage(msg);
+        }
+         if (o instanceof FollowReq){
+             FollowReq req = (FollowReq)o;
+             followReq(req);
+         }
+    }
+
+    private void followReq(FollowReq req) {
+        boolean ok = guiController.recivedFollowReq(req.getWantsToFollow().getUserName());
+        if (ok){
+            serverConnection.sendObject(new OkFollowReg(req, true));
         }
     }
 

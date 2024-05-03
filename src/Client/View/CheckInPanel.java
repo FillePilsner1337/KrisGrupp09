@@ -99,6 +99,7 @@ public class CheckInPanel extends JPanel implements ActionListener {
                 modelAllaVanner.clear();
                 for (String van : vanner) {
                     modelAllaVanner.addElement(van);
+                    System.out.println("Run i check in panel");
                 }
             }
         });
@@ -112,7 +113,7 @@ public class CheckInPanel extends JPanel implements ActionListener {
                 modelIncheckaddeVanner.clear();
                 for (String incheckad : incheckade) {
                     modelIncheckaddeVanner.addElement(incheckad);
-                    System.out.println(modelIncheckaddeVanner.get(0));
+                    System.out.println("Run i chackinpanel");
                 }
             }
 
