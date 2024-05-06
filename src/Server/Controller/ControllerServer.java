@@ -139,8 +139,11 @@ public class ControllerServer {
 
     }
 
-    public void okToFollow(User u, User p){
-
-
+    public void okToFollow(OkFollowReg ok){
+        User follower = getRealUser(ok.getFollowReq().getWantsToFollow());
+        User toBeFollowd = getRealUser(ok.getFollowReq().getPersonToBeFollowd());
+        contactList.addContact(follower,toBeFollowd);
+        connectedClients.getConnectionForUser(follower).sendObject(new Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning"));
+        //Ska msg sparas ner?
     }
 }

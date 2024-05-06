@@ -30,6 +30,9 @@ public class SavedOutgoingObj {
     }
 
     public ArrayList<Object> getObjToSend(User user){
+        if (!objMap.contains(user)){
+            objMap.put(user, new ArrayList<>());
+        }
         ArrayList<Object> list = objMap.get(user);
         objMap.get(user).clear();
         return list;

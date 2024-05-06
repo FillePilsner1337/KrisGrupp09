@@ -19,6 +19,11 @@ public class ServerInputHandler {
             controllerServer.changeStatus(status, user);
             System.out.println("newObjectReceived i inputhandler");
         }
+        if (o instanceof OkFollowReg){
+            OkFollowReg okFollowReg = (OkFollowReg) o;
+            controllerServer.okToFollow(okFollowReg);
+
+        }
         if (o instanceof ContactListUpdate) {
             ContactListUpdate update = (ContactListUpdate) o;
             controllerServer.updateContactlistFromUser(update, user);
