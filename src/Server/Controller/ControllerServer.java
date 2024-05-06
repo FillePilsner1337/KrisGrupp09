@@ -127,7 +127,7 @@ public class ControllerServer {
 
            }
            else {
-                savedOutgoingObj.saveObj(getRealUser(req.getPersonToBeFollowd()), req);
+                savedOutgoingObj.saveObj(req.getPersonToBeFollowd(), req);
 
             }
 
@@ -145,14 +145,20 @@ public class ControllerServer {
                 connectedClients.getConnectionForUser(user).sendObject(list.get(i));
             }
         }
+        savedOutgoingObj.clearUserObjectList(user);
+
 
     }
     public void okToFollow(OkFollowReg ok){
         User follower = getRealUser(ok.getFollowReq().getWantsToFollow());
         User toBeFollowd = getRealUser(ok.getFollowReq().getPersonToBeFollowd());
         contactList.addContact(follower,toBeFollowd);
-        connectedClients.getConnectionForUser(follower).sendObject(new Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning"));
+        if (connectedClients.isUserConnected(follower)) {
+            connectedClients.getConnectionForUser(follower).sendObject(new Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning"));
+        }
+        else {
+            savedOutgoingObj.saveObj(follower, new  Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning" ));
+        }
 
-        //Ska msg sparas ner?
     }
 }

@@ -39,10 +39,18 @@ public class SavedOutgoingObj {
             objMap.put(user, new ArrayList<>());
         }
         ArrayList<Object> list = objMap.get(user);
-        objMap.get(user).clear();
+
         System.out.println("Inne i metod getObjToSend");
         System.out.println("Listan i send metod är tom " + list.isEmpty());
         return list;
+    }
+
+    public void clearUserObjectList(User user) {
+        if (!objMap.containsKey(user)){
+            objMap.put(user, new ArrayList<>());
+        }
+        objMap.get(user).clear();
+
     }
 
     public class loadSave extends Thread {
