@@ -3,6 +3,7 @@ package SharedModel;
 import java.io.Serializable;
 
 public class User implements Serializable {
+    private static final long serialVersionUID = 604569492464863070L;
 
     private String userName;
     private InUtStatus inUtStatus;
@@ -47,5 +48,13 @@ public class User implements Serializable {
 
     public String getUserName() {
         return userName;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userName='" + userName + '\'' +
+                ", inUtStatus=" + inUtStatus.toString() +
+                '}';
     }
 }

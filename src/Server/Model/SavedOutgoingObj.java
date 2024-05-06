@@ -19,6 +19,17 @@ public class SavedOutgoingObj {
         this.controllerServer = controllerServer;
         this.objMap = new ConcurrentHashMap<>();
         saveLoad();
+       /*nolla sparade filer
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        objMap.clear();
+        saveLoad();
+
+        */
     }
 
     public void saveLoad(){

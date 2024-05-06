@@ -20,7 +20,7 @@ public class ContactList {
             this.controllerServer = controller;
             this.contactList = new ConcurrentHashMap<>();
             saveLoad();
-            /*Nollar kontaktlistorna
+            //Nollar kontaktlistorna
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
@@ -30,7 +30,7 @@ public class ContactList {
             contactList.clear();
             saveLoad();
 
-             */
+
 
         }
 

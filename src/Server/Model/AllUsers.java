@@ -20,7 +20,7 @@ public class AllUsers {
         this.allUsers = new ArrayList<>();
         this.controllerServer = controllerServer;
         saveLoad();
-        /*Nollar listorna
+        //Nollar listorna
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
@@ -30,7 +30,7 @@ public class AllUsers {
 
         saveLoad();
 
-         */
+
 
     }
     public void saveLoad(){
