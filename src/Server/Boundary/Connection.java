@@ -50,6 +50,7 @@ public class Connection {
         sendObject(user);
         sendObject(new ConfirmLogon());
         controllerServer.newLogIn(user, this);
+
     }
 
     public void sendObject(Object object){
@@ -124,6 +125,7 @@ public class Connection {
                     Object o = ois.readObject();
                     if (o instanceof User){
                         checkUserNamneAndPassword((User)o);
+
                     }
 
                     if (o instanceof RegReq){

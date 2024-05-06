@@ -41,10 +41,8 @@ public class ControllerServer {
     public void newLogIn(User user, Connection connection) {
         connectedClients.put(user, connection);
         connectedClients.getConnectionForUser(user).sendObject(new ContactListUpdate(contactList.getContactlist(user)));
-        ArrayList<Object> list = savedOutgoingObj.getObjToSend(user);
-        for (Object object : list) {
-            connectedClients.getConnectionForUser(user).sendObject(object);
-        }
+        System.out.println("new LogIn metoden");
+        checkForOldObjToSend(user);
     }
 
     public void allContactUpdatesToAll(){
@@ -77,6 +75,7 @@ public class ControllerServer {
 
     public void updateContactlistFromUser(ContactListUpdate update, User user) {
       //  contactList.put(user, update.getList());
+        //Metoden ska int användas
     }
 
     public boolean checkUserExists(User user) {
@@ -119,8 +118,7 @@ public class ControllerServer {
            connectedClients.getConnectionForUser(user).sendObject(new Message("Användaren finns ej"));
        }
        if (checkUserExists(req.getPersonToBeFollowd())){
-           //Byt denna koden mot att skicka ut till användare. Nu kan alla lägga till alla
-           //contactList.addContact(user, getRealUser(req.getPersonToBeFollowd()));
+
            User toBeFollowd = getRealUser(req.getPersonToBeFollowd());
            req.setPersonToBeFollowd(toBeFollowd);
 
@@ -128,10 +126,9 @@ public class ControllerServer {
                connectedClients.getConnectionForUser(req.getPersonToBeFollowd()).sendObject(req);
 
            }
-           //connectedClients.getConnectionForUser(user).sendObject(new Message("Användare tillagd"));
-          // connectedClients.getConnectionForUser(user).sendObject(new ContactListUpdate(contactList.getContactlist(user)));
-            if (!connectedClients.isUserConnected(req.getPersonToBeFollowd())){
-                savedOutgoingObj.saveObj(req.getPersonToBeFollowd(), req);
+           else {
+                savedOutgoingObj.saveObj(getRealUser(req.getPersonToBeFollowd()), req);
+
             }
 
        }
@@ -139,11 +136,23 @@ public class ControllerServer {
 
     }
 
+    public void checkForOldObjToSend(User user){
+
+        if (!savedOutgoingObj.getObjToSend(user).isEmpty()){
+            System.out.println("inne if sats checkmetod");
+            ArrayList<Object> list = savedOutgoingObj.getObjToSend(user);
+            for (int i = 0; i < list.size(); i++) {
+                connectedClients.getConnectionForUser(user).sendObject(list.get(i));
+            }
+        }
+
+    }
     public void okToFollow(OkFollowReg ok){
         User follower = getRealUser(ok.getFollowReq().getWantsToFollow());
         User toBeFollowd = getRealUser(ok.getFollowReq().getPersonToBeFollowd());
         contactList.addContact(follower,toBeFollowd);
         connectedClients.getConnectionForUser(follower).sendObject(new Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning"));
+
         //Ska msg sparas ner?
     }
 }

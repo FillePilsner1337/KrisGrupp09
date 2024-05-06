@@ -58,11 +58,7 @@ public class ControllerKlient {
              System.out.println("Tog emot ContactListUpdate ");
 
             this.allFriends = ((ContactListUpdate)o).getList();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+
              updateLists();
 
         }

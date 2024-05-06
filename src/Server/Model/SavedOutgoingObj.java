@@ -12,12 +12,15 @@ public class SavedOutgoingObj {
 
     private ConcurrentHashMap <User, ArrayList<Object>> objMap;
     boolean fileLoaded = false;
+
+
+
     public SavedOutgoingObj(ControllerServer controllerServer) {
         this.controllerServer = controllerServer;
         this.objMap = new ConcurrentHashMap<>();
         saveLoad();
-
     }
+
     public void saveLoad(){
         new loadSave().start();
     }
@@ -27,14 +30,18 @@ public class SavedOutgoingObj {
             objMap.put(user, new ArrayList<>());
         }
         objMap.get(user).add(o);
+        System.out.println("Ob tallagt i HM");
+        System.out.println("Listan är tom i save metoden  " + objMap.get(user).isEmpty());
     }
 
     public ArrayList<Object> getObjToSend(User user){
-        if (!objMap.contains(user)){
+        if (!objMap.containsKey(user)){
             objMap.put(user, new ArrayList<>());
         }
         ArrayList<Object> list = objMap.get(user);
         objMap.get(user).clear();
+        System.out.println("Inne i metod getObjToSend");
+        System.out.println("Listan i send metod är tom " + list.isEmpty());
         return list;
     }
 
