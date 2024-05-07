@@ -19,17 +19,17 @@ public class SavedOutgoingObj {
         this.controllerServer = controllerServer;
         this.objMap = new ConcurrentHashMap<>();
         saveLoad();
-       /*nolla sparade filer
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+       //saveFile();
+    }
+    private void saveFile() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedObjToSend.dat"))) {
+            oos.writeObject(objMap);
+            oos.flush();
+            System.out.println("fil sparad");
+
+        } catch (IOException e) {
+            System.out.println("Kunde inte spara fil");
         }
-
-        objMap.clear();
-        saveLoad();
-
-        */
     }
 
     public void saveLoad(){
@@ -61,7 +61,6 @@ public class SavedOutgoingObj {
             objMap.put(user, new ArrayList<>());
         }
         objMap.get(user).clear();
-
     }
 
     public class loadSave extends Thread {

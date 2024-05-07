@@ -12,6 +12,7 @@ public class ConnectedClients {
 
     public ConnectedClients() {
         this.connectedList = new ConcurrentHashMap<>();
+
     }
 
     public synchronized void put(User user, Connection connection) {

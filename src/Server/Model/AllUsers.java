@@ -19,20 +19,20 @@ public class AllUsers {
     public AllUsers (ControllerServer controllerServer) {
         this.allUsers = new ArrayList<>();
         this.controllerServer = controllerServer;
-        saveLoad();
-        //Nollar listorna
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        allUsers.clear();
-
-        saveLoad();
-
-
+       saveLoad();
+        //saveFile();
 
     }
+    private void saveFile() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedAllUsers.dat"))) {
+            oos.writeObject(allUsers);
+            oos.flush();
+
+        } catch (IOException e) {
+            System.out.println("Kunde inte spara fil");
+        }
+    }
+
     public void saveLoad(){
         new loadSave().start();
     }

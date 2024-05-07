@@ -20,19 +20,19 @@ public class ContactList {
             this.controllerServer = controller;
             this.contactList = new ConcurrentHashMap<>();
             saveLoad();
-            //Nollar kontaktlistorna
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            contactList.clear();
-            saveLoad();
-
-
-
+            //saveFile();
         }
+
+    private void saveFile() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedContactLists.dat"))) {
+            oos.writeObject(contactList);
+            oos.flush();
+            System.out.println("fil sparad");
+
+        } catch (IOException e) {
+            System.out.println("Kunde inte spara fil");
+        }
+    }
 
 
         public synchronized void addContact(User userKey, User userToAdd) {

@@ -58,7 +58,7 @@ public class ControllerKlient {
              System.out.println("Tog emot ContactListUpdate ");
             this.allFriends = null;
             this.allFriends = ((ContactListUpdate)o).getList();
-             System.out.println(allFriends.get(0).toString());
+
              for (int i = 0; i < allFriends.size(); i++) {
                  System.out.println(allFriends.get(i).toString());
 
