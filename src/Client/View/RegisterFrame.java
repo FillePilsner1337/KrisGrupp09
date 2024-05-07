@@ -7,10 +7,7 @@ import SharedModel.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.util.Arrays;
 
 public class RegisterFrame extends JFrame implements ActionListener, KeyListener {
@@ -22,6 +19,7 @@ public class RegisterFrame extends JFrame implements ActionListener, KeyListener
     private JLabel usernameLabel;
     private JLabel passwordLabel;
     private ControllerKlient controllerKlient;
+    private int defaultCloseOperation = DISPOSE_ON_CLOSE;
 
     public RegisterFrame(GUIcontroller guIcontroller, ControllerKlient controllerKlient) {
         this.guIcontroller = guIcontroller;
@@ -83,6 +81,30 @@ public class RegisterFrame extends JFrame implements ActionListener, KeyListener
     public void register() {
         String s = new String(password.getPassword());
         controllerKlient.register(username.getText(), s);
+    }
+
+    protected void processWindowEvent(final WindowEvent e) {
+        super.processWindowEvent(e);
+
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            switch (defaultCloseOperation) {
+                case HIDE_ON_CLOSE:
+                    setVisible(false);
+                    guIcontroller.getLogInFrame().setVisible(true);
+                    break;
+                case DISPOSE_ON_CLOSE:
+                    dispose();
+                    guIcontroller.getLogInFrame().setVisible(true);
+                    break;
+                case EXIT_ON_CLOSE:
+                    // This needs to match the checkExit call in
+                    // setDefaultCloseOperation
+                    System.exit(0);
+                    break;
+                case DO_NOTHING_ON_CLOSE:
+                default:
+            }
+        }
     }
 
     @Override

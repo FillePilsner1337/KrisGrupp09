@@ -157,10 +157,13 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
     public void closeRegFrame() {
         registerFrame.setVisible(false);
         registerFrame = null;
+        logInFrame.setVisible(true);
     }
 
     public void startRegFrame() {
+        logInFrame.setVisible(false);
         registerFrame = new RegisterFrame(this, controllerKlient);
+
     }
 
     public void reqToFollow() {
@@ -171,5 +174,9 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
     public boolean recivedFollowReq(String userName) {
         int svar = JOptionPane.showConfirmDialog(null, "Får " + userName + " vill följa dig?", "Följförfrågan", JOptionPane.YES_NO_OPTION);
         return svar == 0;
+    }
+
+    public LogInFrame getLogInFrame(){
+        return logInFrame;
     }
 }
