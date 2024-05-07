@@ -99,6 +99,21 @@ public class AllUsers {
         System.out.println("Return false i checkIfExists ");
         return false;
     }
+
+    public void autoCheckout() {
+        for (int i = 0; i < allUsers.size(); i++) {
+            Date checkInTime = allUsers.get(i).getInUtStatus().getTid();
+            Date currentTime = new Date();
+            if (checkInTime.getTime() + (1*60*1000) > currentTime.getTime()){
+                allUsers.get(i).setInUtStatus(new InUtStatus(false, null,null));
+                System.out.println(allUsers.get(i).getUserName() + " Har loggats ut");
+            }
+
+
+        }
+        controllerServer.allContactUpdatesToAll();
+    }
+
     public class loadSave extends Thread {
         @Override
         public void run() {

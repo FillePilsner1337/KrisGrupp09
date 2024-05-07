@@ -63,13 +63,21 @@ public class ControllerKlient {
                  System.out.println(allFriends.get(i).toString());
 
              }
-
              updateLists();
-
         }
-         if (o instanceof Message){
+        if (o instanceof Message) {
             String msg = ((Message) o).getMsg();
-            guiController.displayMessage(msg);
+            try {
+                if (guiController.getLogInFrame().isVisible()) {
+                    guiController.displayMessage(guiController.getLogInFrame(), msg);
+                } else if (guiController.getRegisterFrame().isVisible()) {
+                    guiController.displayMessage(guiController.getRegisterFrame(), msg);
+                }
+                else if (guiController.getMainFrame().isVisible()){
+                    guiController.displayMessage(guiController.getMainFrame(), msg);
+                }
+            }
+            catch (Exception e){}
         }
          if (o instanceof FollowReq){
              FollowReq req = (FollowReq)o;

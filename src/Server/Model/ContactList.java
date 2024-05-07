@@ -41,6 +41,7 @@ public class ContactList {
             }
             contactList.get(userKey).add(userToAdd);
             saveLoad();
+            controllerServer.allContactUpdatesToAll();
         }
 
     private void saveLoad() {

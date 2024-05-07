@@ -6,6 +6,8 @@ import Server.Model.*;
 import SharedModel.*;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class ControllerServer {
@@ -20,6 +22,8 @@ public class ControllerServer {
     private ContactList contactList;
     private SavedOutgoingObj savedOutgoingObj;
 
+    private TimerTask timer;
+
     public ControllerServer() {
         this.connectedClients = new ConnectedClients();
         this.serverInputHandler = new ServerInputHandler(this);
@@ -28,7 +32,15 @@ public class ControllerServer {
         this.contactList = new ContactList(this);
         this.savedOutgoingObj = new SavedOutgoingObj(this);
         newClientConnection.start();
+        setTimer();
         System.out.println("Controller startad");
+
+    }
+    public void setTimer(){
+        Timer timer = new Timer();
+        TimerToResetLogin timerToResetLogin = new TimerToResetLogin();
+        timer.scheduleAtFixedRate(timerToResetLogin, 0, 10000);
+
     }
     public boolean registrationRequest(RegReq r){
         return allUsers.checkIfExists(r);
@@ -68,6 +80,7 @@ public class ControllerServer {
 
     public void changeStatus(InUtStatus status, User user) {
         allUsers.updateStatus(status, user);
+
 
 
 
@@ -155,10 +168,32 @@ public class ControllerServer {
         contactList.addContact(follower,toBeFollowd);
         if (connectedClients.isUserConnected(follower)) {
             connectedClients.getConnectionForUser(follower).sendObject(new Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning"));
+            connectedClients.getConnectionForUser(follower).sendObject(new ContactListUpdate(contactList.getContactlist(follower)));
         }
         else {
             savedOutgoingObj.saveObj(follower, new  Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning" ));
         }
 
+    }
+
+    public boolean okLengthUsernameAndPassword(RegReq o) {
+        if (o.getUserName().length() >= 3 && o.getPassword().length() >= 3){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public class TimerToResetLogin extends TimerTask {
+
+
+
+
+        @Override
+        public void run() {
+            allUsers.autoCheckout();
+
+        }
     }
 }

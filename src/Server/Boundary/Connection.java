@@ -155,7 +155,11 @@ public class Connection {
            sendObject(new Message("Användarnamnet används redan"));
            System.out.println("registrationRequest redan reggas");
        }
-       if (!allredyregisterd){
+       boolean okUserNameAndPassword = controllerServer.okLengthUsernameAndPassword(o);
+       if (!okUserNameAndPassword){
+           sendObject(new Message("Användarnamn och lösenord måste innehålla minst tre tecken"));
+       }
+       if (!allredyregisterd && okUserNameAndPassword){
            controllerServer.registerNewUser(new User(o.getUserName(), o.getPassword()));
            sendObject(new Message("Ditt konto är registrerat"));
            sendObject(new ConfirmReg());
