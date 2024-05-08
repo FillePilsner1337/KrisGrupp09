@@ -68,9 +68,9 @@ public class ControllerKlient {
         if (o instanceof Message) {
             String msg = ((Message) o).getMsg();
             try {
-                if (guiController.getLogInFrame().isVisible()) {
+                if (guiController.getLogInFrame() != null && guiController.getLogInFrame().isVisible()) {
                     guiController.displayMessage(guiController.getLogInFrame(), msg);
-                } else if (guiController.getRegisterFrame().isVisible()) {
+                } else if (guiController.getRegisterFrame() != null && guiController.getRegisterFrame().isVisible()) {
                     guiController.displayMessage(guiController.getRegisterFrame(), msg);
                 }
                 else if (guiController.getMainFrame().isVisible()){
