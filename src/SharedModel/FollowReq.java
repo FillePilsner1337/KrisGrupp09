@@ -3,7 +3,7 @@ package SharedModel;
 import java.io.Serializable;
 
 public class FollowReq implements Serializable {
-    private static final long serialVersionUID = 604569492464863070L;
+    private static final long serialVersionUID = 4;
     private User wantsToFollow;
     private User personToBeFollowd;
 

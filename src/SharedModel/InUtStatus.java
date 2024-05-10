@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class InUtStatus implements Serializable {
-    private static final long serialVersionUID = 604569492464863070L;
+    private static final long serialVersionUID = 5;
     private boolean incheckad;
     private String id;
     private Date tid;

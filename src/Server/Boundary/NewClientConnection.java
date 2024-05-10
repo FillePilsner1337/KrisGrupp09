@@ -23,13 +23,12 @@ public class NewClientConnection extends Thread {
             System.out.println("IOException i NewClientConnection konstruktor");
             System.out.println(e.getMessage());
         }
-        System.out.println("New client connection startad");
+
     }
 
     @Override
     public void run() {
-        System.out.println("run metod new client ");
-        while (!Thread.interrupted()) {
+       while (!Thread.interrupted()) {
             try {
                 Socket socket = serverSocket.accept();
                 new Connection(socket, controllerServer, serverInputHandler);

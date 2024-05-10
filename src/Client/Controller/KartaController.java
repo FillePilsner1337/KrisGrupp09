@@ -144,8 +144,6 @@ public class KartaController {
                 String[] clickedpointStringSplit = clickedpointString.split(",", 2);
                 int numberOfResults = 0;
                 ArrayList<KrisWayPoint> foundShelters = new ArrayList<>();
-                System.out.println(mapViewer.getZoom());
-                System.out.println(clickedpointString);
                 for (KrisWayPoint waypoint : waypoints) {
                     int[] howClose = clickDependingOnZoom(mapViewer.getZoom());
                     String waypointString = String.valueOf(waypoint.getGeo());
@@ -236,9 +234,7 @@ public class KartaController {
     public void loadFile() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/srOB.dat"))) {
             Object o = ois.readObject();
-            System.out.println("Lästfil");
             srObjects = (ArrayList<SrObject>) o;
-            System.out.println("Loaded");
         } catch (IOException e) {
             if (e instanceof EOFException) {
                 System.out.println("EOF fel");

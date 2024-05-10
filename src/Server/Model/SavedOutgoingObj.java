@@ -25,8 +25,6 @@ public class SavedOutgoingObj {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedObjToSend.dat"))) {
             oos.writeObject(objMap);
             oos.flush();
-            System.out.println("fil sparad");
-
         } catch (IOException e) {
             System.out.println("Kunde inte spara fil");
         }
@@ -41,8 +39,7 @@ public class SavedOutgoingObj {
             objMap.put(user, new ArrayList<>());
         }
         objMap.get(user).add(o);
-        System.out.println("Ob tallagt i HM");
-        System.out.println("Listan är tom i save metoden  " + objMap.get(user).isEmpty());
+
     }
 
     public ArrayList<Object> getObjToSend(User user){
@@ -50,9 +47,6 @@ public class SavedOutgoingObj {
             objMap.put(user, new ArrayList<>());
         }
         ArrayList<Object> list = objMap.get(user);
-
-        System.out.println("Inne i metod getObjToSend");
-        System.out.println("Listan i send metod är tom " + list.isEmpty());
         return list;
     }
 
@@ -77,7 +71,6 @@ public class SavedOutgoingObj {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedObjToSend.dat"))) {
                 oos.writeObject(objMap);
                 oos.flush();
-                System.out.println("fil sparad");
 
             } catch (IOException e) {
                 System.out.println("Kunde inte spara fil");
@@ -88,8 +81,6 @@ public class SavedOutgoingObj {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/savedObjToSend.dat"))) {
                 objMap = (ConcurrentHashMap<User, ArrayList<Object>>) ois.readObject();
                 fileLoaded = true;
-                System.out.println("ObToSend fil laddad");
-
             } catch (IOException e) {
                 if (e instanceof EOFException) {
                     System.out.println("ObToSend: Ingen mer fil att läsa");

@@ -19,25 +19,26 @@ public class AllUsers {
     public AllUsers (ControllerServer controllerServer) {
         this.allUsers = new ArrayList<>();
         this.controllerServer = controllerServer;
-       saveLoad();
+        saveLoad();
         //saveFile();
-
     }
     private void saveFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedAllUsers.dat"))) {
             oos.writeObject(allUsers);
             oos.flush();
-
         } catch (IOException e) {
             System.out.println("Kunde inte spara fil");
+        }
+    }
+    public void printAllUsers(){
+           for (int i = 0; i < allUsers.size(); i++){
+            System.out.println(allUsers.get(i).toString());
         }
     }
 
     public void saveLoad(){
         new loadSave().start();
     }
-
-
     public synchronized void put(User user){
         if (!allUsers.contains(user)){
             allUsers.add(user);
@@ -58,10 +59,9 @@ public class AllUsers {
         for (int i = 0; i < allUsers.size(); i++) {
             if (user.equals(allUsers.get(i))) {
                 allUsers.get(i).setInUtStatus(status);
-                System.out.println("uppdaterat status Update Status i All users update status  ");
+                 break;
             }
         }
-
         controllerServer.allContactUpdatesToAll();
     }
 
@@ -75,7 +75,7 @@ public class AllUsers {
                 return allUsers.get(i).getInUtStatus();
             }
         }
-        return new InUtStatus(false, null,null);
+        return null;
     }
 
     public User getRealUser(User u) {
@@ -90,26 +90,22 @@ public class AllUsers {
     public boolean checkIfExists(RegReq r) {
         for (int i = 0; i < allUsers.size(); i++) {
             if (allUsers.get(i).getUserName().equals(r.getUserName())){
-                System.out.println("Return True i checkIfExists ");
                 return true;
-
             }
-
         }
-        System.out.println("Return false i checkIfExists ");
         return false;
     }
 
     public void autoCheckout() {
         for (int i = 0; i < allUsers.size(); i++) {
-            Date checkInTime = allUsers.get(i).getInUtStatus().getTid();
+            Date checkInTime = new Date();
             Date currentTime = new Date();
-            if (checkInTime.getTime() + (1*60*1000) > currentTime.getTime()){
-                allUsers.get(i).setInUtStatus(new InUtStatus(false, null,null));
-                System.out.println(allUsers.get(i).getUserName() + " Har loggats ut");
+            if (allUsers.get(i).getInUtStatus().getTid() != null) {
+                checkInTime = allUsers.get(i).getInUtStatus().getTid();
             }
-
-
+            if (allUsers.get(i).getInUtStatus().getTid() != null && checkInTime.getTime() + (1*60*1000) > currentTime.getTime()){
+                allUsers.get(i).setInUtStatus(new InUtStatus(false, null,null));
+            }
         }
         controllerServer.allContactUpdatesToAll();
     }
@@ -128,7 +124,6 @@ public class AllUsers {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedAllUsers.dat"))) {
                 oos.writeObject(allUsers);
                 oos.flush();
-
             } catch (IOException e) {
                 System.out.println("Kunde inte spara fil");
             }
@@ -138,7 +133,6 @@ public class AllUsers {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/savedAllUsers.dat"))) {
                 allUsers = (ArrayList<User>) ois.readObject();
                 fileLoaded = true;
-
             } catch (IOException e) {
                 if (e instanceof EOFException) {
                     System.out.println("AllUsers: Ingen mer fil att läsa");

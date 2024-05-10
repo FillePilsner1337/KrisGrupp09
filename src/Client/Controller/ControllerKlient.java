@@ -46,7 +46,6 @@ public class ControllerKlient {
     public void recivedObject(Object o){
         if (o instanceof User){
             this.user = (User)o;
-            System.out.println(user.getInUtStatus().toString());
         }
         if (o instanceof ConfirmReg){
             guiController.closeRegFrame();
@@ -55,19 +54,7 @@ public class ControllerKlient {
             guiController.userAndPassOk();
         }
          if (o instanceof ContactListUpdate){
-             if (user != null) {
-                 System.out.println("Tog emot ContactListUpdate ");
-                 System.out.println("*" + allFriends.toString());
-                 System.out.println(((ContactListUpdate) o).getList().toString());
-                 this.allFriends = null;
-                 this.allFriends = ((ContactListUpdate) o).getList();
-                 System.out.println(this.allFriends.toString());
-
-                 for (int i = 0; i < this.allFriends.size(); i++) {
-                     System.out.println(this.allFriends.get(i).toString());
-                     System.out.println("---------------------------");
-                 }
-             }
+             this.allFriends = ((ContactListUpdate) o).getList();
              updateLists();
         }
         if (o instanceof Message) {
@@ -98,20 +85,16 @@ public class ControllerKlient {
     }
 
     private void updateLists() {
-        System.out.println("inne i updateListsMetoden");
         ArrayList<String> friendList = new ArrayList<>();
         for (int i = 0; i < allFriends.size(); i++){
             friendList.add(allFriends.get(i).getUserName());
-            System.out.println("inne första for loop");
+
             }
         displayer.displayFriends(friendList);
 
         ArrayList<String> friendsInShelter = new ArrayList<>();
         for (int i = 0; i < allFriends.size(); i++) {
-            System.out.println("inne i andra for loop");
-            System.out.println(allFriends.get(i).getInUtStatus().isIncheckad());
                 if (allFriends.get(i).getInUtStatus().isIncheckad()) {
-                    System.out.println("Inne i for loop incheckad if sats");
                     friendsInShelter.add(allFriends.get(i).getUserName());
                 }
         }

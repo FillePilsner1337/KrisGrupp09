@@ -82,7 +82,7 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
             }
         };
         String friendsInShelter = friendsInShelterBuilder.toString();
-        System.out.println(friendsInShelter);
+
 
         int choice;
         if (!friendsInShelter.isEmpty()) {

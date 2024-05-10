@@ -69,7 +69,6 @@ public class ContactList {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedContactLists.dat"))) {
                 oos.writeObject(contactList);
                 oos.flush();
-                System.out.println("fil sparad");
 
             } catch (IOException e) {
                 System.out.println("Kunde inte spara fil");
@@ -80,7 +79,7 @@ public class ContactList {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/savedContactLists.dat"))) {
                 contactList = (ConcurrentHashMap<User, ArrayList<User>>) ois.readObject();
                 fileLoaded = true;
-                System.out.println("ContactList fil laddad");
+
 
             } catch (IOException e) {
                 if (e instanceof EOFException) {

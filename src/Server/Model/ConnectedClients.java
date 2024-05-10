@@ -18,7 +18,6 @@ public class ConnectedClients {
     public synchronized void put(User user, Connection connection) {
         if (!connectedList.containsKey(user)) {
             connectedList.put(user, connection);
-            System.out.println("Användare tillagd i hashMap ConnectedClients");
         }
     }
 

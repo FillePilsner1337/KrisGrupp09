@@ -28,7 +28,6 @@ public class Connection {
     private boolean loggingOn = true;
 
     public Connection(Socket socket, ControllerServer controllerServer, ServerInputHandler serverInputHandler)  {
-        System.out.println("Connection konstruktor rad 1");
         this.controllerServer = controllerServer;
         this.socket = socket;
         this.serverInputHandler = serverInputHandler;
@@ -37,7 +36,7 @@ public class Connection {
         this.outputBuffer = new Buffer<Object>();
         this.outputHandler = new OutputHandler(socket);
         outputHandler.start();
-        System.out.println("new connection objekt");
+
     }
 
     public Socket getSocket() {
@@ -60,7 +59,7 @@ public class Connection {
         boolean exists = controllerServer.checkUserExists(u);
          if (!exists){
             sendObject(new Message("Felaktigt användarnamn"));
-             System.out.println("Användare finns ej");
+
          }
          boolean password = controllerServer.checkPassword(u);
          if (exists && password){
@@ -68,11 +67,11 @@ public class Connection {
              user = controllerServer.getRealUser(u);
              newConnection();
              loggingOn = false;
-             System.out.println("Rätt användarnamn och lösenord");
+
          }
          if (exists && !password) {
              sendObject(new Message("Felaktigt lösenord"));
-             System.out.println("Fel lösenord");
+
          }
     }
 
@@ -88,14 +87,9 @@ public class Connection {
             try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());) {
                 while (!Thread.interrupted()) {
                     Object obj = outputBuffer.get();
-                    if (obj instanceof ContactListUpdate){
-                        ContactListUpdate clu = ((ContactListUpdate)obj);
-                        for (int i = 0; i < ((ContactListUpdate) obj).getList().size(); i++){
-                            System.out.println(((ContactListUpdate) obj).getList().get(i) + " " + new Date());
-                        }
-                    }
                     oos.writeObject(obj);
                     oos.flush();
+                    oos.reset();
                 }
             } catch (IOException e) {
                 System.out.println("FEL Run metoden i InputHandler IOException");
@@ -105,7 +99,7 @@ public class Connection {
                 System.out.println(e.getMessage());
             }
             finally {
-               // controllerServer.userDisconnect(user);
+                controllerServer.userDisconnect(user);
                 try{
                     this.socket.close();
                 }
@@ -133,7 +127,7 @@ public class Connection {
                     }
                     if (o instanceof RegReq){
                         registrationRequest((RegReq)o);
-                        System.out.println("Tagit emot RegReq");
+
                     }
                 }
                 while (!Thread.interrupted()) {
@@ -155,7 +149,7 @@ public class Connection {
        boolean allredyregisterd = controllerServer.registrationRequest(o);
        if (allredyregisterd){
            sendObject(new Message("Användarnamnet används redan"));
-           System.out.println("registrationRequest redan reggas");
+
        }
        boolean okUserNameAndPassword = controllerServer.okLengthUsernameAndPassword(o);
        if (!okUserNameAndPassword){
@@ -165,7 +159,7 @@ public class Connection {
            controllerServer.registerNewUser(new User(o.getUserName(), o.getPassword()));
            sendObject(new Message("Ditt konto är registrerat"));
            sendObject(new ConfirmReg());
-           System.out.println("registrationRequest redan reggas");
+
        }
     }
     public User getUser(){

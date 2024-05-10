@@ -13,15 +13,11 @@ import java.util.TimerTask;
 public class ControllerServer {
     private final int port = 10000;
     private NewClientConnection newClientConnection;
-
     private ConnectedClients connectedClients;
-    
     private ServerInputHandler serverInputHandler;
-
     private AllUsers allUsers;
     private ContactList contactList;
     private SavedOutgoingObj savedOutgoingObj;
-
     private TimerTask timer;
 
     public ControllerServer() {
@@ -33,18 +29,29 @@ public class ControllerServer {
         this.savedOutgoingObj = new SavedOutgoingObj(this);
         newClientConnection.start();
         setTimer();
-        System.out.println("Controller startad");
-
     }
+    public ArrayList<User> createContactList(User user){
+        ArrayList <User> listToSend = new ArrayList<>();
+        ArrayList <User> listToReadFrom = contactList.getContactlist(user);
+        for (int i = 0; i < listToReadFrom.size(); i++){
+            listToSend.add(getRealUser(listToReadFrom.get(i)));
+            InUtStatus status = getRealStatus(listToReadFrom.get(i));
+            listToSend.get(i).setInUtStatus(status);
+        }
+        return listToSend;
+    }
+
+    private InUtStatus getRealStatus(User user) {
+        return allUsers.getStatusForUser(user);
+    }
+
     public void setTimer(){
         Timer timer = new Timer();
         TimerToResetLogin timerToResetLogin = new TimerToResetLogin();
         timer.scheduleAtFixedRate(timerToResetLogin, 0, 10000);
-
     }
     public boolean registrationRequest(RegReq r){
         return allUsers.checkIfExists(r);
-
     }
     public void userDisconnect(User user) {
         connectedClients.removeUser(user);
@@ -52,22 +59,15 @@ public class ControllerServer {
 
     public void newLogIn(User user, Connection connection) {
         connectedClients.put(user, connection);
-        connectedClients.getConnectionForUser(user).sendObject(new ContactListUpdate(contactList.getContactlist(user)));
-        System.out.println("new LogIn metoden");
+        connectedClients.getConnectionForUser(user).sendObject(new ContactListUpdate(createContactList(user)));
         checkForOldObjToSend(user);
     }
 
     public void allContactUpdatesToAll(){
-        System.out.println("allContactUpdatesToAll");
-
         for (int i = 0; i < connectedClients.getListOfConnected().size(); i++){
             User user = connectedClients.getListOfConnected().get(i);
-            System.out.println(user.getInUtStatus().isIncheckad());
-
             Connection c = connectedClients.getConnectionForUser(user);
-
-            c.sendObject(new ContactListUpdate(contactList.getContactlist(user)));
-
+            c.sendObject(new ContactListUpdate(createContactList(user)));
         }
     }
     public void sendSelfUpdate(User user) {
@@ -79,23 +79,13 @@ public class ControllerServer {
     }
 
     public void changeStatus(InUtStatus status, User user) {
-        allUsers.updateStatus(status, user);
-
-
-
-
-    }
-
-    public void updateContactlistFromUser(ContactListUpdate update, User user) {
-      //  contactList.put(user, update.getList());
-        //Metoden ska int användas
+                allUsers.updateStatus(status, user);
     }
 
     public boolean checkUserExists(User user) {
         ArrayList<User> list = allUsers.getAllUsers();
         for (int i = 0; i< list.size(); i++){
-            if (list.get(i).equals(user))
-            {
+            if (list.get(i).equals(user)){
                 return true;
             }
         }
@@ -131,36 +121,25 @@ public class ControllerServer {
            connectedClients.getConnectionForUser(user).sendObject(new Message("Användaren finns ej"));
        }
        if (checkUserExists(req.getPersonToBeFollowd())){
-
            User toBeFollowd = getRealUser(req.getPersonToBeFollowd());
            req.setPersonToBeFollowd(toBeFollowd);
-
            if (connectedClients.isUserConnected(req.getPersonToBeFollowd())){
                connectedClients.getConnectionForUser(req.getPersonToBeFollowd()).sendObject(req);
-
            }
            else {
                 savedOutgoingObj.saveObj(req.getPersonToBeFollowd(), req);
-
             }
-
        }
-
-
     }
 
     public void checkForOldObjToSend(User user){
-
         if (!savedOutgoingObj.getObjToSend(user).isEmpty()){
-            System.out.println("inne if sats checkmetod");
             ArrayList<Object> list = savedOutgoingObj.getObjToSend(user);
             for (int i = 0; i < list.size(); i++) {
                 connectedClients.getConnectionForUser(user).sendObject(list.get(i));
             }
         }
         savedOutgoingObj.clearUserObjectList(user);
-
-
     }
     public void okToFollow(OkFollowReg ok){
         User follower = getRealUser(ok.getFollowReq().getWantsToFollow());
@@ -168,18 +147,11 @@ public class ControllerServer {
         contactList.addContact(follower,toBeFollowd);
         if (connectedClients.isUserConnected(follower)) {
             connectedClients.getConnectionForUser(follower).sendObject(new Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning"));
-            ArrayList<User> testarray = new ArrayList<>();
-            testarray = contactList.getContactlist(follower);
-            System.out.println("***"+testarray.toString()+"***");
-            ContactListUpdate clu = new ContactListUpdate(testarray);
-            System.out.println("****"+clu.toString()+"****");
-            System.out.println("******"+clu.getList().toString()+"******");
-            connectedClients.getConnectionForUser(follower).sendObject(clu);
         }
         else {
             savedOutgoingObj.saveObj(follower, new  Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning" ));
         }
-
+        allContactUpdatesToAll();
     }
 
     public boolean okLengthUsernameAndPassword(RegReq o) {
@@ -191,15 +163,14 @@ public class ControllerServer {
         }
     }
 
+    public void printAllUsers() {
+        allUsers.printAllUsers();
+    }
+
     public class TimerToResetLogin extends TimerTask {
-
-
-
-
         @Override
         public void run() {
             allUsers.autoCheckout();
-
         }
     }
 }
