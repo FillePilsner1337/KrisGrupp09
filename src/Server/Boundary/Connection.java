@@ -12,8 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
-
+import java.util.Date;
 
 
 public class Connection {
@@ -89,6 +88,12 @@ public class Connection {
             try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());) {
                 while (!Thread.interrupted()) {
                     Object obj = outputBuffer.get();
+                    if (obj instanceof ContactListUpdate){
+                        ContactListUpdate clu = ((ContactListUpdate)obj);
+                        for (int i = 0; i < ((ContactListUpdate) obj).getList().size(); i++){
+                            System.out.println(((ContactListUpdate) obj).getList().get(i) + " " + new Date());
+                        }
+                    }
                     oos.writeObject(obj);
                     oos.flush();
                 }
@@ -125,14 +130,11 @@ public class Connection {
                     Object o = ois.readObject();
                     if (o instanceof User){
                         checkUserNamneAndPassword((User)o);
-
                     }
-
                     if (o instanceof RegReq){
                         registrationRequest((RegReq)o);
                         System.out.println("Tagit emot RegReq");
                     }
-
                 }
                 while (!Thread.interrupted()) {
                     Object o = ois.readObject();
@@ -165,6 +167,9 @@ public class Connection {
            sendObject(new ConfirmReg());
            System.out.println("registrationRequest redan reggas");
        }
+    }
+    public User getUser(){
+        return user;
     }
 }
 

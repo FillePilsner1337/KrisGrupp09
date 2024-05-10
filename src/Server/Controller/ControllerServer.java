@@ -168,7 +168,13 @@ public class ControllerServer {
         contactList.addContact(follower,toBeFollowd);
         if (connectedClients.isUserConnected(follower)) {
             connectedClients.getConnectionForUser(follower).sendObject(new Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning"));
-            connectedClients.getConnectionForUser(follower).sendObject(new ContactListUpdate(contactList.getContactlist(follower)));
+            ArrayList<User> testarray = new ArrayList<>();
+            testarray = contactList.getContactlist(follower);
+            System.out.println("***"+testarray.toString()+"***");
+            ContactListUpdate clu = new ContactListUpdate(testarray);
+            System.out.println("****"+clu.toString()+"****");
+            System.out.println("******"+clu.getList().toString()+"******");
+            connectedClients.getConnectionForUser(follower).sendObject(clu);
         }
         else {
             savedOutgoingObj.saveObj(follower, new  Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning" ));

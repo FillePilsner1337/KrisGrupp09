@@ -133,6 +133,7 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         mainFrame.getCheckInPanel().revalidate();
     }
 
+
     public void displayMessage(Component comp, String msg){
         JOptionPane.showMessageDialog(comp,msg);
     }
@@ -174,6 +175,11 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
     public boolean recivedFollowReq(String userName) {
         int svar = JOptionPane.showConfirmDialog(mainFrame, "Får " + userName + " vill följa dig?", "Följförfrågan", JOptionPane.YES_NO_OPTION);
         return svar == 0;
+    }
+
+    @Override
+    public void displayErrorMessage(String msg){
+        JOptionPane.showMessageDialog(mainFrame, msg);
     }
 
     public LogInFrame getLogInFrame(){

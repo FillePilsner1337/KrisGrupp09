@@ -77,10 +77,12 @@ public class KartaController {
                            GeoPosition home = new GeoPosition(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
                            startPos(home);
                        }catch (Exception ex){
+                           displayer.displayErrorMessage("Felaktig inmatning");
                            startPos(null); //tar dig till niagara om exception inträffar.
                        }
                    }
                    else{
+                       displayer.displayErrorMessage("Felaktig inmatning");
                        GeoPosition home = null;
                        startPos(home);
                    }

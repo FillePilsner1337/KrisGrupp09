@@ -54,14 +54,19 @@ public class ControllerKlient {
         if (o instanceof ConfirmLogon){
             guiController.userAndPassOk();
         }
-         if (o instanceof ContactListUpdate && user != null){
-             System.out.println("Tog emot ContactListUpdate ");
-            this.allFriends = null;
-            this.allFriends = ((ContactListUpdate)o).getList();
+         if (o instanceof ContactListUpdate){
+             if (user != null) {
+                 System.out.println("Tog emot ContactListUpdate ");
+                 System.out.println("*" + allFriends.toString());
+                 System.out.println(((ContactListUpdate) o).getList().toString());
+                 this.allFriends = null;
+                 this.allFriends = ((ContactListUpdate) o).getList();
+                 System.out.println(this.allFriends.toString());
 
-             for (int i = 0; i < allFriends.size(); i++) {
-                 System.out.println(allFriends.get(i).toString());
-
+                 for (int i = 0; i < this.allFriends.size(); i++) {
+                     System.out.println(this.allFriends.get(i).toString());
+                     System.out.println("---------------------------");
+                 }
              }
              updateLists();
         }

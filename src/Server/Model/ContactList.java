@@ -36,12 +36,12 @@ public class ContactList {
 
 
         public synchronized void addContact(User userKey, User userToAdd) {
-            if (!contactList.containsKey(userKey)){
+            if (!contactList.containsKey(userKey)) {
                 contactList.put(userKey, new ArrayList<>());
             }
-            contactList.get(userKey).add(userToAdd);
-            saveLoad();
-            controllerServer.allContactUpdatesToAll();
+                contactList.get(userKey).add(userToAdd);
+                saveLoad();
+                controllerServer.allContactUpdatesToAll();
         }
 
     private void saveLoad() {
