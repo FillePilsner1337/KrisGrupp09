@@ -129,8 +129,8 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
     }
 
     public void repaintGUI(){
-        mainFrame.getCheckInPanel().repaint();
-        mainFrame.getCheckInPanel().revalidate();
+        kartaController.getMapViewer().repaint();
+        kartaController.getMapViewer().revalidate();
     }
 
 

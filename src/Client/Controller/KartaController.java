@@ -284,5 +284,7 @@ public class KartaController {
         displayer.displayMap(mapViewer);
     }
 
+    public JXMapViewer getMapViewer(){return mapViewer;}
+
 }
 

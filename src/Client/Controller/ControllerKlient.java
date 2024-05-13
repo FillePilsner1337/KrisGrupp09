@@ -100,6 +100,7 @@ public class ControllerKlient {
         }
 
         displayer.displayFriendsInShelter(friendsInShelter);
+        guiController.repaintGUI();
     }
     public void register(String userName, String password){
         serverConnection.sendObject(new RegReq(userName,password));
