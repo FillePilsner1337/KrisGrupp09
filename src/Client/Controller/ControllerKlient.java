@@ -45,7 +45,8 @@ public class ControllerKlient {
 
     public void recivedObject(Object o){
         if (o instanceof User){
-            this.user = (User)o;
+            this.user = (User) o;
+           // guiController.checkout();
         }
         if (o instanceof ConfirmReg){
             guiController.closeRegFrame();
@@ -72,12 +73,12 @@ public class ControllerKlient {
             catch (Exception e){}
         }
          if (o instanceof FollowReq){
-             FollowReq req = (FollowReq)o;
+             FollowReq req = (FollowReq) o;
              followReq(req);
          }
     }
 
-    private void followReq(FollowReq req) {
+    private void followReq(FollowReq req){
         boolean ok = guiController.recivedFollowReq(req.getWantsToFollow().getUserName());
         if (ok){
             serverConnection.sendObject(new OkFollowReg(req, true));
@@ -142,7 +143,7 @@ public class ControllerKlient {
 
     public void logon(String userName, String password) {
         User u = new User(userName, password);
-        u.setInUtStatus(new InUtStatus(false,null,null));
+        u.setInUtStatus(new InUtStatus(false,null,null)); //Kolla metoden. Varför ny status?
         serverConnection.sendObject(u);
     }
 

@@ -103,8 +103,10 @@ public class AllUsers {
             if (allUsers.get(i).getInUtStatus().getTid() != null) {
                 checkInTime = allUsers.get(i).getInUtStatus().getTid();
             }
-            if (allUsers.get(i).getInUtStatus().getTid() != null && checkInTime.getTime() + (1*60*1000) > currentTime.getTime()){
+            if (allUsers.get(i).getInUtStatus().getTid() != null && checkInTime.getTime() + (1*10*1000) > currentTime.getTime()){
                 allUsers.get(i).setInUtStatus(new InUtStatus(false, null,null));
+                controllerServer.sendMessageToUser(allUsers.get(i), "Du har blivit automatiskt utloggad från skyddsrummet");
+                controllerServer.getConnectedClients().getConnectionForUser(allUsers.get(i)).sendObject(allUsers.get(i));
             }
         }
         controllerServer.allContactUpdatesToAll();

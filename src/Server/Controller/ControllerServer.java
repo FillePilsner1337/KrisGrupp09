@@ -28,7 +28,7 @@ public class ControllerServer {
         this.contactList = new ContactList(this);
         this.savedOutgoingObj = new SavedOutgoingObj(this);
         newClientConnection.start();
-        setTimer();
+       // setTimer();
     }
     public ArrayList<User> createContactList(User user){
         ArrayList <User> listToSend = new ArrayList<>();
@@ -172,5 +172,9 @@ public class ControllerServer {
         public void run() {
             allUsers.autoCheckout();
         }
+    }
+
+    public ConnectedClients getConnectedClients() {
+        return connectedClients;
     }
 }
