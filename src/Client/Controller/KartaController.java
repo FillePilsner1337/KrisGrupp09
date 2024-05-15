@@ -33,8 +33,13 @@ public class KartaController {
     private ImapDisplay displayer;
     final JXMapViewer mapViewer = new JXMapViewer();
     ControllerKlient controllerKlient;
+
+    /*
     private String[] cities = new String[]{"Malmö, 55.6088535, 12.9941134", "Lund, 55.704551, 13.192441", "Stockholm, 59.325587, 18.0552665",
             "Göteborg, 57.7078558, 11.9732139", "Ronneby, 56.210434, 15.276022900000043"};
+
+     */
+    private Object[] cities;
 
     public KartaController(ControllerKlient ck) {
         this.controllerKlient = ck;
@@ -60,6 +65,7 @@ public class KartaController {
         JButton angePlats = new JButton("Ange plats");
         mapViewer.add(angePlats);
         angePlats.setVisible(true);
+        /*
         JButton search = new JButton("Sök plats");
         search.setVisible(true);
 
@@ -70,15 +76,30 @@ public class KartaController {
                 displayer.openCloseSearch();
             }
         });
+        
+         */
+        cities = controllerKlient.getSearchCityController().getCities().toArray();
         angePlats.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                /*
                 String start1 = displayer.chooseLocationDialog(cities);
                 if (start1 != null){
                     String[] parts = start1.split(",", 3);
                     GeoPosition home = new GeoPosition(Double.parseDouble(parts[1]), Double.parseDouble(parts[2]));
                     startPos(home);
                 }
+
+                 */
+                CityObject start1 = ((CityObject) displayer.chooseLocationDialog(cities));
+                if (start1 != null){
+                    GeoPosition home = start1.getGeoPosition();
+                    startPos(home);
+                }
+                else {
+                    displayer.openCloseSearch();
+                }
+                /*
                 else {
                    String start = displayer.enterManually();
                    if (start != null){
@@ -91,12 +112,16 @@ public class KartaController {
                            startPos(null); //tar dig till niagara om exception inträffar.
                        }
                    }
+
+
                    else{
                        displayer.displayErrorMessage("Felaktig inmatning");
                        GeoPosition home = null;
                        startPos(home);
                    }
                 }
+
+                 */
             }
         });
 

@@ -116,7 +116,7 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         return choice;
     }
 
-    public String chooseLocationDialog(String[] cities) {
+    public Object chooseLocationDialog(Object[] cities) {
         String[] options = {"Ok", "Manuell inmatning"};
         JComboBox menuBar = new JComboBox(cities);
         int choice = JOptionPane.showOptionDialog(
@@ -129,7 +129,8 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
                 options,
                 options[0]);
         if (choice == 0) {
-            String pickedCity = cities[menuBar.getSelectedIndex()];
+            //String pickedCity = cities[menuBar.getSelectedIndex()];
+            Object pickedCity = cities[menuBar.getSelectedIndex()];
             return pickedCity;
         } else {
             return null;
@@ -221,6 +222,5 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
 
     public void searchCity(String s) {
         searchCityController.search(s);
-
     }
 }

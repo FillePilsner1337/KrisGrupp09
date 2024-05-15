@@ -64,5 +64,9 @@ public class SearchCityController {
         guiController.diplaySearchResult(result);
     }
 
+    public ArrayList<CityObject> getCities(){
+        return cities;
+    }
+
 
 }

@@ -180,8 +180,6 @@ public class CheckInPanel extends JPanel implements ActionListener {
                             guIcontroller.getMainFrame().getTabs().setSelectedIndex(0);
                         }
                     }
-
-
                     }
                 }
         });

@@ -158,6 +158,10 @@ public class ControllerKlient {
         serverConnection.sendObject(new FollowReq(user, namn));
     }
 
+    public SearchCityController getSearchCityController(){
+        return searchCityController;
+    }
+
     /*public static void logInDialog() {
         String username = JOptionPane.showInputDialog(null, "Ange användarnamn");
 

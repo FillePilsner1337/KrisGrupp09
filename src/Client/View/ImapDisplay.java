@@ -13,7 +13,7 @@ public interface ImapDisplay {
     public void displayMap(JXMapViewer mapViewer);
     public void setCheckinText(String shelter);
     public int displayShelterInfo(ArrayList<KrisWayPoint> foundShelters, int i);
-    public String chooseLocationDialog(String[] cities);
+    public Object chooseLocationDialog(Object[] cities);
     public String enterManually();
     public void displayErrorMessage(String msg);
     public void diplaySearchResult(ArrayList<CityObject> list);
