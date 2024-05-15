@@ -195,6 +195,11 @@ public class KartaController {
         mapViewer.setZoom(7);
     }
 
+    public void takeMeHereFriendLocation(GeoPosition geoPosition){
+        mapViewer.setAddressLocation(geoPosition);
+        mapViewer.setZoom(4);
+    }
+
     public void startPos(GeoPosition geoPosition){
         if (geoPosition == null) {
              geoPosition = new GeoPosition(55.610348059975394, 12.994770622696002);
@@ -285,6 +290,10 @@ public class KartaController {
     }
 
     public JXMapViewer getMapViewer(){return mapViewer;}
+
+    public HashSet<KrisWayPoint> getWaypoints(){
+        return waypoints;
+    }
 
 }
 

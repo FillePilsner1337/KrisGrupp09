@@ -1,12 +1,17 @@
 package Client.View;
 
 import Client.Controller.GUIcontroller;
+import Client.Model.KrisWayPoint;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class CheckInPanel extends JPanel implements ActionListener {
     private JLabel incheckad;
@@ -18,6 +23,8 @@ public class CheckInPanel extends JPanel implements ActionListener {
     private DefaultListModel<String> modelIncheckaddeVanner;
     private GUIcontroller guIcontroller;
 
+    private JButton showOnMap;
+
 
 
     public CheckInPanel(GUIcontroller guIcontroller){
@@ -27,10 +34,12 @@ public class CheckInPanel extends JPanel implements ActionListener {
         laggTillVannBtn = new JButton("Lägg till vän");
         this.modelIncheckaddeVanner = new DefaultListModel<>();
         this.modelAllaVanner = new DefaultListModel<>();
+        this.showOnMap = new JButton("Visa på karta");
 
         listAllaVanner = new JList<>(modelAllaVanner);
         listIncheckadeVanner = new JList<>(modelIncheckaddeVanner);
         setUp();
+        setUpShowOnMapListeners();
     }
 
     private void setUp() {
@@ -67,6 +76,11 @@ public class CheckInPanel extends JPanel implements ActionListener {
         listIncheckadeVanner.setSize(180, 250);
         listIncheckadeVanner.setLocation(400 , 180);
         listIncheckadeVanner.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        showOnMap.setText("Visa på kartan");
+        showOnMap.setSize(180, 40);
+        showOnMap.setLocation(400,440);
+        showOnMap.setEnabled(false);
+        this.add(showOnMap);
 
         add(listIncheckadeVanner);
 
@@ -108,6 +122,7 @@ public class CheckInPanel extends JPanel implements ActionListener {
 
     }
 
+
     public void updateIncheckadeVanner(ArrayList<String> incheckade) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -134,6 +149,44 @@ public class CheckInPanel extends JPanel implements ActionListener {
             guIcontroller.reqToFollow();
         }
     }
+
+    public void setUpShowOnMapListeners(){
+        listIncheckadeVanner.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()){
+                    String nameAndID = listIncheckadeVanner.getSelectedValue();
+                    if (nameAndID != null) {
+                        showOnMap.setEnabled(true);
+                    }
+                }
+            }
+        });
+
+        showOnMap.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nameAndID = listIncheckadeVanner.getSelectedValue();
+                if (nameAndID != null){
+                    String[] parts = nameAndID.split(",");
+                    String shelterId = parts[1].substring(1);
+                    System.out.println(parts[1]);
+                    System.out.println(shelterId);
+                    HashSet<KrisWayPoint> waypoints = guIcontroller.getKartaController().getWaypoints();
+                    for (KrisWayPoint wayPoint : waypoints){
+                        if (wayPoint.getId().matches(shelterId)){
+                            GeoPosition friendsLocation = wayPoint.getGeo();
+                            guIcontroller.getKartaController().takeMeHereFriendLocation(friendsLocation);
+                            guIcontroller.getMainFrame().getTabs().setSelectedIndex(0);
+                        }
+                    }
+
+
+                    }
+                }
+        });
+    }
+
 
 
 

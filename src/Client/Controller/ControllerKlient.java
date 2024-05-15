@@ -96,7 +96,7 @@ public class ControllerKlient {
         ArrayList<String> friendsInShelter = new ArrayList<>();
         for (int i = 0; i < allFriends.size(); i++) {
                 if (allFriends.get(i).getInUtStatus().isIncheckad()) {
-                    friendsInShelter.add(allFriends.get(i).getUserName());
+                    friendsInShelter.add(allFriends.get(i).getUserName() + ", " + allFriends.get(i).getInUtStatus().getId());
                 }
         }
 
