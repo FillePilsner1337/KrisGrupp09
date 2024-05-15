@@ -63,11 +63,22 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
 
     public void checkout(){
         controllerKlient.checkout();
-        mainFrame.getCheckInPanel().getIncheckad().setText(controllerKlient.getUser().getUserName() + ", Du är inte incheckad");
+        setCheckoutText();
     }
 
     public void setCheckinText(String shelter){
-        mainFrame.getCheckInPanel().getIncheckad().setText(controllerKlient.getUser().getUserName() + ", Du är nu incheckad i " + shelter);
+        if (mainFrame != null) {
+            if (shelter == null) {
+                setCheckoutText();
+            }
+            else {
+                mainFrame.getCheckInPanel().getIncheckad().setText(controllerKlient.getUser().getUserName() + ", Du är nu incheckad i " + shelter);
+            }
+        }
+    }
+
+    public void setCheckoutText(){
+        mainFrame.getCheckInPanel().getIncheckad().setText(controllerKlient.getUser().getUserName() + ", Du är inte incheckad.");
     }
     
     public int displayShelterInfo(ArrayList<KrisWayPoint> foundShelters, int i){

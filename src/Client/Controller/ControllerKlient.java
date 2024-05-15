@@ -49,7 +49,7 @@ public class ControllerKlient {
     public void recivedObject(Object o){
         if (o instanceof User){
             this.user = (User) o;
-           // guiController.checkout();
+            guiController.setCheckinText(user.getInUtStatus().getId());
         }
         if (o instanceof ConfirmReg){
             guiController.closeRegFrame();
