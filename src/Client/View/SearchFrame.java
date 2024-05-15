@@ -65,7 +65,7 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
         confirmButton = new JButton("Ok");
         confirmButton.setSize(60, 28);
         confirmButton.setLocation(255, 340);
-        confirmButton.setEnabled(true);
+        confirmButton.setEnabled(false);
         confirmButton.setVisible(true);
         confirmButton.addActionListener(this);
         add(confirmButton);
@@ -98,10 +98,6 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
                 }
             }
         });
-
-
-
-
     }
 
 
@@ -112,12 +108,22 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
     }
 
     public void showOnMap(){
-        int index = searchResult.getSelectedIndex();
-        GeoPosition pos = searchResult.getModel().getElementAt(index).getGeoPosition();
-        guIcontroller.getKartaController().startPos(pos);
-        modelSearchResult.clear();
-        searchTextField.setText("");
-        setVisible(false);
+        try {
+            int index = searchResult.getSelectedIndex();
+            GeoPosition pos = searchResult.getModel().getElementAt(index).getGeoPosition();
+            guIcontroller.getKartaController().startPos(pos);
+            modelSearchResult.clear();
+            searchTextField.setText("");
+            setVisible(false);
+        }
+        catch (ArrayIndexOutOfBoundsException e){
+            guIcontroller.displayMessage(this, "Felaktig input");
+            GeoPosition defaultPos = new GeoPosition(55.610348059975394, 12.994770622696002);
+            guIcontroller.getKartaController().startPos(defaultPos);
+            modelSearchResult.clear();
+            searchTextField.setText("");
+            setVisible(false);
+        }
     }
 
     @Override
@@ -127,6 +133,7 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
         }
         if (e.getSource() == confirmButton){
             showOnMap();
+            confirmButton.setEnabled(false);
         }
     }
 
@@ -148,6 +155,9 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
     public void updateSearchResult(ArrayList<CityObject> list){
         modelSearchResult.clear();
         modelSearchResult.addAll(list);
+        if (!list.isEmpty()) {
+            confirmButton.setEnabled(true);
+        }
         revalidate();
         repaint();
     }
@@ -163,6 +173,7 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER && !searchResult.isSelectionEmpty()){
                     showOnMap();
+                    confirmButton.setEnabled(false);
                 }
 
             }
