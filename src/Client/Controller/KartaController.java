@@ -60,6 +60,16 @@ public class KartaController {
         JButton angePlats = new JButton("Ange plats");
         mapViewer.add(angePlats);
         angePlats.setVisible(true);
+        JButton search = new JButton("Sök plats");
+        search.setVisible(true);
+
+        mapViewer.add(search);
+        search.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                displayer.openCloseSearch();
+            }
+        });
         angePlats.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

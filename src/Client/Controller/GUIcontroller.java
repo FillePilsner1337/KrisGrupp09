@@ -1,4 +1,5 @@
 package Client.Controller;
+import Client.Model.CityObject;
 import Client.Model.KrisWayPoint;
 import Client.Model.VMAobject;
 import Client.View.*;
@@ -16,12 +17,14 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
     private ControllerKlient controllerKlient;
 
     private VmaController vmaController;
+    private SearchCityController searchCityController;
 
     private MainFrame mainFrame;
 
     private LogInFrame logInFrame;
 
     private RegisterFrame registerFrame;
+    private SearchFrame searchFrame;
 
     public GUIcontroller(ControllerKlient controllerKlient){
         this.kartaController = kartaController;
@@ -163,7 +166,13 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         logInFrame.setVisible(false);
         logInFrame = null;
         this.mainFrame = new MainFrame(this);
+        this.searchFrame = new SearchFrame(this);
+        searchFrame.setVisible(false);
         controllerKlient.setUp();
+    }
+
+    public void setSearchCityController(SearchCityController searchCityController) {
+        this.searchCityController = searchCityController;
     }
 
     public void closeRegFrame() {
@@ -193,9 +202,25 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         JOptionPane.showMessageDialog(mainFrame, msg);
     }
 
+    @Override
+    public void diplaySearchResult(ArrayList<CityObject> list) {
+        searchFrame.updateSearchResult(list);
+
+    }
+
+    @Override
+    public void openCloseSearch() {
+        searchFrame.setVisible(true);
+    }
+
     public LogInFrame getLogInFrame(){
         return logInFrame;
     }
     public RegisterFrame getRegisterFrame(){return registerFrame;};
     public MainFrame getMainFrame(){return mainFrame;};
+
+    public void searchCity(String s) {
+        searchCityController.search(s);
+
+    }
 }

@@ -15,6 +15,7 @@ public class ControllerKlient {
     private ArrayList<User> allFriends = new ArrayList<>();
     private VmaController vmaController;
     private GUIcontroller guiController;
+    private SearchCityController searchCityController;
     private IinfoFriends displayer;
     private User user;
 
@@ -27,6 +28,8 @@ public class ControllerKlient {
     public void setUp(){
         this.vmaController = new VmaController(this);
         this.kc = new KartaController(this);
+        this.searchCityController = new SearchCityController(this, guiController);
+        guiController.setSearchCityController(searchCityController);
         guiController.setKartaController(kc);
         guiController.setVmaController(vmaController);
         kc.setDisplayer(guiController);

@@ -1,5 +1,6 @@
 package Client.View;
 
+import Client.Model.CityObject;
 import Client.Model.KrisWayPoint;
 import org.jxmapviewer.JXMapViewer;
 
@@ -15,4 +16,7 @@ public interface ImapDisplay {
     public String chooseLocationDialog(String[] cities);
     public String enterManually();
     public void displayErrorMessage(String msg);
+    public void diplaySearchResult(ArrayList<CityObject> list);
+
+    void openCloseSearch();
 }
