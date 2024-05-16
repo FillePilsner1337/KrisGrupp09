@@ -37,6 +37,7 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
     public void setUpFrame() {
         setLayout(null);
         setSize(335, 400);
+        setLocation(guIcontroller.getMainFrame().getX()+250, guIcontroller.getMainFrame().getY()+100);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setResizable(false);
         setTitle("Sök");
@@ -98,6 +99,7 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
                 }
             }
         });
+        setVisible(true);
     }
 
 

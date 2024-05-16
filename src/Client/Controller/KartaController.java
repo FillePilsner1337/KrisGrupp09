@@ -37,7 +37,6 @@ public class KartaController {
     /*
     private String[] cities = new String[]{"Malmö, 55.6088535, 12.9941134", "Lund, 55.704551, 13.192441", "Stockholm, 59.325587, 18.0552665",
             "Göteborg, 57.7078558, 11.9732139", "Ronneby, 56.210434, 15.276022900000043"};
-
      */
     private Object[] cities;
 
@@ -62,7 +61,7 @@ public class KartaController {
         tileFactory.setLocalCache(new FileBasedLocalCache(cacheDir, false));
 
         mapViewer.setTileFactory(tileFactory);
-        JButton angePlats = new JButton("Ange plats");
+        JButton angePlats = new JButton("Sök");
         mapViewer.add(angePlats);
         angePlats.setVisible(true);
         /*
@@ -82,6 +81,7 @@ public class KartaController {
         angePlats.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                displayer.openCloseSearch();
                 /*
                 String start1 = displayer.chooseLocationDialog(cities);
                 if (start1 != null){
@@ -91,6 +91,7 @@ public class KartaController {
                 }
 
                  */
+                /*
                 CityObject start1 = ((CityObject) displayer.chooseLocationDialog(cities));
                 if (start1 != null){
                     GeoPosition home = start1.getGeoPosition();
@@ -99,6 +100,8 @@ public class KartaController {
                 else {
                     displayer.openCloseSearch();
                 }
+
+                 */
                 /*
                 else {
                    String start = displayer.enterManually();

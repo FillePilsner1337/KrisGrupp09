@@ -3,7 +3,6 @@ import Client.Model.CityObject;
 import Client.Model.KrisWayPoint;
 import Client.Model.VMAobject;
 import Client.View.*;
-import SharedModel.User;
 import org.jxmapviewer.JXMapViewer;
 
 import javax.swing.*;
@@ -167,8 +166,12 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         logInFrame.setVisible(false);
         logInFrame = null;
         this.mainFrame = new MainFrame(this);
-        this.searchFrame = new SearchFrame(this);
-        searchFrame.setVisible(false);
+        /*
+        Flyttade detta till OpenClose Search.
+        Om det inte finns en frame skapas en ny annars sätts visable till true.
+        //this.searchFrame = new SearchFrame(this);
+        //searchFrame.setVisible(false);
+         */
         controllerKlient.setUp();
     }
 
@@ -211,7 +214,16 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
 
     @Override
     public void openCloseSearch() {
-        searchFrame.setVisible(true);
+        if (searchFrame == null){
+            searchFrame = new SearchFrame(this);
+        }
+        else {
+            /*
+            Tar mainframes position och lägger till lite för att lägga searchfönstret mer i mitten av mainframe.
+             */
+            searchFrame.setLocation(getMainFrame().getX()+250, getMainFrame().getY()+100);
+            searchFrame.setVisible(true);
+        }
     }
 
     public LogInFrame getLogInFrame(){
