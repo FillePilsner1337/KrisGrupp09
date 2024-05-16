@@ -36,6 +36,7 @@ public class Connection {
         this.outputBuffer = new Buffer<Object>();
         this.outputHandler = new OutputHandler(socket);
         outputHandler.start();
+        controllerServer.log("Ny anslutning etablerad");
 
     }
 
@@ -48,6 +49,7 @@ public class Connection {
         sendObject(user);
         sendObject(new ConfirmLogon());
         controllerServer.newLogIn(user, this);
+        controllerServer.log("Ny inloggning av " + user.getUserName());
 
     }
 
@@ -59,6 +61,7 @@ public class Connection {
         boolean exists = controllerServer.checkUserExists(u);
          if (!exists){
             sendObject(new Message("Felaktigt användarnamn"));
+             controllerServer.log("Felaktigt användarnamn: " + u.getUserName());
 
          }
          boolean password = controllerServer.checkPassword(u);
@@ -67,10 +70,12 @@ public class Connection {
              user = controllerServer.getRealUser(u);
              newConnection();
              loggingOn = false;
+             controllerServer.log("Rätt användarnamn och lösenord: " + u.getUserName());
 
          }
          if (exists && !password) {
              sendObject(new Message("Felaktigt lösenord"));
+             controllerServer.log("Felaktigt lösenord: " + u.getUserName());
 
          }
     }
@@ -159,6 +164,7 @@ public class Connection {
            controllerServer.registerNewUser(new User(o.getUserName(), o.getPassword()));
            sendObject(new Message("Ditt konto är registrerat"));
            sendObject(new ConfirmReg());
+           controllerServer.log("Ny registrerad klient: " + o.getUserName());
 
        }
     }

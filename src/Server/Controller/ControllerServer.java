@@ -3,6 +3,7 @@ package Server.Controller;
 import Server.Boundary.*;
 
 import Server.Model.*;
+import Server.Boundary.ServerMainFrame;
 import SharedModel.*;
 
 import java.util.ArrayList;
@@ -19,17 +20,37 @@ public class ControllerServer {
     private ContactList contactList;
     private SavedOutgoingObj savedOutgoingObj;
     private TimerTask timer;
+    private ServerMainFrame serverMainFrame;
 
     public ControllerServer() {
-        this.connectedClients = new ConnectedClients();
+        this.serverMainFrame = new ServerMainFrame(this);
+        this.connectedClients = new ConnectedClients(this);
         this.serverInputHandler = new ServerInputHandler(this);
         this.newClientConnection = new NewClientConnection(20000, this, serverInputHandler);
         this.allUsers = new AllUsers(this);
         this.contactList = new ContactList(this);
         this.savedOutgoingObj = new SavedOutgoingObj(this);
         newClientConnection.start();
+        loadServerGuiData();
+
         //setTimer();
     }
+
+    private void loadServerGuiData() {
+        // Det här är inte bra. För testning
+        boolean filesNotLoaded = true;
+        while (filesNotLoaded){
+              if (contactList.isFileLoaded() && savedOutgoingObj.isFileLoaded() && allUsers.isFileLoaded()){
+                  serverMainFrame.loadGUIdata();
+                  filesNotLoaded = false;
+              }
+
+        }
+
+
+        serverMainFrame.loadGUIdata();
+    }
+
     public ArrayList<User> createContactList(User user){
         ArrayList <User> listToSend = new ArrayList<>();
         ArrayList <User> listToReadFrom = contactList.getContactlist(user);
@@ -69,6 +90,7 @@ public class ControllerServer {
             Connection c = connectedClients.getConnectionForUser(user);
             c.sendObject(new ContactListUpdate(createContactList(user)));
         }
+        log("Uppdatering skickad till alla användare ");
     }
     public void sendSelfUpdate(User user) {
         connectedClients.getConnectionForUser(user).sendObject(user);
@@ -129,6 +151,7 @@ public class ControllerServer {
            else {
                 savedOutgoingObj.saveObj(req.getPersonToBeFollowd(), req);
             }
+           log("Följförfrågan skickad: Från: " + req.getWantsToFollow().getUserName() + " till " + req.getPersonToBeFollowd().getUserName());
        }
     }
 
@@ -140,6 +163,7 @@ public class ControllerServer {
             }
         }
         savedOutgoingObj.clearUserObjectList(user);
+        log("Eventuella sparade meddelanden skickat till: " + user.getUserName());
     }
     public void okToFollow(OkFollowReg ok){
         User follower = getRealUser(ok.getFollowReq().getWantsToFollow());
@@ -151,6 +175,7 @@ public class ControllerServer {
         else {
             savedOutgoingObj.saveObj(follower, new  Message(toBeFollowd.getUserName() + " har godkänt din följförfrågning" ));
         }
+        log("Godkänd följförfrågan: " + toBeFollowd.getUserName() + " har godkänt " + follower.getUserName() + "s förfrågan");
         allContactUpdatesToAll();
     }
 
@@ -167,6 +192,14 @@ public class ControllerServer {
         allUsers.printAllUsers();
     }
 
+    public ArrayList<User> getAllUsers() {
+        return allUsers.getAllUsers();
+    }
+
+    public ArrayList<User> getConnectedUsers() {
+        return connectedClients.getListOfConnected();
+    }
+
     public class TimerToResetLogin extends TimerTask {
         @Override
         public void run() {
@@ -177,4 +210,16 @@ public class ControllerServer {
     public ConnectedClients getConnectedClients() {
         return connectedClients;
     }
+
+  public void updateGuiConnectedUsers(ArrayList<User> connectedUsers){
+        serverMainFrame.updateGuiConnectedUsers(connectedUsers);
+    }
+    public void updateGuiAllUsers(ArrayList<User> allUsers){
+        serverMainFrame.updateGuiAllUsers(allUsers);
+    }
+
+    public void log(String string){
+        serverMainFrame.log(string);
+    }
+
 }

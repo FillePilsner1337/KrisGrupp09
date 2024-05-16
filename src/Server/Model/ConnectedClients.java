@@ -1,6 +1,7 @@
 package Server.Model;
 
 import Server.Boundary.Connection;
+import Server.Controller.ControllerServer;
 import SharedModel.User;
 
 import java.util.ArrayList;
@@ -9,15 +10,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectedClients {
     private ConcurrentHashMap<User, Connection> connectedList;
+    private ControllerServer controllerServer;
 
-    public ConnectedClients() {
+    public ConnectedClients(ControllerServer controllerServer) {
         this.connectedList = new ConcurrentHashMap<>();
+        this.controllerServer = controllerServer;
 
     }
 
     public synchronized void put(User user, Connection connection) {
         if (!connectedList.containsKey(user)) {
             connectedList.put(user, connection);
+            controllerServer.updateGuiConnectedUsers(getListOfConnected());
+
         }
     }
 
@@ -50,5 +55,8 @@ public class ConnectedClients {
 
     public void removeUser(User user){
         connectedList.remove(user);
+        controllerServer.updateGuiConnectedUsers(getListOfConnected());
+        controllerServer.log("Klient nerkopplad: " + user.getUserName());
+
     }
 }

@@ -17,11 +17,10 @@ public class InUtStatus implements Serializable {
 
     @Override
     public String toString() {
-        return "InUtStatus{" +
-                "incheckad=" + incheckad +
+        return "incheckad=" + incheckad +
                 ", id='" + id + '\'' +
-                ", tid=" + tid +
-                '}';
+                ", tid=" + tid;
+
     }
 
     public boolean isIncheckad() {

@@ -38,6 +38,7 @@ public class ContactList {
         public synchronized void addContact(User userKey, User userToAdd) {
             if (!contactList.containsKey(userKey)) {
                 contactList.put(userKey, new ArrayList<>());
+                controllerServer.log("Ny person på kontaktlista: " + userKey.getUserName() + " la till " + userToAdd.getUserName());
             }
                 contactList.get(userKey).add(userToAdd);
                 saveLoad();
@@ -79,6 +80,7 @@ public class ContactList {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/savedContactLists.dat"))) {
                 contactList = (ConcurrentHashMap<User, ArrayList<User>>) ois.readObject();
                 fileLoaded = true;
+                controllerServer.log("Fil inläst savedContactLists.dat ");
 
 
             } catch (IOException e) {
@@ -94,5 +96,7 @@ public class ContactList {
         }
     }
 
-
+    public boolean isFileLoaded() {
+        return fileLoaded;
+    }
 }

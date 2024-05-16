@@ -81,6 +81,7 @@ public class SavedOutgoingObj {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/savedObjToSend.dat"))) {
                 objMap = (ConcurrentHashMap<User, ArrayList<Object>>) ois.readObject();
                 fileLoaded = true;
+                controllerServer.log("Fil inläst savedObjToSend.dat");
             } catch (IOException e) {
                 if (e instanceof EOFException) {
                     System.out.println("ObToSend: Ingen mer fil att läsa");
@@ -94,5 +95,7 @@ public class SavedOutgoingObj {
         }
     }
 
-
+    public boolean isFileLoaded() {
+        return fileLoaded;
+    }
 }

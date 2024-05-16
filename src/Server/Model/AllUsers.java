@@ -63,6 +63,8 @@ public class AllUsers {
             }
         }
         controllerServer.allContactUpdatesToAll();
+        controllerServer.updateGuiAllUsers(allUsers);
+        controllerServer.log("Ny status: " + user.getUserName() + " " + user.getInUtStatus().toString());
     }
 
     public ArrayList<User> getAllUsers() {
@@ -87,6 +89,10 @@ public class AllUsers {
         return null;
     }
 
+    public boolean isFileLoaded() {
+        return fileLoaded;
+    }
+
     public boolean checkIfExists(RegReq r) {
         for (int i = 0; i < allUsers.size(); i++) {
             if (allUsers.get(i).getUserName().equals(r.getUserName())){
@@ -107,9 +113,11 @@ public class AllUsers {
                 allUsers.get(i).setInUtStatus(new InUtStatus(false, null,null));
                 controllerServer.sendMessageToUser(allUsers.get(i), "Du har blivit automatiskt utloggad från skyddsrummet");
                 controllerServer.getConnectedClients().getConnectionForUser(allUsers.get(i)).sendObject(allUsers.get(i));
+                controllerServer.log("Användare automatiskt utcheckad: " + allUsers.get(i).getUserName());
             }
         }
         controllerServer.allContactUpdatesToAll();
+        controllerServer.updateGuiAllUsers(allUsers);
     }
 
     public class loadSave extends Thread {
@@ -117,6 +125,7 @@ public class AllUsers {
         public void run() {
             if (!fileLoaded) {
                 loadFile();
+
             } else {
                 saveFile();
             }
@@ -135,6 +144,7 @@ public class AllUsers {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/savedAllUsers.dat"))) {
                 allUsers = (ArrayList<User>) ois.readObject();
                 fileLoaded = true;
+                controllerServer.log("Fil inläst savedAllUsers.dat: ");
             } catch (IOException e) {
                 if (e instanceof EOFException) {
                     System.out.println("AllUsers: Ingen mer fil att läsa");

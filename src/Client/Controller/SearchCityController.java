@@ -29,13 +29,13 @@ public class SearchCityController {
                 cities = (ArrayList<CityObject>) ois.readObject();
             } catch (IOException e) {
                 if (e instanceof EOFException) {
-                    System.out.println("ObToSend: Ingen mer fil att läsa");
+                    System.out.println("Fel i inläsning av fil  cityObjects.dat ");
                 } else {
-                    System.out.println("ObToSend: Kunde inte ladda fil IOException");
+                    System.out.println("Fel i inläsning av fil  cityObjects.dat");
                     e.printStackTrace();
                 }
             } catch (ClassNotFoundException e) {
-                System.out.println("Kunde inte ladda fil ClassNotFoundException ObToSend");
+                System.out.println("Fel i inläsning av fil  cityObjects.dat");
             }
 
     }
@@ -49,7 +49,6 @@ public class SearchCityController {
                 if (cities.get(i).getCityName().toLowerCase(Locale.ROOT).equals(searchPhrase)) {
                     result.add(cities.get(i));
                     toBeIgnored = i;
-
                 }
             }
 
