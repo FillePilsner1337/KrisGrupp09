@@ -8,37 +8,37 @@ import java.util.ArrayList;
 import java.util.Date;
 import Client.View.*;
 
-public class ControllerKlient {
+public class ClientController {
 
-    private KartaController kc;
+    private MapController kc;
     private ServerConnection serverConnection;
     private ArrayList<User> allFriends = new ArrayList<>();
-    private VmaController vmaController;
+    private VMAcontroller vmaController;
     private GUIcontroller guiController;
     private SearchCityController searchCityController;
     private IinfoFriends displayer;
     private User user;
 
-    public ControllerKlient(){
+    public ClientController(){
         this.guiController = new GUIcontroller(this);
         this.displayer = guiController;
         this.serverConnection = new ServerConnection( this);
     }
 
     public void setUp(){
-        this.vmaController = new VmaController(this);
-        this.kc = new KartaController(this);
+        this.vmaController = new VMAcontroller(this);
+        this.kc = new MapController(this);
         this.searchCityController = new SearchCityController(this, guiController);
         guiController.setSearchCityController(searchCityController);
-        guiController.setKartaController(kc);
-        guiController.setVmaController(vmaController);
+        guiController.setMapController(kc);
+        guiController.setVMAcontroller(vmaController);
         kc.setDisplayer(guiController);
         vmaController.setDisplayer(guiController);
         vmaController.fetchAndDisplayVmaData();
         kc.start();
-        if (user.getInUtStatus().isIncheckad()) {
-            guiController.setCheckinText(user.getInUtStatus().getId());
-            checkIn(user.getInUtStatus().getId());
+        if (user.getUserStatus().isCheckedIn()) {
+            guiController.setCheckinText(user.getUserStatus().getId());
+            checkIn(user.getUserStatus().getId());
         }
     }
 
@@ -46,16 +46,16 @@ public class ControllerKlient {
         this.user = user;
     }
 
-    public void recivedObject(Object o){
+    public void receivedObject(Object o){
         if (o instanceof User){
             this.user = (User) o;
-            guiController.setCheckinText(user.getInUtStatus().getId());
+            guiController.setCheckinText(user.getUserStatus().getId());
         }
-        if (o instanceof ConfirmReg){
-            guiController.closeRegFrame();
+        if (o instanceof ConfirmRegistration){
+            guiController.closeRegistartionFrame();
         }
-        if (o instanceof ConfirmLogon){
-            guiController.userAndPassOk();
+        if (o instanceof ConfirmLogin){
+            guiController.usernameAndPasswordOk();
         }
          if (o instanceof ContactListUpdate){
              this.allFriends = ((ContactListUpdate) o).getList();
@@ -75,45 +75,45 @@ public class ControllerKlient {
             }
             catch (Exception e){}
         }
-         if (o instanceof FollowReq){
-             FollowReq req = (FollowReq) o;
-             followReq(req);
+         if (o instanceof FollowRequest){
+             FollowRequest req = (FollowRequest) o;
+             followRequest(req);
          }
     }
 
-    private void followReq(FollowReq req){
-        boolean ok = guiController.recivedFollowReq(req.getWantsToFollow().getUserName());
+    private void followRequest(FollowRequest req){
+        boolean ok = guiController.receivedFollowRequest(req.getWantsToFollow().getUsername());
         if (ok){
-            serverConnection.sendObject(new OkFollowReg(req, true));
+            serverConnection.sendObject(new OkFollowRequest(req, true));
         }
     }
 
     private void updateLists() {
         ArrayList<String> friendList = new ArrayList<>();
         for (int i = 0; i < allFriends.size(); i++){
-            friendList.add(allFriends.get(i).getUserName());
+            friendList.add(allFriends.get(i).getUsername());
 
             }
         displayer.displayFriends(friendList);
 
         ArrayList<String> friendsInShelter = new ArrayList<>();
         for (int i = 0; i < allFriends.size(); i++) {
-                if (allFriends.get(i).getInUtStatus().isIncheckad()) {
-                    friendsInShelter.add(allFriends.get(i).getUserName() + ", " + allFriends.get(i).getInUtStatus().getId());
+                if (allFriends.get(i).getUserStatus().isCheckedIn()) {
+                    friendsInShelter.add(allFriends.get(i).getUsername() + ", " + allFriends.get(i).getUserStatus().getId());
                 }
         }
 
         displayer.displayFriendsInShelter(friendsInShelter);
-        guiController.repaintGUI();
+        guiController.repaintMap();
     }
     public void register(String userName, String password){
-        serverConnection.sendObject(new RegReq(userName,password));
+        serverConnection.sendObject(new RegistrationRequest(userName,password));
 
     }
     public void checkIn(String id) {
         guiController.enableCheckOutButton();
-        InUtStatus status = new InUtStatus(true, id, new Date());
-        user.setInUtStatus(status);
+        UserStatus status = new UserStatus(true, id, new Date());
+        user.setUserStatus(status);
         serverConnection.sendObject(status);
     }
 
@@ -130,8 +130,8 @@ public class ControllerKlient {
     }
 
     public void checkout(){
-        InUtStatus checkoutStatus = new InUtStatus(false,null,null);
-        user.setInUtStatus(checkoutStatus);
+        UserStatus checkoutStatus = new UserStatus(false,null,null);
+        user.setUserStatus(checkoutStatus);
         serverConnection.sendObject(checkoutStatus);
     }
 
@@ -141,21 +141,21 @@ public class ControllerKlient {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        new ControllerKlient();
+        new ClientController();
     }
 
-    public void logon(String userName, String password) {
+    public void login(String userName, String password) {
         User u = new User(userName, password);
-        u.setInUtStatus(new InUtStatus(false,null,null)); //Kolla metoden. Varför ny status?
+        u.setUserStatus(new UserStatus(false,null,null)); //Kolla metoden. Varför ny status?
         serverConnection.sendObject(u);
     }
 
     public void closeRegisterFrame() {
-        guiController.closeRegFrame();
+        guiController.closeRegistartionFrame();
     }
 
-    public void sendFollowReq(String namn) {
-        serverConnection.sendObject(new FollowReq(user, namn));
+    public void sendFollowRequest(String namn) {
+        serverConnection.sendObject(new FollowRequest(user, namn));
     }
 
     public SearchCityController getSearchCityController(){
@@ -170,7 +170,7 @@ public class ControllerKlient {
             logInDialog();
         }
         else {
-            new ControllerKlient(username);
+            new ClientController(username);
         }
     }
 

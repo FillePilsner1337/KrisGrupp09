@@ -1,6 +1,6 @@
 package Client.Controller;
 import Client.Model.CityObject;
-import Client.Model.KrisWayPoint;
+import Client.Model.ShelterWaypoint;
 import Client.Model.VMAobject;
 import Client.View.*;
 import org.jxmapviewer.JXMapViewer;
@@ -9,13 +9,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
+public class GUIcontroller implements Imap, IinfoFriends, Ivma{
 
-    private KartaController kartaController;
+    private MapController mapController;
 
-    private ControllerKlient controllerKlient;
+    private ClientController clientController;
 
-    private VmaController vmaController;
+    private VMAcontroller vmaController;
     private SearchCityController searchCityController;
 
     private MainFrame mainFrame;
@@ -25,11 +25,11 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
     private RegisterFrame registerFrame;
     private SearchFrame searchFrame;
 
-    public GUIcontroller(ControllerKlient controllerKlient){
-        this.kartaController = kartaController;
-        this.controllerKlient = controllerKlient;
+    public GUIcontroller(ClientController clientController){
+        this.mapController = mapController;
+        this.clientController = clientController;
         this.vmaController = vmaController;
-        logInFrame = new LogInFrame(this, controllerKlient);
+        logInFrame = new LogInFrame(this, clientController);
     }
 
     public void startMainFrame(){}
@@ -41,27 +41,27 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
     }
 
     public void displayMap(JXMapViewer mapViewer){
-        mainFrame.setKartPanel(mapViewer);
+        mainFrame.setMapPanel(mapViewer);
     }
 
     public void displayFriends(ArrayList<String> friendList){
-        mainFrame.getCheckInPanel().updateAllaVanner(friendList);
-        mainFrame.getCheckInPanel().getListAllaVanner().revalidate();
-        mainFrame.getCheckInPanel().getListAllaVanner().repaint();
+        mainFrame.getCheckInPanel().updateAllFriends(friendList);
+        mainFrame.getCheckInPanel().getListAllFriends().revalidate();
+        mainFrame.getCheckInPanel().getListAllFriends().repaint();
     }
     public void displayFriendsInShelter(ArrayList<String> friendsInShelter){
-        mainFrame.getCheckInPanel().updateIncheckadeVanner(friendsInShelter);
-        mainFrame.getCheckInPanel().getListIncheckadeVanner().revalidate();
-        mainFrame.getCheckInPanel().getListIncheckadeVanner().repaint();
+        mainFrame.getCheckInPanel().updateFriendsInShelter(friendsInShelter);
+        mainFrame.getCheckInPanel().getListFriendsInShelter().revalidate();
+        mainFrame.getCheckInPanel().getListFriendsInShelter().repaint();
 
     }
 
     public void enableCheckOutButton(){
-        mainFrame.getCheckInPanel().getCheckaUt().setEnabled(true);
+        mainFrame.getCheckInPanel().getCheckOutButton().setEnabled(true);
     }
 
     public void checkout(){
-        controllerKlient.checkout();
+        clientController.checkout();
         setCheckoutText();
     }
 
@@ -71,26 +71,26 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
                 setCheckoutText();
             }
             else {
-                mainFrame.getCheckInPanel().getIncheckad().setText(controllerKlient.getUser().getUserName() + ", Du är nu incheckad i " + shelter);
+                mainFrame.getCheckInPanel().getCheckedIn().setText(clientController.getUser().getUsername() + ", Du är nu incheckad i " + shelter);
             }
         }
     }
 
     public void setCheckoutText(){
-        mainFrame.getCheckInPanel().getIncheckad().setText(controllerKlient.getUser().getUserName() + ", Du är inte incheckad.");
+        mainFrame.getCheckInPanel().getCheckedIn().setText(clientController.getUser().getUsername() + ", Du är inte incheckad.");
     }
     
-    public int displayShelterInfo(ArrayList<KrisWayPoint> foundShelters, int i){
+    public int displayShelterInfo(ArrayList<ShelterWaypoint> foundShelters, int i){
         ImageIcon img = new ImageIcon("files/1.png");
         Image imgRescale = img.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
         ImageIcon img2 = new ImageIcon(imgRescale);
 
         StringBuilder friendsInShelterBuilder= new StringBuilder();
-        for (int j = 0; j < controllerKlient.getAllFriends().size(); j++){
-            if (controllerKlient.getAllFriends().get(j).getInUtStatus().isIncheckad()) {
+        for (int j = 0; j < clientController.getAllFriends().size(); j++){
+            if (clientController.getAllFriends().get(j).getUserStatus().isCheckedIn()) {
 
-                if (controllerKlient.getAllFriends().get(j).getInUtStatus().getId().equals(foundShelters.get(i).getId())) {
-                    friendsInShelterBuilder.append(controllerKlient.getAllFriends().get(j).getUserName()).append("\n ");
+                if (clientController.getAllFriends().get(j).getUserStatus().getId().equals(foundShelters.get(i).getIdNumber())) {
+                    friendsInShelterBuilder.append(clientController.getAllFriends().get(j).getUsername()).append("\n ");
                 }
             }
         };
@@ -99,18 +99,18 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
 
         int choice;
         if (!friendsInShelter.isEmpty()) {
-             choice = JOptionPane.showConfirmDialog(mainFrame, " ID: " + foundShelters.get(i).getId() +
+             choice = JOptionPane.showConfirmDialog(mainFrame, " ID: " + foundShelters.get(i).getIdNumber() +
                     "\n Fastighet: " + foundShelters.get(i).getAddress() +
-                    "\n Platser: " + foundShelters.get(i).getCapacaty() + "\n" +
+                    "\n Platser: " + foundShelters.get(i).getCapacity() + "\n" +
                     "\n Incheckade vänner: " +
                     "\n " + friendsInShelter +
-                    "\n Vill du checka in? ", foundShelters.get(i).getId(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, img2);
+                    "\n Vill du checka in? ", foundShelters.get(i).getIdNumber(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, img2);
         }
         else {
-            choice = JOptionPane.showConfirmDialog(mainFrame, " ID: " + foundShelters.get(i).getId() +
+            choice = JOptionPane.showConfirmDialog(mainFrame, " ID: " + foundShelters.get(i).getIdNumber() +
                     "\n Fastighet: " + foundShelters.get(i).getAddress() +
-                    "\n Platser: " + foundShelters.get(i).getCapacaty() +
-                    "\n Vill du checka in? ", foundShelters.get(i).getId(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, img2);
+                    "\n Platser: " + foundShelters.get(i).getCapacity() +
+                    "\n Vill du checka in? ", foundShelters.get(i).getIdNumber(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, img2);
         }
         return choice;
     }
@@ -142,9 +142,9 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         return manualInput;
     }
 
-    public void repaintGUI(){
-        kartaController.getMapViewer().repaint();
-        kartaController.getMapViewer().revalidate();
+    public void repaintMap(){
+        mapController.getMapViewer().repaint();
+        mapController.getMapViewer().revalidate();
     }
 
 
@@ -153,16 +153,16 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
     }
 
 
-    public KartaController getKartaController() {
-        return kartaController;
+    public MapController getMapController() {
+        return mapController;
     }
 
-    public void setKartaController(KartaController kartaController){
-        this.kartaController=kartaController;
+    public void setMapController(MapController mapController){
+        this.mapController = mapController;
     }
-    public void setVmaController(VmaController vmaController){this.vmaController = vmaController;}
+    public void setVMAcontroller(VMAcontroller vmaController){this.vmaController = vmaController;}
 
-    public void userAndPassOk() {
+    public void usernameAndPasswordOk() {
         logInFrame.setVisible(false);
         logInFrame = null;
         this.mainFrame = new MainFrame(this);
@@ -172,31 +172,31 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
         //this.searchFrame = new SearchFrame(this);
         //searchFrame.setVisible(false);
          */
-        controllerKlient.setUp();
+        clientController.setUp();
     }
 
     public void setSearchCityController(SearchCityController searchCityController) {
         this.searchCityController = searchCityController;
     }
 
-    public void closeRegFrame() {
+    public void closeRegistartionFrame() {
         registerFrame.setVisible(false);
         registerFrame = null;
         logInFrame.setVisible(true);
     }
 
-    public void startRegFrame() {
+    public void startRegistrationFrame() {
         logInFrame.setVisible(false);
-        registerFrame = new RegisterFrame(this, controllerKlient);
+        registerFrame = new RegisterFrame(this, clientController);
 
     }
 
-    public void reqToFollow() {
+    public void requestToFollow() {
         String namn = JOptionPane.showInputDialog(mainFrame, "Ange användarnamn på den du vill följa");
-        controllerKlient.sendFollowReq(namn);
+        clientController.sendFollowRequest(namn);
     }
 
-    public boolean recivedFollowReq(String userName) {
+    public boolean receivedFollowRequest(String userName) {
         int svar = JOptionPane.showConfirmDialog(mainFrame, "Får " + userName + " vill följa dig?", "Följförfrågan", JOptionPane.YES_NO_OPTION);
         return svar == 0;
     }
@@ -207,13 +207,13 @@ public class GUIcontroller implements ImapDisplay, IinfoFriends, Ivma{
     }
 
     @Override
-    public void diplaySearchResult(ArrayList<CityObject> list) {
+    public void displaySearchResult(ArrayList<CityObject> list) {
         searchFrame.updateSearchResult(list);
 
     }
 
     @Override
-    public void openCloseSearch() {
+    public void openSearchFrame() {
         if (searchFrame == null){
             searchFrame = new SearchFrame(this);
         }

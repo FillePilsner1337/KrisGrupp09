@@ -1,25 +1,24 @@
 package Server.Model;
 
-import Server.Controller.ControllerServer;
-import SharedModel.InUtStatus;
-import SharedModel.RegReq;
+import Server.Controller.ServerController;
+import SharedModel.UserStatus;
+import SharedModel.RegistrationRequest;
 import SharedModel.User;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class AllUsers {
 
     private ArrayList<User> allUsers;
-    private ControllerServer controllerServer;
+    private ServerController serverController;
 
     private boolean fileLoaded = false;
-    public AllUsers (ControllerServer controllerServer) {
+    public AllUsers (ServerController serverController) {
         this.allUsers = new ArrayList<>();
-        this.controllerServer = controllerServer;
-        saveLoad();
+        this.serverController = serverController;
+        saveOrLoad();
         //saveFile();
     }
     private void saveFile() {
@@ -36,13 +35,14 @@ public class AllUsers {
         }
     }
 
-    public void saveLoad(){
-        new loadSave().start();
+    public void saveOrLoad(){
+        new loadOrSave().start();
     }
+
     public synchronized void put(User user){
         if (!allUsers.contains(user)){
             allUsers.add(user);
-            saveLoad();
+            saveOrLoad();
         }
         else{
             for (int i = 0; i < allUsers.size(); i++){
@@ -51,30 +51,30 @@ public class AllUsers {
                     break;
                 }
             }
-            controllerServer.sendSelfUpdate(user);
+            serverController.sendSelfUpdate(user);
         }
     }
 
-    public void updateStatus(InUtStatus status, User user) {
+    public void updateStatus(UserStatus status, User user) {
         for (int i = 0; i < allUsers.size(); i++) {
             if (user.equals(allUsers.get(i))) {
-                allUsers.get(i).setInUtStatus(status);
+                allUsers.get(i).setUserStatus(status);
                  break;
             }
         }
-        controllerServer.allContactUpdatesToAll();
-        controllerServer.updateGuiAllUsers(allUsers);
-        controllerServer.log("Ny status: " + user.getUserName() + " " + user.getInUtStatus().toString());
+        serverController.allContactUpdatesToAll();
+        serverController.updateGuiAllUsers(allUsers);
+        serverController.log("Ny status: " + user.getUsername() + " " + user.getUserStatus().toString());
     }
 
     public ArrayList<User> getAllUsers() {
         return allUsers;
     }
 
-    public InUtStatus getStatusForUser(User user) {
+    public UserStatus getStatusForUser(User user) {
         for (int i = 0; i < allUsers.size() ; i++) {
             if (user.equals(allUsers.get(i))){
-                return allUsers.get(i).getInUtStatus();
+                return allUsers.get(i).getUserStatus();
             }
         }
         return null;
@@ -93,9 +93,9 @@ public class AllUsers {
         return fileLoaded;
     }
 
-    public boolean checkIfExists(RegReq r) {
+    public boolean checkIfExists(RegistrationRequest r) {
         for (int i = 0; i < allUsers.size(); i++) {
-            if (allUsers.get(i).getUserName().equals(r.getUserName())){
+            if (allUsers.get(i).getUsername().equals(r.getUserName())){
                 return true;
             }
         }
@@ -106,21 +106,21 @@ public class AllUsers {
         for (int i = 0; i < allUsers.size(); i++) {
             Date checkInTime = new Date();
             Date currentTime = new Date();
-            if (allUsers.get(i).getInUtStatus().getTid() != null) {
-                checkInTime = allUsers.get(i).getInUtStatus().getTid();
+            if (allUsers.get(i).getUserStatus().getTime() != null) {
+                checkInTime = allUsers.get(i).getUserStatus().getTime();
             }
-            if (allUsers.get(i).getInUtStatus().getTid() != null && checkInTime.getTime() + (1*300*1000) > currentTime.getTime()){
-                allUsers.get(i).setInUtStatus(new InUtStatus(false, null,null));
-                controllerServer.sendMessageToUser(allUsers.get(i), "Du har blivit automatiskt utloggad från skyddsrummet");
-                controllerServer.getConnectedClients().getConnectionForUser(allUsers.get(i)).sendObject(allUsers.get(i));
-                controllerServer.log("Användare automatiskt utcheckad: " + allUsers.get(i).getUserName());
+            if (allUsers.get(i).getUserStatus().getTime() != null && checkInTime.getTime() + (1*300*1000) > currentTime.getTime()){
+                allUsers.get(i).setUserStatus(new UserStatus(false, null,null));
+                serverController.sendMessageToUser(allUsers.get(i), "Du har blivit automatiskt utloggad från skyddsrummet");
+                serverController.getConnectedClients().getConnectionForUser(allUsers.get(i)).sendObject(allUsers.get(i));
+                serverController.log("Användare automatiskt utcheckad: " + allUsers.get(i).getUsername());
             }
         }
-        controllerServer.allContactUpdatesToAll();
-        controllerServer.updateGuiAllUsers(allUsers);
+        serverController.allContactUpdatesToAll();
+        serverController.updateGuiAllUsers(allUsers);
     }
 
-    public class loadSave extends Thread {
+    public class loadOrSave extends Thread {
         @Override
         public void run() {
             if (!fileLoaded) {
@@ -144,7 +144,7 @@ public class AllUsers {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/savedAllUsers.dat"))) {
                 allUsers = (ArrayList<User>) ois.readObject();
                 fileLoaded = true;
-                controllerServer.log("Fil inläst savedAllUsers.dat: ");
+                serverController.log("Fil inläst savedAllUsers.dat: ");
             } catch (IOException e) {
                 if (e instanceof EOFException) {
                     System.out.println("AllUsers: Ingen mer fil att läsa");

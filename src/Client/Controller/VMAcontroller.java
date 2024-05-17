@@ -16,14 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 import Client.View.*;
 
-public class VmaController {
+public class VMAcontroller {
     private Ivma displayer;
     ArrayList<VMAobject> vmaObjects = new ArrayList<>();
 
-    ControllerKlient controllerKlient;
+    ClientController clientController;
 
-    public VmaController(ControllerKlient controllerKlient) {
-        this.controllerKlient = controllerKlient;
+    public VMAcontroller(ClientController clientController) {
+        this.clientController = clientController;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

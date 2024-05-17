@@ -1,6 +1,6 @@
 package Server.Boundary;
 
-import Server.Controller.ControllerServer;
+import Server.Controller.ServerController;
 import SharedModel.User;
 
 import javax.swing.*;
@@ -17,10 +17,10 @@ public class ServerMainFrame extends JFrame {
     private JList<String> logList;
     private DefaultListModel<String> modelLogList;
 
-    private ControllerServer controllerServer;
+    private ServerController serverController;
 
-    public ServerMainFrame(ControllerServer controllerServer) {
-        this.controllerServer = controllerServer;
+    public ServerMainFrame(ServerController serverController) {
+        this.serverController = serverController;
         setUpFrame();
     }
 
@@ -90,10 +90,10 @@ setLayout(null);
 
     public void loadGUIdata() {
 
-        ArrayList<User> allUsers = controllerServer.getAllUsers();
+        ArrayList<User> allUsers = serverController.getAllUsers();
         modelUserList.clear();
         modelUserList.addAll(allUsers);
-        ArrayList<User> connectedUsers = controllerServer.getConnectedUsers();
+        ArrayList<User> connectedUsers = serverController.getConnectedUsers();
         modelConnectedUserList.clear();
         modelConnectedUserList.addAll(connectedUsers);
     }

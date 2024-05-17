@@ -1,7 +1,6 @@
 package Client.Controller;
 
 import Client.Model.CityObject;
-import Client.View.ImapDisplay;
 
 import java.io.EOFException;
 import java.io.FileInputStream;
@@ -14,16 +13,16 @@ import java.util.Locale;
 public class SearchCityController {
     private ArrayList<CityObject> cities = new ArrayList<>();
     private GUIcontroller guiController;
-    private ControllerKlient controllerKlient;
+    private ClientController clientController;
 
 
-    public SearchCityController(ControllerKlient controller, GUIcontroller guIcontroller){
+    public SearchCityController(ClientController controller, GUIcontroller guIcontroller){
         this.guiController = guIcontroller;
-        this.controllerKlient = controller;
-        loadfile();
+        this.clientController = controller;
+        loadFile();
     }
 
-    private void loadfile() {
+    private void loadFile() {
 
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/cityObjects.dat"))) {
                 cities = (ArrayList<CityObject>) ois.readObject();
@@ -60,7 +59,7 @@ public class SearchCityController {
                 }
             }
         }
-        guiController.diplaySearchResult(result);
+        guiController.displaySearchResult(result);
     }
 
     public ArrayList<CityObject> getCities(){

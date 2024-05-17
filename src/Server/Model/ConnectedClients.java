@@ -1,7 +1,7 @@
 package Server.Model;
 
-import Server.Boundary.Connection;
-import Server.Controller.ControllerServer;
+import Server.Boundary.ClientConnection;
+import Server.Controller.ServerController;
 import SharedModel.User;
 
 import java.util.ArrayList;
@@ -9,19 +9,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class ConnectedClients {
-    private ConcurrentHashMap<User, Connection> connectedList;
-    private ControllerServer controllerServer;
+    private ConcurrentHashMap<User, ClientConnection> connectedList;
+    private ServerController serverController;
 
-    public ConnectedClients(ControllerServer controllerServer) {
+    public ConnectedClients(ServerController serverController) {
         this.connectedList = new ConcurrentHashMap<>();
-        this.controllerServer = controllerServer;
+        this.serverController = serverController;
 
     }
 
-    public synchronized void put(User user, Connection connection) {
+    public synchronized void put(User user, ClientConnection clientConnection) {
         if (!connectedList.containsKey(user)) {
-            connectedList.put(user, connection);
-            controllerServer.updateGuiConnectedUsers(getListOfConnected());
+            connectedList.put(user, clientConnection);
+            serverController.updateGuiConnectedUsers(getListOfConnected());
 
         }
     }
@@ -31,7 +31,7 @@ public class ConnectedClients {
         return connectedList.containsKey(user);
     }
 
-    public Connection getConnectionForUser(User user) {
+    public ClientConnection getConnectionForUser(User user) {
         return connectedList.get(user);
     }
 
@@ -43,11 +43,11 @@ public class ConnectedClients {
         return listConnectedClients;
     }
 
-    public ArrayList<Connection> getListOfAllConnection() {
-        ArrayList<Connection> allC = new ArrayList<>();
+    public ArrayList<ClientConnection> getListOfAllConnections() {
+        ArrayList<ClientConnection> allC = new ArrayList<>();
 
-        for (Connection connection : connectedList.values()){
-            allC.add(connection);
+        for (ClientConnection clientConnection : connectedList.values()){
+            allC.add(clientConnection);
         }
         return allC;
     }
@@ -55,8 +55,8 @@ public class ConnectedClients {
 
     public void removeUser(User user){
         connectedList.remove(user);
-        controllerServer.updateGuiConnectedUsers(getListOfConnected());
-        controllerServer.log("Klient nerkopplad: " + user.getUserName());
+        serverController.updateGuiConnectedUsers(getListOfConnected());
+        serverController.log("Klient nerkopplad: " + user.getUsername());
 
     }
 }

@@ -1,7 +1,7 @@
 package Server.Boundary;
 
 
-import Server.Controller.ControllerServer;
+import Server.Controller.ServerController;
 import Server.Controller.ServerInputHandler;
 
 import java.io.IOException;
@@ -10,12 +10,12 @@ import java.net.Socket;
 
 public class NewClientConnection extends Thread {
 
-    private ControllerServer controllerServer;
+    private ServerController serverController;
     private ServerSocket serverSocket;
     private ServerInputHandler serverInputHandler;
 
-    public NewClientConnection(int port, ControllerServer controllerServer, ServerInputHandler serverInputHandler)  {
-        this.controllerServer = controllerServer;
+    public NewClientConnection(int port, ServerController serverController, ServerInputHandler serverInputHandler)  {
+        this.serverController = serverController;
         this.serverInputHandler = serverInputHandler;
         try {
             this.serverSocket = new ServerSocket(port);
@@ -31,7 +31,7 @@ public class NewClientConnection extends Thread {
        while (!Thread.interrupted()) {
             try {
                 Socket socket = serverSocket.accept();
-                new Connection(socket, controllerServer, serverInputHandler);
+                new ClientConnection(socket, serverController, serverInputHandler);
             } catch (IOException e) {
                 System.out.println("IOException i NewClientConnection run metod");
                 System.out.println(e.getMessage());

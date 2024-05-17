@@ -5,36 +5,36 @@ import java.io.Serializable;
 public class User implements Serializable {
     private static final long serialVersionUID = 9;
 
-    private String userName;
-    private InUtStatus inUtStatus;
+    private String username;
+    private UserStatus userStatus;
     private String password;
 
-    public User(String userName, String password) {
-        this.userName = userName;
+    public User(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public InUtStatus getInUtStatus() {
-        return inUtStatus;
+    public UserStatus getUserStatus() {
+        return userStatus;
     }
 
-    public void setInUtStatus(InUtStatus inUtStatus) {
-        this.inUtStatus = inUtStatus;
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 
     @Override
     public int hashCode() {
-        return userName.hashCode();
+        return username.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
         if(obj!=null && obj instanceof User)
-            return userName.equals(((User)obj).getUserName());
+            return username.equals(((User)obj).getUsername());
         return false;
     }
 
@@ -46,12 +46,12 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
     @Override
     public String toString() {
-        return userName + ", " + inUtStatus.toString();
+        return username + ", " + userStatus.toString();
     }
 }

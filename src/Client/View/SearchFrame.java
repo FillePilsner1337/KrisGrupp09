@@ -1,33 +1,30 @@
 package Client.View;
 
-import Client.Controller.ControllerKlient;
+import Client.Controller.ClientController;
 import Client.Controller.GUIcontroller;
 import Client.Controller.SearchCityController;
 import Client.Model.CityObject;
-import SharedModel.User;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class SearchFrame extends JFrame implements ActionListener, KeyListener {
 
-    private ControllerKlient controllerKlient;
-    private GUIcontroller guIcontroller;
+    private ClientController clientController;
+    private GUIcontroller guiController;
     private SearchCityController searchCityController;
     private JTextField searchTextField;
-    private JButton searchBtn;
+    private JButton searchButton;
     private JButton confirmButton;
     private JLabel searchLabel;
     private JList<CityObject> searchResult;
     private DefaultListModel<CityObject> modelSearchResult;
 
 
-    public SearchFrame(GUIcontroller guIcontroller) {
-        this.guIcontroller = guIcontroller;
+    public SearchFrame(GUIcontroller guiController) {
+        this.guiController = guiController;
         setUpFrame();
         setSearchResultKeyListener();
     }
@@ -37,7 +34,7 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
     public void setUpFrame() {
         setLayout(null);
         setSize(335, 400);
-        setLocation(guIcontroller.getMainFrame().getX()+250, guIcontroller.getMainFrame().getY()+100);
+        setLocation(guiController.getMainFrame().getX()+250, guiController.getMainFrame().getY()+100);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setResizable(false);
         setTitle("Sök");
@@ -55,13 +52,13 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
         searchTextField.addKeyListener(this);
         add(searchTextField);
 
-        searchBtn = new JButton("Sök");
-        searchBtn.setSize(60, 28);
-        searchBtn.setLocation(180, 25);
-        searchBtn.setEnabled(true);
-        searchBtn.setVisible(true);
-        searchBtn.addActionListener(this);
-        add(searchBtn);
+        searchButton = new JButton("Sök");
+        searchButton.setSize(60, 28);
+        searchButton.setLocation(180, 25);
+        searchButton.setEnabled(true);
+        searchButton.setVisible(true);
+        searchButton.addActionListener(this);
+        add(searchButton);
 
         confirmButton = new JButton("Ok");
         confirmButton.setSize(60, 28);
@@ -91,7 +88,7 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
                     int index = searchResult.locationToIndex(e.getPoint());
                     if (index >= 0){
                         GeoPosition pos = searchResult.getModel().getElementAt(index).getGeoPosition();
-                        guIcontroller.getKartaController().startPos(pos);
+                        guiController.getMapController().startPosition(pos);
                         modelSearchResult.clear();
                         searchTextField.setText("");
                         setVisible(false);
@@ -106,22 +103,22 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
 
     public void search() {
         String s = searchTextField.getText();
-        guIcontroller.searchCity(s);
+        guiController.searchCity(s);
     }
 
     public void showOnMap(){
         try {
             int index = searchResult.getSelectedIndex();
             GeoPosition pos = searchResult.getModel().getElementAt(index).getGeoPosition();
-            guIcontroller.getKartaController().startPos(pos);
+            guiController.getMapController().startPosition(pos);
             modelSearchResult.clear();
             searchTextField.setText("");
             setVisible(false);
         }
         catch (ArrayIndexOutOfBoundsException e){
-            guIcontroller.displayMessage(this, "Felaktig input");
+            guiController.displayMessage(this, "Felaktig input");
             GeoPosition defaultPos = new GeoPosition(55.610348059975394, 12.994770622696002);
-            guIcontroller.getKartaController().startPos(defaultPos);
+            guiController.getMapController().startPosition(defaultPos);
             modelSearchResult.clear();
             searchTextField.setText("");
             setVisible(false);
@@ -130,7 +127,7 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == searchBtn) {
+        if (e.getSource() == searchButton) {
             search();
         }
         if (e.getSource() == confirmButton){

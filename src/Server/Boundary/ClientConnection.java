@@ -2,7 +2,7 @@ package Server.Boundary;
 
 
 
-import Server.Controller.ControllerServer;
+import Server.Controller.ServerController;
 import Server.Controller.ServerInputHandler;
 import Server.Model.Buffer;
 import Server.Model.ConnectedClients;
@@ -12,23 +12,22 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Date;
 
 
-public class Connection {
+public class ClientConnection {
 
     private InputHandler inputHandler;
     private Socket socket;
     private Buffer<Object> outputBuffer;
-    private ControllerServer controllerServer;
+    private ServerController serverController;
     private OutputHandler outputHandler;
     private ConnectedClients connectedClients;
     private ServerInputHandler serverInputHandler;
     private User user;
     private boolean loggingOn = true;
 
-    public Connection(Socket socket, ControllerServer controllerServer, ServerInputHandler serverInputHandler)  {
-        this.controllerServer = controllerServer;
+    public ClientConnection(Socket socket, ServerController serverController, ServerInputHandler serverInputHandler)  {
+        this.serverController = serverController;
         this.socket = socket;
         this.serverInputHandler = serverInputHandler;
         this.inputHandler = new InputHandler(socket);
@@ -36,7 +35,7 @@ public class Connection {
         this.outputBuffer = new Buffer<Object>();
         this.outputHandler = new OutputHandler(socket);
         outputHandler.start();
-        controllerServer.log("Ny anslutning etablerad");
+        serverController.log("Ny anslutning etablerad");
 
     }
 
@@ -45,11 +44,11 @@ public class Connection {
     }
 
     public void newConnection(){
-        user.setInUtStatus(controllerServer.getStatusForUser(user));
+        user.setUserStatus(serverController.getStatusForUser(user));
         sendObject(user);
-        sendObject(new ConfirmLogon());
-        controllerServer.newLogIn(user, this);
-        controllerServer.log("Ny inloggning av " + user.getUserName());
+        sendObject(new ConfirmLogin());
+        serverController.newLogIn(user, this);
+        serverController.log("Ny inloggning av " + user.getUsername());
 
     }
 
@@ -58,24 +57,24 @@ public class Connection {
     }
 
     private void checkUserNamneAndPassword(User u) {
-        boolean exists = controllerServer.checkUserExists(u);
+        boolean exists = serverController.checkUserExists(u);
          if (!exists){
             sendObject(new Message("Felaktigt användarnamn"));
-             controllerServer.log("Felaktigt användarnamn: " + u.getUserName());
+             serverController.log("Felaktigt användarnamn: " + u.getUsername());
 
          }
-         boolean password = controllerServer.checkPassword(u);
+         boolean password = serverController.checkPassword(u);
          if (exists && password){
 
-             user = controllerServer.getRealUser(u);
+             user = serverController.getRealUser(u);
              newConnection();
              loggingOn = false;
-             controllerServer.log("Rätt användarnamn och lösenord: " + u.getUserName());
+             serverController.log("Rätt användarnamn och lösenord: " + u.getUsername());
 
          }
          if (exists && !password) {
              sendObject(new Message("Felaktigt lösenord"));
-             controllerServer.log("Felaktigt lösenord: " + u.getUserName());
+             serverController.log("Felaktigt lösenord: " + u.getUsername());
 
          }
     }
@@ -104,7 +103,7 @@ public class Connection {
                 System.out.println(e.getMessage());
             }
             finally {
-                controllerServer.userDisconnect(user);
+                serverController.userDisconnect(user);
                 try{
                     this.socket.close();
                 }
@@ -130,8 +129,8 @@ public class Connection {
                     if (o instanceof User){
                         checkUserNamneAndPassword((User)o);
                     }
-                    if (o instanceof RegReq){
-                        registrationRequest((RegReq)o);
+                    if (o instanceof RegistrationRequest){
+                        registrationRequest((RegistrationRequest)o);
 
                     }
                 }
@@ -144,27 +143,27 @@ public class Connection {
                 e.printStackTrace();
             }
              finally {
-              controllerServer.userDisconnect(user);
+              serverController.userDisconnect(user);
 
             }
         }
     }
 
-    private void registrationRequest(RegReq o) {
-       boolean allredyregisterd = controllerServer.registrationRequest(o);
+    private void registrationRequest(RegistrationRequest o) {
+       boolean allredyregisterd = serverController.registrationRequest(o);
        if (allredyregisterd){
            sendObject(new Message("Användarnamnet används redan"));
 
        }
-       boolean okUserNameAndPassword = controllerServer.okLengthUsernameAndPassword(o);
+       boolean okUserNameAndPassword = serverController.okLengthUsernameAndPassword(o);
        if (!okUserNameAndPassword){
            sendObject(new Message("Användarnamn och lösenord måste innehålla minst tre tecken"));
        }
        if (!allredyregisterd && okUserNameAndPassword){
-           controllerServer.registerNewUser(new User(o.getUserName(), o.getPassword()));
+           serverController.registerNewUser(new User(o.getUserName(), o.getPassword()));
            sendObject(new Message("Ditt konto är registrerat"));
-           sendObject(new ConfirmReg());
-           controllerServer.log("Ny registrerad klient: " + o.getUserName());
+           sendObject(new ConfirmRegistration());
+           serverController.log("Ny registrerad klient: " + o.getUserName());
 
        }
     }

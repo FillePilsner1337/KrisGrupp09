@@ -1,8 +1,7 @@
 package Client.View;
 
-import Client.Controller.ControllerKlient;
+import Client.Controller.ClientController;
 import Client.Controller.GUIcontroller;
-import SharedModel.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,22 +9,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Arrays;
 
 public class LogInFrame extends JFrame implements ActionListener, KeyListener {
 
-    private GUIcontroller guIcontroller;
+    private GUIcontroller guiController;
     private JTextField username;
     private JPasswordField password;
     private JButton login;
     private JButton register;
     private JLabel usernameLabel;
     private JLabel passwordLabel;
-    private ControllerKlient controllerKlient;
+    private ClientController clientController;
 
-    public LogInFrame(GUIcontroller guIcontroller, ControllerKlient controllerKlient) {
-        this.guIcontroller = guIcontroller;
-        this.controllerKlient = controllerKlient;
+    public LogInFrame(GUIcontroller guiController, ClientController clientController) {
+        this.guiController = guiController;
+        this.clientController = clientController;
         setUpFrame();
     }
 
@@ -87,7 +85,7 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
 
     public void login() {
         String s = new String(password.getPassword());
-        controllerKlient.logon(username.getText(), s);
+        clientController.login(username.getText(), s);
     }
 
     @Override
@@ -96,7 +94,7 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
             login();
         }
         if (e.getSource() == register){
-            guIcontroller.startRegFrame();
+            guiController.startRegistrationFrame();
         }
     }
 

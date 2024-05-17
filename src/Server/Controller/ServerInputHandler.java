@@ -4,24 +4,24 @@ import SharedModel.*;
 
 
 public class ServerInputHandler {
-    private ControllerServer controllerServer;
+    private ServerController serverController;
 
-    public ServerInputHandler(ControllerServer controllerServer) {
-        this.controllerServer = controllerServer;
+    public ServerInputHandler(ServerController serverController) {
+        this.serverController = serverController;
 
     }
     public void newObjectReceived(Object o, User user){
-        if (o instanceof InUtStatus){
-            InUtStatus status = (InUtStatus) o;
-            controllerServer.changeStatus(status, user);
+        if (o instanceof UserStatus){
+            UserStatus status = (UserStatus) o;
+            serverController.changeStatus(status, user);
                     }
-        if (o instanceof OkFollowReg){
-            OkFollowReg okFollowReg = (OkFollowReg) o;
-            controllerServer.okToFollow(okFollowReg);
+        if (o instanceof OkFollowRequest){
+            OkFollowRequest okFollowRequest = (OkFollowRequest) o;
+            serverController.okToFollow(okFollowRequest);
         }
-        if (o instanceof FollowReq){
-            FollowReq req = (FollowReq)o;
-            controllerServer.reqToFollow(req, user);
+        if (o instanceof FollowRequest){
+            FollowRequest req = (FollowRequest)o;
+            serverController.requestToFollow(req, user);
         }
     }
 }

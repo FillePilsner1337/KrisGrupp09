@@ -3,9 +3,9 @@ package Client.View;
 import javax.swing.*;
 import java.awt.*;
 
-public class KartPanel extends JPanel{
+public class MapPanel extends JPanel{
 
-    public KartPanel(){
+    public MapPanel(){
         setSize(800,600);
         setLayout(new BorderLayout());
     }

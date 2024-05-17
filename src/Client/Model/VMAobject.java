@@ -50,9 +50,6 @@ public class VMAobject {
         this.description = description;
     }
 
-    public GeoPosition getPosition() {
-        return position;
-    }
 
     public void setPosition(GeoPosition position) {
         this.position = position;
@@ -71,7 +68,7 @@ public class VMAobject {
                 bodyText + "Dummy text eftersom test VMA inte ger någon text. Dummy text eftersom test VMA inte ger någon text. Dummy text eftersom test VMA inte ger någon text. ";
     }
 
-    public GeoPosition getLocation() {
+    public GeoPosition getGeoPosition() {
         return position;
     }
 }

@@ -14,9 +14,7 @@ import Client.View.*;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 
-import Client.Controller.ControllerKlient;
-import Client.Model.SrObject;
-import com.sun.tools.javac.Main;
+import Client.Model.ShelterObject;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;
@@ -27,12 +25,12 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
 import org.jxmapviewer.viewer.*;
 
 
-public class KartaController {
-    HashSet<KrisWayPoint> waypoints = new HashSet<KrisWayPoint>();
-    ArrayList<SrObject> srObjects;
-    private ImapDisplay displayer;
+public class MapController {
+    HashSet<ShelterWaypoint> waypoints = new HashSet<ShelterWaypoint>();
+    ArrayList<ShelterObject> shelterObjects;
+    private Imap displayer;
     final JXMapViewer mapViewer = new JXMapViewer();
-    ControllerKlient controllerKlient;
+    ClientController clientController;
 
     /*
     private String[] cities = new String[]{"Malmö, 55.6088535, 12.9941134", "Lund, 55.704551, 13.192441", "Stockholm, 59.325587, 18.0552665",
@@ -40,16 +38,16 @@ public class KartaController {
      */
     private Object[] cities;
 
-    public KartaController(ControllerKlient ck) {
-        this.controllerKlient = ck;
+    public MapController(ClientController ck) {
+        this.clientController = ck;
         loadFile();
         /*
         Dessa används inte för tillfället men de kommer ligga kvar då de kan behövas första gången man startar applikationen från
         en ny dator.
-         */
-        //srObjects = readSrObject();
+        //shelterObjects = readSrObject();
         // saveFile();
         //start();
+         */
     }
 
     public void start() {
@@ -77,11 +75,11 @@ public class KartaController {
         });
         
          */
-        cities = controllerKlient.getSearchCityController().getCities().toArray();
+        cities = clientController.getSearchCityController().getCities().toArray();
         angePlats.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                displayer.openCloseSearch();
+                displayer.openSearchFrame();
                 /*
                 String start1 = displayer.chooseLocationDialog(cities);
                 if (start1 != null){
@@ -128,9 +126,9 @@ public class KartaController {
             }
         });
 
-        startPos(null);
-        for (int i = 0; i < srObjects.size(); i++) {
-            waypoints.add(new KrisWayPoint(srObjects.get(i).getPos(), srObjects.get(i).getAdress(), srObjects.get(i).getIdNummer(), srObjects.get(i).getKapacitet()));
+        startPosition(null);
+        for (int i = 0; i < shelterObjects.size(); i++) {
+            waypoints.add(new ShelterWaypoint(shelterObjects.get(i).getPosition(), shelterObjects.get(i).getAddress(), shelterObjects.get(i).getIdNumber(), shelterObjects.get(i).getCapacity()));
         }
         MouseInputListener mia = new PanMouseInputListener(mapViewer);
         mapViewer.addMouseListener(mia);
@@ -139,12 +137,12 @@ public class KartaController {
         mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCenter(mapViewer));
         mapViewer.addKeyListener(new PanKeyListener(mapViewer));
 
-        WaypointPainter<KrisWayPoint> waypointPainter = new WaypointPainter<>();
-        waypointPainter.setRenderer(new WaypointRenderer<KrisWayPoint>() {
+        WaypointPainter<ShelterWaypoint> waypointPainter = new WaypointPainter<>();
+        waypointPainter.setRenderer(new WaypointRenderer<ShelterWaypoint>() {
             @Override
-            public void paintWaypoint(Graphics2D graphics2D, JXMapViewer jxMapViewer, KrisWayPoint krisWayPoint) {
-                double latitude = krisWayPoint.getGeo().getLatitude();
-                double longitude = krisWayPoint.getGeo().getLongitude();
+            public void paintWaypoint(Graphics2D graphics2D, JXMapViewer jxMapViewer, ShelterWaypoint shelterWaypoint) {
+                double latitude = shelterWaypoint.getGeoPosition().getLatitude();
+                double longitude = shelterWaypoint.getGeoPosition().getLongitude();
 
                 Point2D point = jxMapViewer.getTileFactory().geoToPixel(new org.jxmapviewer.viewer.GeoPosition(latitude, longitude), jxMapViewer.getZoom());
 
@@ -152,8 +150,8 @@ public class KartaController {
                 int height = 8;
                 int width = 8;
                 graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
-                for (int i = 0; i < controllerKlient.getAllFriends().size(); i++) {
-                    if (krisWayPoint.getId().equals(controllerKlient.getAllFriends().get(i).getInUtStatus().getId()) && !controllerKlient.getAllFriends().get(i).getUserName().equals(controllerKlient.getUser().getUserName())) {
+                for (int i = 0; i < clientController.getAllFriends().size(); i++) {
+                    if (shelterWaypoint.getIdNumber().equals(clientController.getAllFriends().get(i).getUserStatus().getId()) && !clientController.getAllFriends().get(i).getUsername().equals(clientController.getUser().getUsername())) {
                         graphics2D.setColor(Color.GREEN);
                         height = 8;
                         width = 8;
@@ -161,7 +159,7 @@ public class KartaController {
                     }
                 }
                 try {
-                    if (krisWayPoint.getId().equals(controllerKlient.getUser().getInUtStatus().getId())) {
+                    if (shelterWaypoint.getIdNumber().equals(clientController.getUser().getUserStatus().getId())) {
                         graphics2D.setColor(Color.BLUE);
                         height = 8;
                         width = 8;
@@ -181,10 +179,10 @@ public class KartaController {
                 String clickedpointString = String.valueOf(clickedPointasGeo);
                 String[] clickedpointStringSplit = clickedpointString.split(",", 2);
                 int numberOfResults = 0;
-                ArrayList<KrisWayPoint> foundShelters = new ArrayList<>();
-                for (KrisWayPoint waypoint : waypoints) {
+                ArrayList<ShelterWaypoint> foundShelters = new ArrayList<>();
+                for (ShelterWaypoint waypoint : waypoints) {
                     int[] howClose = clickDependingOnZoom(mapViewer.getZoom());
-                    String waypointString = String.valueOf(waypoint.getGeo());
+                    String waypointString = String.valueOf(waypoint.getGeoPosition());
                     String[] waypointStringSplit = waypointString.split(",", 2);
                     /*
                     Om man är på zoomnivå 5 eller högre kommer det inte gå att klicka på ett skyddsrum som koden är implementerad
@@ -238,7 +236,7 @@ public class KartaController {
         mapViewer.setZoom(4);
     }
 
-    public void startPos(GeoPosition geoPosition){
+    public void startPosition(GeoPosition geoPosition){
         if (geoPosition == null) {
              geoPosition = new GeoPosition(55.610348059975394, 12.994770622696002);
         }
@@ -246,9 +244,9 @@ public class KartaController {
         mapViewer.setAddressLocation(geoPosition);
     }
 
-    public void checkIn(ArrayList<KrisWayPoint> foundShelters, int i){
-        displayer.setCheckinText(foundShelters.get(i).getId());
-        controllerKlient.checkIn(foundShelters.get(i).getId());
+    public void checkIn(ArrayList<ShelterWaypoint> foundShelters, int i){
+        displayer.setCheckinText(foundShelters.get(i).getIdNumber());
+        clientController.checkIn(foundShelters.get(i).getIdNumber());
         mapViewer.repaint();
     }
 
@@ -277,7 +275,7 @@ public class KartaController {
     public void loadFile() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/srOB.dat"))) {
             Object o = ois.readObject();
-            srObjects = (ArrayList<SrObject>) o;
+            shelterObjects = (ArrayList<ShelterObject>) o;
         } catch (IOException e) {
             if (e instanceof EOFException) {
                 System.out.println("EOF fel");
@@ -290,36 +288,36 @@ public class KartaController {
         }
     }
 
-    public static ArrayList<SrObject> readSrObject() {
-        ArrayList<SrObject> srObjects1 = new ArrayList<>();
+    public static ArrayList<ShelterObject> readSrObject() {
+        ArrayList<ShelterObject> shelterObjects1 = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader("files/SR.csv"));
             String[] parts;
-            SrObject srObject;
+            ShelterObject shelterObject;
             String str = br.readLine();
             while (str != null) {
                 parts = str.split(",");
-                srObject = new SrObject(new GeoPosition(Double.parseDouble(parts[0]), Double.parseDouble(parts[1])), parts[2], parts[3], parts[4]);
-                srObjects1.add(srObject);
+                shelterObject = new ShelterObject(new GeoPosition(Double.parseDouble(parts[0]), Double.parseDouble(parts[1])), parts[2], parts[3], parts[4]);
+                shelterObjects1.add(shelterObject);
                 str = br.readLine();
             }
             br.close();
         } catch (IOException e) {
             System.out.println("readPersons: " + e);
         }
-        return srObjects1;
+        return shelterObjects1;
     }
 
     public void saveFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/srOb.dat"))) {
-            oos.writeObject(srObjects);
+            oos.writeObject(shelterObjects);
             oos.flush();
         } catch (IOException e) {
             System.out.println("Kunde inte spara fil");
         }
     }
 
-    public void setDisplayer(ImapDisplay displayer) {
+    public void setDisplayer(Imap displayer) {
         this.displayer = displayer;
     }
 
@@ -329,7 +327,7 @@ public class KartaController {
 
     public JXMapViewer getMapViewer(){return mapViewer;}
 
-    public HashSet<KrisWayPoint> getWaypoints(){
+    public HashSet<ShelterWaypoint> getWaypoints(){
         return waypoints;
     }
 

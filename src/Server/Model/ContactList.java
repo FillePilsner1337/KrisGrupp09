@@ -1,6 +1,6 @@
 package Server.Model;
 
-import Server.Controller.ControllerServer;
+import Server.Controller.ServerController;
 import SharedModel.User;
 
 import java.io.*;
@@ -10,14 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ContactList {
 
         private ConcurrentHashMap<User, ArrayList<User>> contactList;
-        private ControllerServer controllerServer;
+        private ServerController serverController;
         private boolean fileLoaded = false;
 
 
 
-        public ContactList(ControllerServer controller) {
+        public ContactList(ServerController controller) {
 
-            this.controllerServer = controller;
+            this.serverController = controller;
             this.contactList = new ConcurrentHashMap<>();
             saveLoad();
             //saveFile();
@@ -38,11 +38,11 @@ public class ContactList {
         public synchronized void addContact(User userKey, User userToAdd) {
             if (!contactList.containsKey(userKey)) {
                 contactList.put(userKey, new ArrayList<>());
-                controllerServer.log("Ny person på kontaktlista: " + userKey.getUserName() + " la till " + userToAdd.getUserName());
+                serverController.log("Ny person på kontaktlista: " + userKey.getUsername() + " la till " + userToAdd.getUsername());
             }
                 contactList.get(userKey).add(userToAdd);
                 saveLoad();
-                controllerServer.allContactUpdatesToAll();
+                serverController.allContactUpdatesToAll();
         }
 
     private void saveLoad() {
@@ -80,7 +80,7 @@ public class ContactList {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/savedContactLists.dat"))) {
                 contactList = (ConcurrentHashMap<User, ArrayList<User>>) ois.readObject();
                 fileLoaded = true;
-                controllerServer.log("Fil inläst savedContactLists.dat ");
+                serverController.log("Fil inläst savedContactLists.dat ");
 
 
             } catch (IOException e) {

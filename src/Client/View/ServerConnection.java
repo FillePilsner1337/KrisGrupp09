@@ -1,6 +1,6 @@
 package Client.View;
 
-import Client.Controller.ControllerKlient;
+import Client.Controller.ClientController;
 import Server.Model.Buffer;
 
 import java.io.IOException;
@@ -16,10 +16,10 @@ public class ServerConnection {
     private OutputHandler outputHandler;
     private Buffer<Object> outputBuffer;
 
-    private ControllerKlient controllerKlient;
+    private ClientController clientController;
 
-    public ServerConnection(ControllerKlient controllerKlient)  {
-        this.controllerKlient = controllerKlient;
+    public ServerConnection(ClientController clientController)  {
+        this.clientController = clientController;
 
         try {
             this.socket = new Socket("127.0.0.1", 20000);
@@ -38,7 +38,7 @@ public class ServerConnection {
         outputBuffer.put(o);
     }
     public void receivedObject(Object o){
-        controllerKlient.recivedObject(o);
+        clientController.receivedObject(o);
     }
 
 

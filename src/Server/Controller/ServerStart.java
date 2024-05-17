@@ -13,6 +13,6 @@ public class ServerStart {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        new ControllerServer();
+        new ServerController();
     }
 }

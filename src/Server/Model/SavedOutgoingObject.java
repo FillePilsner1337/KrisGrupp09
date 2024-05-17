@@ -1,24 +1,24 @@
 package Server.Model;
 
-import Server.Controller.ControllerServer;
+import Server.Controller.ServerController;
 import SharedModel.User;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SavedOutgoingObj {
-    private ControllerServer controllerServer;
+public class SavedOutgoingObject {
+    private ServerController serverController;
 
     private ConcurrentHashMap <User, ArrayList<Object>> objMap;
     boolean fileLoaded = false;
 
 
 
-    public SavedOutgoingObj(ControllerServer controllerServer) {
-        this.controllerServer = controllerServer;
+    public SavedOutgoingObject(ServerController serverController) {
+        this.serverController = serverController;
         this.objMap = new ConcurrentHashMap<>();
-        saveLoad();
+        saveOrLoad();
        //saveFile();
     }
     private void saveFile() {
@@ -30,8 +30,8 @@ public class SavedOutgoingObj {
         }
     }
 
-    public void saveLoad(){
-        new loadSave().start();
+    public void saveOrLoad(){
+        new loadOrSave().start();
     }
 
     public void saveObj(User user, Object o) {
@@ -57,7 +57,7 @@ public class SavedOutgoingObj {
         objMap.get(user).clear();
     }
 
-    public class loadSave extends Thread {
+    private class loadOrSave extends Thread {
         @Override
         public void run() {
             if (!fileLoaded) {
@@ -81,7 +81,7 @@ public class SavedOutgoingObj {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("files/savedObjToSend.dat"))) {
                 objMap = (ConcurrentHashMap<User, ArrayList<Object>>) ois.readObject();
                 fileLoaded = true;
-                controllerServer.log("Fil inläst savedObjToSend.dat");
+                serverController.log("Fil inläst savedObjToSend.dat");
             } catch (IOException e) {
                 if (e instanceof EOFException) {
                     System.out.println("ObToSend: Ingen mer fil att läsa");

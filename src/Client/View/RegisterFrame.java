@@ -1,29 +1,27 @@
 package Client.View;
 
 
-import Client.Controller.ControllerKlient;
+import Client.Controller.ClientController;
 import Client.Controller.GUIcontroller;
-import SharedModel.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Arrays;
 
 public class RegisterFrame extends JFrame implements ActionListener, KeyListener {
 
-    private GUIcontroller guIcontroller;
+    private GUIcontroller guiController;
     private JTextField username;
     private JPasswordField password;
     private JButton register;
     private JLabel usernameLabel;
     private JLabel passwordLabel;
-    private ControllerKlient controllerKlient;
+    private ClientController clientController;
     private int defaultCloseOperation = DISPOSE_ON_CLOSE;
 
-    public RegisterFrame(GUIcontroller guIcontroller, ControllerKlient controllerKlient) {
-        this.guIcontroller = guIcontroller;
-        this.controllerKlient = controllerKlient;
+    public RegisterFrame(GUIcontroller guiController, ClientController clientController) {
+        this.guiController = guiController;
+        this.clientController = clientController;
         setUpFrame();
     }
 
@@ -80,7 +78,7 @@ public class RegisterFrame extends JFrame implements ActionListener, KeyListener
 
     public void register() {
         String s = new String(password.getPassword());
-        controllerKlient.register(username.getText(), s);
+        clientController.register(username.getText(), s);
     }
 
     protected void processWindowEvent(final WindowEvent e) {
@@ -90,11 +88,11 @@ public class RegisterFrame extends JFrame implements ActionListener, KeyListener
             switch (defaultCloseOperation) {
                 case HIDE_ON_CLOSE:
                     setVisible(false);
-                    guIcontroller.getLogInFrame().setVisible(true);
+                    guiController.getLogInFrame().setVisible(true);
                     break;
                 case DISPOSE_ON_CLOSE:
                     dispose();
-                    guIcontroller.getLogInFrame().setVisible(true);
+                    guiController.getLogInFrame().setVisible(true);
                     break;
                 case EXIT_ON_CLOSE:
                     // This needs to match the checkExit call in

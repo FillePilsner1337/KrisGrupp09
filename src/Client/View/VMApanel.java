@@ -4,16 +4,14 @@ import Client.Model.VMAobject;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.basic.BasicOptionPaneUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class VmaPanel extends JPanel {
+public class VMApanel extends JPanel {
 
     private JScrollPane scrollPane;
     private MainFrame mainFrame;
@@ -23,18 +21,18 @@ public class VmaPanel extends JPanel {
 
     private JButton showOnMap;
 
-    public VmaPanel(MainFrame mainframe) {
+    public VMApanel(MainFrame mainframe) {
         this.mainFrame = mainframe;
         setLayout(null);
         listModel = new DefaultListModel<>();
         vmaHeadlines = new JList<>(listModel);
         vmaMessage = new JTextArea();
         this.showOnMap = new JButton();
-        setUpPanels();
+        setUpPanel();
         setUpListeners();
     }
 
-    private void setUpPanels() {
+    private void setUpPanel() {
         JLabel headline = new JLabel("VMA: ");
         headline.setText("VMA: ");
         headline.setLocation(100, 50);
@@ -85,8 +83,8 @@ public class VmaPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 VMAobject selectedObject = vmaHeadlines.getSelectedValue();
                 if (selectedObject != null) {
-                    GeoPosition position = selectedObject.getLocation();
-                    mainFrame.getGuIcontroller().getKartaController().takeMeHere(position);
+                    GeoPosition position = selectedObject.getGeoPosition();
+                    mainFrame.getGuiController().getMapController().takeMeHere(position);
                     mainFrame.getTabs().setSelectedIndex(0);
 
                 }
