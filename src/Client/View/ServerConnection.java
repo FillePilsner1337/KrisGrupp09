@@ -8,14 +8,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * Klass som sköter uppkopplingen till servern.
+ * @Author Ola Persson
+ */
 public class ServerConnection {
-
     private Socket socket;
-
     private InputHandler inputHandler;
     private OutputHandler outputHandler;
     private Buffer<Object> outputBuffer;
-
     private ClientController clientController;
 
     public ServerConnection(ClientController clientController)  {
@@ -44,7 +45,6 @@ public class ServerConnection {
 
     private class OutputHandler extends Thread {
         private Socket socket;
-
         public OutputHandler(Socket socket) {
             this.socket = socket;
         }
@@ -76,7 +76,6 @@ public class ServerConnection {
 
         public void run() {
             try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());) {
-
                 while (!Thread.interrupted()) {
                     Object o = ois.readObject();
                     receivedObject(o);

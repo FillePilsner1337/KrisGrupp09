@@ -2,6 +2,10 @@ package Client.Model;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
+/**
+ * Klass som används för att skapa VMA objekt.
+ * @Author Ola Persson
+ */
 public class VMAobject {
     private String headline;
     private String published;

@@ -6,6 +6,10 @@ import org.jxmapviewer.JXMapViewer;
 
 import java.util.ArrayList;
 
+/**
+ * Interface som används för att visa information som kommer från kartan i GUI.
+ * @Author Ola Persson, Jonatan Tempel
+ */
 public interface Imap {
 
     public void displayMap(JXMapViewer mapViewer);

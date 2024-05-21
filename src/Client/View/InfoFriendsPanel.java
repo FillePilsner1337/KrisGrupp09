@@ -13,6 +13,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * GUI klass som visar information om användaren är incheckad och i vilket skyddsrum hen är incheckad i.
+ * Visar också användarens kontaktlista och vilka skyddsrum hens kontakter är incheckade i.
+ * @Author Ola Persson, Jonatan Tempel
+ */
 public class InfoFriendsPanel extends JPanel implements ActionListener {
     private JLabel checkedIn;
     private JButton checkOutButton;
@@ -24,8 +29,6 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
     private GUIcontroller guiController;
 
     private JButton showOnMapButton;
-
-
 
     public InfoFriendsPanel(GUIcontroller guiController){
         this.guiController = guiController;
@@ -106,13 +109,13 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
     public JButton getCheckOutButton() {
         return checkOutButton;
     }
-    public void updateAllFriends(ArrayList<String> vanner) {
+    public void updateAllFriends(ArrayList<String> friends) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 listAllFriendsModel.clear();
-                for (String van : vanner) {
-                    listAllFriendsModel.addElement(van);
+                for (String friend : friends) {
+                    listAllFriendsModel.addElement(friend);
 
                 }
                 revalidate();
@@ -123,21 +126,18 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
     }
 
 
-    public void updateFriendsInShelter(ArrayList<String> incheckade) {
+    public void updateFriendsInShelter(ArrayList<String> checkedInFriends) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 listFriendsInShelterModel.clear();
-                for (String incheckad : incheckade) {
-                    listFriendsInShelterModel.addElement(incheckad);
-
+                for (String checkedIn : checkedInFriends) {
+                    listFriendsInShelterModel.addElement(checkedIn);
                 }
                 repaint();
                 revalidate();
             }
-
         });
-
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -150,6 +150,9 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
         }
     }
 
+    /**
+     * Metod som lyssnar efter en användares input. Om en användare markerar en incheckad vän (som finns) så sätts showOnMapButtons enable till ture.
+     */
     public void setUpShowOnMapListeners(){
         listFriendsInShelter.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -163,6 +166,10 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
             }
         });
 
+        /**
+         * Metod som tar skyddsrumsID från den markerade användaren i listan och loopar igenom alla waypoints för att hitta vilket
+         * skyddsrum som matchar den ID som användaren är incheckad i. Sedan visas det skyddsrummet på kartan.
+         */
         showOnMapButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -170,8 +177,6 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
                 if (nameAndID != null){
                     String[] parts = nameAndID.split(",");
                     String shelterId = parts[1].substring(1);
-                    System.out.println(parts[1]);
-                    System.out.println(shelterId);
                     HashSet<ShelterWaypoint> waypoints = guiController.getMapController().getWaypoints();
                     for (ShelterWaypoint wayPoint : waypoints){
                         if (wayPoint.getIdNumber().matches(shelterId)){

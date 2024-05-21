@@ -3,6 +3,10 @@ package Client.Model;
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
 
+/**
+ * Klass som används för att rita ut skyddsrummen på kartan.
+ * @Author Ola Persson, Jonatan Tempel
+ */
 public class ShelterWaypoint extends DefaultWaypoint {
     private String address;
     private String idNumber;

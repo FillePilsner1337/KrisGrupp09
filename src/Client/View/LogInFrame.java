@@ -84,8 +84,8 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
     }
 
     public void login() {
-        String s = new String(password.getPassword());
-        clientController.login(username.getText(), s);
+        String password = new String(this.password.getPassword());
+        clientController.login(username.getText(), password);
     }
 
     @Override

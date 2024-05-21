@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import Client.View.*;
 
+/**
+ * Klass som sköter logiken med att hämta VMA meddelanden och skapa VMA objekt av meddelandena.
+ * @Author Ola Persson, Filip Claesson
+ */
 public class VMAcontroller {
     private Ivma displayer;
     ArrayList<VMAobject> vmaObjects = new ArrayList<>();

@@ -6,6 +6,11 @@ import org.jxmapviewer.viewer.GeoPosition;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Klass som används för att läsa en .CSV fil och göra om det till javaobjekt. Använts för att konvertera SR.csv och stader.txt.
+ * Klassen finns kvar om någon av filerna skulle bli korrupta i framtiden.
+ * @Author Ola Persson
+ */
 public class ConverterCSVtoJavaObjects {
     ArrayList<CityObject> cityObjects = new ArrayList<CityObject>();
 
@@ -19,15 +24,12 @@ public class ConverterCSVtoJavaObjects {
     }
 
     private void savefile() {
-
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/cityObjects.dat"))) {
                 oos.writeObject(cityObjects);
                 oos.flush();
-
             } catch (IOException e) {
                 System.out.println("Kunde inte spara fil");
             }
-
     }
 
     public void loadFile(){
@@ -44,11 +46,6 @@ public class ConverterCSVtoJavaObjects {
             }
             br.close();
         } catch( IOException e ) {
-
         }
     }
-
-
-
-
 }

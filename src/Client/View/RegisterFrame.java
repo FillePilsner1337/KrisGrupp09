@@ -8,6 +8,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Registreringsruta som används när en användare registrerar ett nytt konto.
+ * @Author Ola Persson, Jonatan Tempel
+ */
 public class RegisterFrame extends JFrame implements ActionListener, KeyListener {
 
     private GUIcontroller guiController;
@@ -77,10 +81,14 @@ public class RegisterFrame extends JFrame implements ActionListener, KeyListener
     }
 
     public void register() {
-        String s = new String(password.getPassword());
-        clientController.register(username.getText(), s);
+        String password = new String(this.password.getPassword());
+        clientController.register(username.getText(), password);
     }
 
+    /**
+     * Metod som slutar visa RegisterFrame och visar LogInFrame när man stänger ner RegisterFrame.
+     * @param e  the window event
+     */
     protected void processWindowEvent(final WindowEvent e) {
         super.processWindowEvent(e);
 
@@ -126,7 +134,5 @@ public class RegisterFrame extends JFrame implements ActionListener, KeyListener
     @Override
     public void keyReleased(KeyEvent e) {
     }
-
-
 }
 
