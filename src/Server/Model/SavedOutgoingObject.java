@@ -19,8 +19,8 @@ public class SavedOutgoingObject {
     public SavedOutgoingObject(ServerController serverController) {
         this.serverController = serverController;
         this.objMap = new ConcurrentHashMap<>();
-        //saveOrLoad();
-       saveFile();
+        saveOrLoad();
+        //saveFile(); Behövs för att nolla datfiler
     }
     private void saveFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedObjToSend.dat"))) {

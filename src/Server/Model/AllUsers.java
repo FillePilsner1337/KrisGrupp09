@@ -21,8 +21,8 @@ public class AllUsers {
     public AllUsers (ServerController serverController) {
         this.allUsers = new ArrayList<>();
         this.serverController = serverController;
-        //saveOrLoad();
-        saveFile();
+        saveOrLoad();
+        //saveFile(); Behövs för att nolla datfiler
     }
     private void saveFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedAllUsers.dat"))) {

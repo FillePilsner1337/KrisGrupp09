@@ -19,8 +19,8 @@ public class ContactList {
         public ContactList(ServerController controller) {
             this.serverController = controller;
             this.contactList = new ConcurrentHashMap<>();
-            //saveLoad();
-            saveFile();
+            saveLoad();
+            //saveFile(); Behövs för att nolla datfiler
         }
 
     private void saveFile() {
