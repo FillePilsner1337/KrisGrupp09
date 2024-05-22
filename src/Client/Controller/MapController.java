@@ -35,10 +35,6 @@ public class MapController {
     final JXMapViewer mapViewer = new JXMapViewer();
     ClientController clientController;
 
-    /*
-    private String[] cities = new String[]{"Malmö, 55.6088535, 12.9941134", "Lund, 55.704551, 13.192441", "Stockholm, 59.325587, 18.0552665",
-            "Göteborg, 57.7078558, 11.9732139", "Ronneby, 56.210434, 15.276022900000043"};
-     */
     private Object[] cities;
 
     public MapController(ClientController ck) {
@@ -74,48 +70,6 @@ public class MapController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 displayer.openSearchFrame();
-                /*
-                Detta har används i en tidigare version när sökfunktionen inte fanns. Kan plockas bort när sökfunktionen har visats för resten av gruppen och de har godkänt
-                att sökfunktionen används istället.
-
-                String start1 = displayer.chooseLocationDialog(cities);
-                if (start1 != null){
-                    String[] parts = start1.split(",", 3);
-                    GeoPosition home = new GeoPosition(Double.parseDouble(parts[1]), Double.parseDouble(parts[2]));
-                    startPos(home);
-                }
-                 */
-                /*
-                CityObject start1 = ((CityObject) displayer.chooseLocationDialog(cities));
-                if (start1 != null){
-                    GeoPosition home = start1.getGeoPosition();
-                    startPos(home);
-                }
-                else {
-                    displayer.openCloseSearch();
-                }
-                 */
-                //Vilken else sats som används beror på vilken implementering man vill använda.
-                /*
-                else {
-                   String start = displayer.enterManually();
-                   if (start != null){
-                       String[] parts = start.split(",", 2);
-                       try { //felhantering om man skulle skriva input på fel sätt.
-                           GeoPosition home = new GeoPosition(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
-                           startPos(home);
-                       }catch (Exception ex){
-                           displayer.displayErrorMessage("Felaktig inmatning");
-                           startPos(null); //tar dig till niagara om exception inträffar.
-                       }
-                   }
-                   else {
-                       displayer.displayErrorMessage("Felaktig inmatning");
-                       GeoPosition home = null;
-                       startPos(home);
-                   }
-                }
-                 */
             }
         });
 
@@ -372,5 +326,6 @@ public class MapController {
     public HashSet<ShelterWaypoint> getWaypoints(){
         return waypoints;
     }
+
 }
 
