@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Klassen håller varje Users individuella kontaktlista. Sparar och laddar till fil via inre klass loadSave
- *
+ * @author Ola Persson och Jonatan Tempel
  */
 
 public class ContactList {
@@ -19,8 +19,8 @@ public class ContactList {
         public ContactList(ServerController controller) {
             this.serverController = controller;
             this.contactList = new ConcurrentHashMap<>();
-            saveLoad();
-            //saveFile();
+            //saveLoad();
+            saveFile();
         }
 
     private void saveFile() {

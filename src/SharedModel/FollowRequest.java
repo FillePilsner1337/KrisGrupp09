@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Objekt som skickas från user till server med en förfrågan om att följa en ny person
+ * @author Ola Persson och Jonatan Tempel
  */
 public class FollowRequest implements Serializable {
     private static final long serialVersionUID = 4;

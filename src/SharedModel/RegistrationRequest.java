@@ -3,6 +3,7 @@ package SharedModel;
 import java.io.Serializable;
 /**
  * Objektet skickas från klient till servern. Det är en förfrågan om att registrera ett nytt konto
+ * @author Ola Persson och Jonatan Tempel
  */
 public class RegistrationRequest implements Serializable {
     private static final long serialVersionUID = 8;

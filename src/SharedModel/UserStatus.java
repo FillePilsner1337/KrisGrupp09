@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Ett status objekt som håller info om var en user är incheckad. Varje user objekt håller '
- * ett status objekt
+ * Ett status objekt som håller info om var en user är incheckad. Varje user objekt håller
+ *  ett status objekt
+ *  @author Ola Persson och Jonatan Tempel
  */
 public class UserStatus implements Serializable {
     private static final long serialVersionUID = 5;

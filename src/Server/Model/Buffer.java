@@ -5,6 +5,7 @@ import java.util.LinkedList;
 /**
  * Generisk buffert som håller objekt.
  *
+ * @author Ola Persson och Jonatan Tempel
  */
 public class Buffer<T> {
     private LinkedList<T> buffer = new LinkedList<T>();

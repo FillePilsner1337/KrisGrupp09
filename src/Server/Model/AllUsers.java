@@ -12,6 +12,7 @@ import java.util.Date;
  * Klassen håller alla användares User objekt. Laddar fil från HD när servern startas.
  * Sparar varje gång en ny användare registrerar sig.
  *
+ * @author Ola Persson och Jonatan Tempel
  */
 public class AllUsers {
     private ArrayList<User> allUsers;
@@ -20,8 +21,8 @@ public class AllUsers {
     public AllUsers (ServerController serverController) {
         this.allUsers = new ArrayList<>();
         this.serverController = serverController;
-        saveOrLoad();
-        //saveFile();
+        //saveOrLoad();
+        saveFile();
     }
     private void saveFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedAllUsers.dat"))) {

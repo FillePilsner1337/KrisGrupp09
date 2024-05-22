@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Klassen sparar ner objekt som ska skickas till enUser nästa gång den kopplar upp sig till server.
+ * @author Ola Persson och Jonatan Tempel
  */
 
 public class SavedOutgoingObject {
@@ -18,8 +19,8 @@ public class SavedOutgoingObject {
     public SavedOutgoingObject(ServerController serverController) {
         this.serverController = serverController;
         this.objMap = new ConcurrentHashMap<>();
-        saveOrLoad();
-       //saveFile();
+        //saveOrLoad();
+       saveFile();
     }
     private void saveFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedObjToSend.dat"))) {

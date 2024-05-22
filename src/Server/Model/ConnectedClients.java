@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Klassen håller alla anslutna user objekt samt deras connection i en hashmap
+ * @author Ola Persson och Jonatan Tempel
  */
 public class ConnectedClients {
     private ConcurrentHashMap<User, ClientConnection> connectedList;

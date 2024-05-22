@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * User objekt inehåller information om varje användare.
+ * @author Ola Persson och Jonatan Tempel
  */
 
 public class User implements Serializable {
