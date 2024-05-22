@@ -2,21 +2,21 @@ package Server.Model;
 
 import Server.Controller.ServerController;
 import SharedModel.User;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ContactList {
+/**
+ * Klassen håller varje Users individuella kontaktlista. Sparar och laddar till fil via inre klass loadSave
+ *
+ */
 
+public class ContactList {
         private ConcurrentHashMap<User, ArrayList<User>> contactList;
         private ServerController serverController;
         private boolean fileLoaded = false;
 
-
-
         public ContactList(ServerController controller) {
-
             this.serverController = controller;
             this.contactList = new ConcurrentHashMap<>();
             saveLoad();
@@ -28,12 +28,10 @@ public class ContactList {
             oos.writeObject(contactList);
             oos.flush();
             System.out.println("fil sparad");
-
         } catch (IOException e) {
             System.out.println("Kunde inte spara fil");
         }
     }
-
 
         public synchronized void addContact(User userKey, User userToAdd) {
             if (!contactList.containsKey(userKey)) {
@@ -70,7 +68,6 @@ public class ContactList {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedContactLists.dat"))) {
                 oos.writeObject(contactList);
                 oos.flush();
-
             } catch (IOException e) {
                 System.out.println("Kunde inte spara fil");
             }
@@ -81,8 +78,6 @@ public class ContactList {
                 contactList = (ConcurrentHashMap<User, ArrayList<User>>) ois.readObject();
                 fileLoaded = true;
                 serverController.log("Fil inläst savedContactLists.dat ");
-
-
             } catch (IOException e) {
                 if (e instanceof EOFException) {
                     System.out.println("contactList: Ingen mer fil att läsa");

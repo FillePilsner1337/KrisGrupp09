@@ -1,18 +1,19 @@
 package Server.Controller;
 
 import Server.Boundary.*;
-
 import Server.Model.*;
 import Server.Boundary.ServerMainFrame;
 import SharedModel.*;
-
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
+/**
+ * Huvudsakliga controllern till servern.
+ *
+ * @author Ola Persson och Jonatan Tempel
+ */
 public class ServerController {
-    private final int port = 10000;
     private NewClientConnection newClientConnection;
     private ConnectedClients connectedClients;
     private ServerInputHandler serverInputHandler;
@@ -32,22 +33,18 @@ public class ServerController {
         this.savedOutgoingObject = new SavedOutgoingObject(this);
         newClientConnection.start();
         loadServerGuiData();
-
-        //setTimer();
+        setTimer();
     }
 
     private void loadServerGuiData() {
         // Det här är inte bra. För testning
         boolean filesNotLoaded = true;
         while (filesNotLoaded){
-              if (contactList.isFileLoaded() && savedOutgoingObject.isFileLoaded() && allUsers.isFileLoaded()){
-                  serverMainFrame.loadGUIdata();
-                  filesNotLoaded = false;
-              }
-
+            if (contactList.isFileLoaded() && savedOutgoingObject.isFileLoaded() && allUsers.isFileLoaded()){
+                serverMainFrame.loadGUIdata();
+                filesNotLoaded = false;
+            }
         }
-
-
         serverMainFrame.loadGUIdata();
     }
 
@@ -69,11 +66,13 @@ public class ServerController {
     public void setTimer(){
         Timer timer = new Timer();
         TimerToResetLogin timerToResetLogin = new TimerToResetLogin();
-        timer.scheduleAtFixedRate(timerToResetLogin, 0, 10000);
+        timer.scheduleAtFixedRate(timerToResetLogin, 0, 60000);
     }
-    public boolean registrationRequest(RegistrationRequest r){
-        return allUsers.checkIfExists(r);
+
+    public boolean registrationRequest(RegistrationRequest registrationRequest){
+        return allUsers.checkIfExists(registrationRequest);
     }
+
     public void userDisconnect(User user) {
         connectedClients.removeUser(user);
     }
@@ -87,8 +86,8 @@ public class ServerController {
     public void allContactUpdatesToAll(){
         for (int i = 0; i < connectedClients.getListOfConnected().size(); i++){
             User user = connectedClients.getListOfConnected().get(i);
-            ClientConnection c = connectedClients.getConnectionForUser(user);
-            c.sendObject(new ContactListUpdate(createContactList(user)));
+            ClientConnection connectionForUser = connectedClients.getConnectionForUser(user);
+            connectionForUser.sendObject(new ContactListUpdate(createContactList(user)));
         }
         log("Uppdatering skickad till alla användare ");
     }
@@ -101,7 +100,7 @@ public class ServerController {
     }
 
     public void changeStatus(UserStatus status, User user) {
-                allUsers.updateStatus(status, user);
+        allUsers.updateStatus(status, user);
     }
 
     public boolean checkUserExists(User user) {
@@ -128,31 +127,30 @@ public class ServerController {
         return allUsers.getStatusForUser(user);
     }
 
-    public User getRealUser(User u) {
-        return allUsers.getRealUser(u);
+    public User getRealUser(User user) {
+        return allUsers.getRealUser(user);
     }
 
     public void registerNewUser(User user) {
-        User u = user;
-        u.setUserStatus(new UserStatus(false,null,null));
-        allUsers.put(u);
+        user.setUserStatus(new UserStatus(false,null,null));
+        allUsers.put(user);
     }
 
-    public void requestToFollow(FollowRequest req, User user) {
-       if (!checkUserExists(req.getUserToBeFollowd())){
-           connectedClients.getConnectionForUser(user).sendObject(new Message("Användaren finns ej"));
-       }
-       if (checkUserExists(req.getUserToBeFollowd())){
-           User toBeFollowd = getRealUser(req.getUserToBeFollowd());
-           req.setUserToBeFollowd(toBeFollowd);
-           if (connectedClients.isUserConnected(req.getUserToBeFollowd())){
-               connectedClients.getConnectionForUser(req.getUserToBeFollowd()).sendObject(req);
-           }
-           else {
-                savedOutgoingObject.saveObj(req.getUserToBeFollowd(), req);
+    public void requestToFollow(FollowRequest followRequest, User user) {
+        if (!checkUserExists(followRequest.getUserToBeFollowd())){
+            connectedClients.getConnectionForUser(user).sendObject(new Message("Användaren finns ej"));
+        }
+        if (checkUserExists(followRequest.getUserToBeFollowd())){
+            User toBeFollowd = getRealUser(followRequest.getUserToBeFollowd());
+            followRequest.setUserToBeFollowd(toBeFollowd);
+            if (connectedClients.isUserConnected(followRequest.getUserToBeFollowd())){
+                connectedClients.getConnectionForUser(followRequest.getUserToBeFollowd()).sendObject(followRequest);
             }
-           log("Följförfrågan skickad: Från: " + req.getWantsToFollow().getUsername() + " till " + req.getUserToBeFollowd().getUsername());
-       }
+            else {
+                savedOutgoingObject.saveObj(followRequest.getUserToBeFollowd(), followRequest);
+            }
+            log("Följförfrågan skickad: Från: " + followRequest.getWantsToFollow().getUsername() + " till " + followRequest.getUserToBeFollowd().getUsername());
+        }
     }
 
     public void checkForOldObjToSend(User user){
@@ -165,9 +163,9 @@ public class ServerController {
         savedOutgoingObject.clearUserObjectList(user);
         log("Eventuella sparade meddelanden skickat till: " + user.getUsername());
     }
-    public void okToFollow(OkFollowRequest ok){
-        User follower = getRealUser(ok.getFollowRequest().getWantsToFollow());
-        User toBeFollowd = getRealUser(ok.getFollowRequest().getUserToBeFollowd());
+    public void okToFollow(OkFollowRequest okFollowRequest){
+        User follower = getRealUser(okFollowRequest.getFollowRequest().getWantsToFollow());
+        User toBeFollowd = getRealUser(okFollowRequest.getFollowRequest().getUserToBeFollowd());
         contactList.addContact(follower,toBeFollowd);
         if (connectedClients.isUserConnected(follower)) {
             connectedClients.getConnectionForUser(follower).sendObject(new Message(toBeFollowd.getUsername() + " har godkänt din följförfrågning"));
@@ -179,17 +177,13 @@ public class ServerController {
         allContactUpdatesToAll();
     }
 
-    public boolean okLengthUsernameAndPassword(RegistrationRequest o) {
-        if (o.getUserName().length() >= 3 && o.getPassword().length() >= 3){
+    public boolean okLengthUsernameAndPassword(RegistrationRequest registrationRequest) {
+        if (registrationRequest.getUserName().length() >= 3 && registrationRequest.getPassword().length() >= 3){
             return true;
         }
         else{
             return false;
         }
-    }
-
-    public void printAllUsers() {
-        allUsers.printAllUsers();
     }
 
     public ArrayList<User> getAllUsers() {
@@ -211,7 +205,7 @@ public class ServerController {
         return connectedClients;
     }
 
-  public void updateGuiConnectedUsers(ArrayList<User> connectedUsers){
+    public void updateGuiConnectedUsers(ArrayList<User> connectedUsers){
         serverMainFrame.updateGuiConnectedUsers(connectedUsers);
     }
     public void updateGuiAllUsers(ArrayList<User> allUsers){
@@ -221,5 +215,4 @@ public class ServerController {
     public void log(String string){
         serverMainFrame.log(string);
     }
-
 }

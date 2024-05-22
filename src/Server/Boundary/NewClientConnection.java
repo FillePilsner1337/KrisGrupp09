@@ -1,13 +1,17 @@
 package Server.Boundary;
 
-
 import Server.Controller.ServerController;
 import Server.Controller.ServerInputHandler;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * Objekt av klassen lyssnar efter nya anslutningar från klienter. När en ny anslutning etableras
+ * skapas ett ClientConnectionobjekt
+ *
+ * @author Ola Persson och Jonatan Tempel
+ */
 public class NewClientConnection extends Thread {
 
     private ServerController serverController;
@@ -23,12 +27,11 @@ public class NewClientConnection extends Thread {
             System.out.println("IOException i NewClientConnection konstruktor");
             System.out.println(e.getMessage());
         }
-
     }
 
     @Override
     public void run() {
-       while (!Thread.interrupted()) {
+        while (!Thread.interrupted()) {
             try {
                 Socket socket = serverSocket.accept();
                 new ClientConnection(socket, serverController, serverInputHandler);

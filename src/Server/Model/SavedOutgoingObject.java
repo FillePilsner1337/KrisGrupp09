@@ -2,18 +2,18 @@ package Server.Model;
 
 import Server.Controller.ServerController;
 import SharedModel.User;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Klassen sparar ner objekt som ska skickas till enUser nästa gång den kopplar upp sig till server.
+ */
+
 public class SavedOutgoingObject {
     private ServerController serverController;
-
     private ConcurrentHashMap <User, ArrayList<Object>> objMap;
     boolean fileLoaded = false;
-
-
 
     public SavedOutgoingObject(ServerController serverController) {
         this.serverController = serverController;
@@ -34,11 +34,11 @@ public class SavedOutgoingObject {
         new loadOrSave().start();
     }
 
-    public void saveObj(User user, Object o) {
+    public void saveObj(User user, Object object) {
         if (!objMap.containsKey(user)){
             objMap.put(user, new ArrayList<>());
         }
-        objMap.get(user).add(o);
+        objMap.get(user).add(object);
 
     }
 
@@ -71,7 +71,6 @@ public class SavedOutgoingObject {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/savedObjToSend.dat"))) {
                 oos.writeObject(objMap);
                 oos.flush();
-
             } catch (IOException e) {
                 System.out.println("Kunde inte spara fil");
             }

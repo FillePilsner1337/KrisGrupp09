@@ -4,16 +4,18 @@ import Server.Controller.ServerController;
 import SharedModel.UserStatus;
 import SharedModel.RegistrationRequest;
 import SharedModel.User;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Klassen håller alla användares User objekt. Laddar fil från HD när servern startas.
+ * Sparar varje gång en ny användare registrerar sig.
+ *
+ */
 public class AllUsers {
-
     private ArrayList<User> allUsers;
     private ServerController serverController;
-
     private boolean fileLoaded = false;
     public AllUsers (ServerController serverController) {
         this.allUsers = new ArrayList<>();
@@ -30,15 +32,13 @@ public class AllUsers {
         }
     }
     public void printAllUsers(){
-           for (int i = 0; i < allUsers.size(); i++){
+        for (int i = 0; i < allUsers.size(); i++){
             System.out.println(allUsers.get(i).toString());
         }
     }
-
     public void saveOrLoad(){
         new loadOrSave().start();
     }
-
     public synchronized void put(User user){
         if (!allUsers.contains(user)){
             allUsers.add(user);
@@ -59,7 +59,7 @@ public class AllUsers {
         for (int i = 0; i < allUsers.size(); i++) {
             if (user.equals(allUsers.get(i))) {
                 allUsers.get(i).setUserStatus(status);
-                 break;
+                break;
             }
         }
         serverController.allContactUpdatesToAll();
@@ -80,9 +80,9 @@ public class AllUsers {
         return null;
     }
 
-    public User getRealUser(User u) {
+    public User getRealUser(User user) {
         for (int i = 0; i< allUsers.size(); i++){
-            if (u.equals(allUsers.get(i))){
+            if (user.equals(allUsers.get(i))){
                 return allUsers.get(i);
             }
         }
@@ -93,9 +93,9 @@ public class AllUsers {
         return fileLoaded;
     }
 
-    public boolean checkIfExists(RegistrationRequest r) {
+    public boolean checkIfExists(RegistrationRequest registrationRequest) {
         for (int i = 0; i < allUsers.size(); i++) {
-            if (allUsers.get(i).getUsername().equals(r.getUserName())){
+            if (allUsers.get(i).getUsername().equals(registrationRequest.getUserName())){
                 return true;
             }
         }
@@ -125,7 +125,6 @@ public class AllUsers {
         public void run() {
             if (!fileLoaded) {
                 loadFile();
-
             } else {
                 saveFile();
             }

@@ -2,6 +2,9 @@ package SharedModel;
 
 import java.io.Serializable;
 
+/**
+ * Objekt som skickas från user till server med en förfrågan om att följa en ny person
+ */
 public class FollowRequest implements Serializable {
     private static final long serialVersionUID = 4;
     private User wantsToFollow;

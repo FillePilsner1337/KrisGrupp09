@@ -2,10 +2,15 @@ package Server.Boundary;
 
 import Server.Controller.ServerController;
 import SharedModel.User;
-
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Date;
+
+/**
+ * Klassen utgör hela GUI till servern.
+ *
+ * @author Ola Persson och Jonatan Tempel
+ */
 
 public class ServerMainFrame extends JFrame {
 
@@ -13,10 +18,8 @@ public class ServerMainFrame extends JFrame {
     private DefaultListModel<User> modelUserList;
     private JList<User> connectedUserList;
     private DefaultListModel<User> modelConnectedUserList;
-
     private JList<String> logList;
     private DefaultListModel<String> modelLogList;
-
     private ServerController serverController;
 
     public ServerMainFrame(ServerController serverController) {
@@ -24,22 +27,18 @@ public class ServerMainFrame extends JFrame {
         setUpFrame();
     }
 
-    public ServerMainFrame() {
-        setUpFrame();
-    }
-
     private void setUpFrame() {
-setLayout(null);
+        setLayout(null);
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         setTitle("Server");
         setVisible(true);
+
         JLabel userListLabel = new JLabel("All users:");
         userListLabel.setSize(100, 20);
         userListLabel.setLocation(20, 0);
         add(userListLabel);
-
 
         userList = new JList<>();
         modelUserList = new DefaultListModel<>();
@@ -76,10 +75,8 @@ setLayout(null);
         logScrollPane.setLocation(250, 20);
         add(logScrollPane);
 
-
         repaint();
         revalidate();
-
     }
 
     public void log(String string){
@@ -89,7 +86,6 @@ setLayout(null);
     }
 
     public void loadGUIdata() {
-
         ArrayList<User> allUsers = serverController.getAllUsers();
         modelUserList.clear();
         modelUserList.addAll(allUsers);
@@ -110,6 +106,4 @@ setLayout(null);
         repaint();
         revalidate();
     }
-
-
 }

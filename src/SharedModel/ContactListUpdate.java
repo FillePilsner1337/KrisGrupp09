@@ -3,9 +3,12 @@ package SharedModel;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Objektet skickas till User från server och innehåller en uppdaterad lista med userns vänner
+ * och des status
+ */
 public class ContactListUpdate implements Serializable {
     private static final long serialVersionUID = 3;
-
     private ArrayList<User> list;
 
     public ContactListUpdate(ArrayList<User> list) {

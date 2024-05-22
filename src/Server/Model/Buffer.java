@@ -1,7 +1,11 @@
 package Server.Model;
+
 import java.util.LinkedList;
 
-
+/**
+ * Generisk buffert som håller objekt.
+ *
+ */
 public class Buffer<T> {
     private LinkedList<T> buffer = new LinkedList<T>();
 
