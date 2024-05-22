@@ -11,6 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * Klass för att visa VMA objekt i GUI
+ * @Author Ola Persson, Filip Claesson
+ */
 public class VMApanel extends JPanel {
 
     private JScrollPane scrollPane;

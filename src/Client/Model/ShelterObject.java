@@ -4,6 +4,10 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.Serializable;
 
+/**
+ * Klass som används för att skapa skyddsrumsobjekt.
+ * @Author Ola Persson
+ */
 public class ShelterObject implements Serializable {
 
     private GeoPosition position;

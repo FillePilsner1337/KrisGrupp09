@@ -4,13 +4,16 @@ import javax.swing.*;
 import java.awt.*;
 import Client.Controller.*;
 
+/**
+ * Klass som används som huvudklass för GUI.
+ * @Author Ola Persson, Jonatan Tempel
+ */
 public class MainFrame extends JFrame {
 
     private JTabbedPane tabs = new JTabbedPane();
     private MapPanel mapPanel = new MapPanel();
     private InfoFriendsPanel infoFriendsPanel;
     private GUIcontroller guiController;
-
     private VMApanel vmaPanel;
 
 

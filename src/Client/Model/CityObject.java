@@ -4,6 +4,10 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.Serializable;
 
+/**
+ * Modelklass som används för städer.
+ * @Author Ola Persson
+ */
 public class CityObject implements Serializable {
     private String cityName;
     private String kommunName;
@@ -36,7 +40,6 @@ public class CityObject implements Serializable {
     @Override
     public String toString() {
         return cityName + ", " + kommunName + " kommun, " + regionName + " län" ;
-
     }
 }
 

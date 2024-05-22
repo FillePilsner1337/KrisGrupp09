@@ -10,6 +10,10 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+/**
+ * Klass för att visa ett fönster för sök funktionen i GUI
+ * @Author Ola Persson, Jonatan Tempel
+ */
 public class SearchFrame extends JFrame implements ActionListener, KeyListener {
 
     private ClientController clientController;
@@ -99,8 +103,6 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
         setVisible(true);
     }
 
-
-
     public void search() {
         String s = searchTextField.getText();
         guiController.searchCity(s);
@@ -174,12 +176,10 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
                     showOnMap();
                     confirmButton.setEnabled(false);
                 }
-
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-
             }
         });
     }
