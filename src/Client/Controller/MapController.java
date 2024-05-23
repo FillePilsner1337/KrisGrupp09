@@ -94,6 +94,8 @@ public class MapController {
          * Beroende på om skyddsrummet är tomt, om vänner är incheckade eller om användaren själv är incheckad målas skyddsrummet i en
          * speciell färg.
          */
+        ImageIcon img = new ImageIcon("files/1.png");
+        Image imgRescale = img.getImage().getScaledInstance(10, 10, Image.SCALE_SMOOTH);
         waypointPainter.setRenderer(new WaypointRenderer<ShelterWaypoint>() {
             @Override
             public void paintWaypoint(Graphics2D graphics2D, JXMapViewer jxMapViewer, ShelterWaypoint shelterWaypoint) {
@@ -102,26 +104,30 @@ public class MapController {
 
                 Point2D point = jxMapViewer.getTileFactory().geoToPixel(new org.jxmapviewer.viewer.GeoPosition(latitude, longitude), jxMapViewer.getZoom());
 
-                graphics2D.setColor(Color.RED);
-                int height = 8;
-                int width = 8;
-                graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
+                //graphics2D.setColor(Color.RED);
+                int height = 10;
+                int width = 10;
+                //    graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
+                graphics2D.drawImage(imgRescale, (int) point.getX() - width / 2, (int) point.getY() - height / 2, null);
+
                 for (int i = 0; i < clientController.getAllFriends().size(); i++) {
                     if (shelterWaypoint.getIdNumber().equals(clientController.getAllFriends().get(i).getUserStatus().getId()) && !clientController.getAllFriends().get(i).getUsername().equals(clientController.getUser().getUsername())) {
                         graphics2D.setColor(Color.GREEN);
-                        height = 8;
-                        width = 8;
+                        height = 10;
+                        width = 10;
                         graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
                     }
                 }
                 try {
                     if (shelterWaypoint.getIdNumber().equals(clientController.getUser().getUserStatus().getId())) {
                         graphics2D.setColor(Color.BLUE);
-                        height = 8;
-                        width = 8;
+                        height = 10;
+                        width = 10;
                         graphics2D.fillRect((int) point.getX() - width / 2, (int) point.getY() - height / 2, width, height);
                     }
                 }catch (Exception e){}
+
+
             }
         });
         waypointPainter.setWaypoints(waypoints);
