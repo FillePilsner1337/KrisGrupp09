@@ -45,6 +45,7 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
         listFriendsInShelter = new JList<>(listFriendsInShelterModel);
         setUp();
         setUpShowOnMapListeners();
+        setUpRemoveFriendListeners();
     }
 
     private void setUp() {
@@ -67,8 +68,8 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
 
         removeFriend.setSize(180, 30);
         removeFriend.setLocation(200, 440);
-        removeFriend.setEnabled(true);
-        removeFriend.addActionListener(this);
+        removeFriend.setEnabled(false);
+        //removeFriend.addActionListener(this);
         add(removeFriend);
 
         JLabel allaVanner = new JLabel("Alla vänner");
@@ -156,12 +157,40 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
         if (e.getSource() == addFriendButton){
             guiController.requestToFollow();
         }
+        /*
         if (e.getSource() == removeFriend){
             String namn = listAllFriends.getSelectedValue();
             guiController.removeFrind(namn);
 
         }
+         */
     }
+
+    public void setUpRemoveFriendListeners(){
+        listAllFriends.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()){
+                    String name = listAllFriends.getSelectedValue();
+                    if (name != null) {
+                        removeFriend.setEnabled(true);
+                    }
+                }
+            }
+        });
+        removeFriend.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = listAllFriends.getSelectedValue();
+                guiController.removeFrind(name);
+                listAllFriends.clearSelection();
+                if (listAllFriends.isSelectionEmpty()){
+                    removeFriend.setEnabled(false);
+                }
+            }
+        });
+    }
+
 
     /**
      * Metod som lyssnar efter en användares input. Om en användare markerar en incheckad vän (som finns) så sätts showOnMapButtons enable till ture.
@@ -178,7 +207,6 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
                 }
             }
         });
-
         /**
          * Metod som tar skyddsrumsID från den markerade användaren i listan och loopar igenom alla waypoints för att hitta vilket
          * skyddsrum som matchar den ID som användaren är incheckad i. Sedan visas det skyddsrummet på kartan.
@@ -198,7 +226,11 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
                             guiController.getMainFrame().getTabs().setSelectedIndex(0);
                         }
                     }
+                    listFriendsInShelter.clearSelection();
                     }
+                if (listFriendsInShelter.isSelectionEmpty()){
+                    showOnMapButton.setEnabled(false);
+                }
                 }
         });
     }
