@@ -7,6 +7,7 @@ import Client.Model.CityObject;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -25,6 +26,7 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
     private JLabel searchLabel;
     private JList<CityObject> searchResult;
     private DefaultListModel<CityObject> modelSearchResult;
+    private final Taskbar taskbar = Taskbar.getTaskbar();
 
 
     public SearchFrame(GUIcontroller guiController) {
@@ -32,6 +34,8 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
         setUpFrame();
         setSearchResultKeyListener();
         ImageIcon img = new ImageIcon("files/1.png");
+        Image img1 = img.getImage();
+        taskbar.setIconImage(img1);
         this.setIconImage(img.getImage());
     }
 

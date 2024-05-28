@@ -20,12 +20,15 @@ public class LogInFrame extends JFrame implements ActionListener, KeyListener {
     private JLabel usernameLabel;
     private JLabel passwordLabel;
     private ClientController clientController;
+    private final Taskbar taskbar = Taskbar.getTaskbar();
 
     public LogInFrame(GUIcontroller guiController, ClientController clientController) {
         this.guiController = guiController;
         this.clientController = clientController;
         setUpFrame();
         ImageIcon img = new ImageIcon("files/1.png");
+        Image img1 = img.getImage();
+        taskbar.setIconImage(img1);
         this.setIconImage(img.getImage());
     }
 
