@@ -50,7 +50,7 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
     }
     public void setUpFrame() {
         setLayout(null);
-        setSize(335, 400);
+        setSize(335, 410);
         setLocation(guiController.getMainFrame().getX()+250, guiController.getMainFrame().getY()+100);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setResizable(false);
