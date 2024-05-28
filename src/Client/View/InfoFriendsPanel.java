@@ -27,7 +27,7 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
     private DefaultListModel<String> listAllFriendsModel;
     private DefaultListModel<String> listFriendsInShelterModel;
     private GUIcontroller guiController;
-
+    private JButton removeFriend;
     private JButton showOnMapButton;
 
     public InfoFriendsPanel(GUIcontroller guiController){
@@ -35,9 +35,11 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
         checkedIn = new JLabel("Du är inte incheckad");
         checkOutButton = new JButton("Checka ut");
         addFriendButton = new JButton("Lägg till vän");
+
         this.listFriendsInShelterModel = new DefaultListModel<>();
         this.listAllFriendsModel = new DefaultListModel<>();
         this.showOnMapButton = new JButton("Visa på karta");
+        this.removeFriend = new JButton("Ta bort vän");
 
         listAllFriends = new JList<>(listAllFriendsModel);
         listFriendsInShelter = new JList<>(listFriendsInShelterModel);
@@ -63,6 +65,12 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
 
         add(addFriendButton);
 
+        removeFriend.setSize(180, 30);
+        removeFriend.setLocation(200, 440);
+        removeFriend.setEnabled(true);
+        removeFriend.addActionListener(this);
+        add(removeFriend);
+
         JLabel allaVanner = new JLabel("Alla vänner");
         JLabel incheckadeVanner = new JLabel("Incheckade vänner");
         allaVanner.setSize(200, 30);
@@ -80,7 +88,7 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
         listFriendsInShelter.setLocation(400 , 180);
         listFriendsInShelter.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         showOnMapButton.setText("Visa på kartan");
-        showOnMapButton.setSize(180, 40);
+        showOnMapButton.setSize(180, 30);
         showOnMapButton.setLocation(400,440);
         showOnMapButton.setEnabled(false);
         this.add(showOnMapButton);
@@ -147,6 +155,11 @@ public class InfoFriendsPanel extends JPanel implements ActionListener {
         }
         if (e.getSource() == addFriendButton){
             guiController.requestToFollow();
+        }
+        if (e.getSource() == removeFriend){
+            String namn = listAllFriends.getSelectedValue();
+            guiController.removeFrind(namn);
+
         }
     }
 

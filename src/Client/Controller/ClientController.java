@@ -188,6 +188,14 @@ public class ClientController {
         }
         new ClientController();
     }
-    
+
+    public void removeFriend(String namn) {
+        for (int i = 0; i < allFriends.size(); i++) {
+            if (namn.equals(allFriends.get(i).getUsername())){
+            serverConnection.sendObject(new RemoveFriend(allFriends.get(i)));
+            break;
+            }
+        }
+    }
 }
 

@@ -24,6 +24,8 @@ public class MainFrame extends JFrame {
         this.infoFriendsPanel = new InfoFriendsPanel(guiController);
         this.vmaPanel =new VMApanel(this);
         setupGUI();
+        ImageIcon img = new ImageIcon("files/1.png");
+        this.setIconImage(img.getImage());
     }
 
     private void setupGUI() {

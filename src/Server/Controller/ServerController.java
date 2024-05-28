@@ -4,6 +4,8 @@ import Server.Boundary.*;
 import Server.Model.*;
 import Server.Boundary.ServerMainFrame;
 import SharedModel.*;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,6 +27,8 @@ public class ServerController {
 
     public ServerController() {
         this.serverMainFrame = new ServerMainFrame(this);
+        ImageIcon img = new ImageIcon("files/1.png");
+        serverMainFrame.setIconImage(img.getImage());
         this.connectedClients = new ConnectedClients(this);
         this.serverInputHandler = new ServerInputHandler(this);
         this.newClientConnection = new NewClientConnection(20000, this, serverInputHandler);
@@ -193,6 +197,11 @@ public class ServerController {
     public ArrayList<User> getConnectedUsers() {
         return connectedClients.getListOfConnected();
     }
+
+    public void removeFriend(RemoveFriend removeObj, User user) {
+        User userToRemove = removeObj.getUserToRemove();
+        contactList.removeFriend(userToRemove, user);
+     }
 
     public class TimerToResetLogin extends TimerTask {
         @Override

@@ -31,6 +31,8 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
         this.guiController = guiController;
         setUpFrame();
         setSearchResultKeyListener();
+        ImageIcon img = new ImageIcon("files/1.png");
+        this.setIconImage(img.getImage());
     }
 
 

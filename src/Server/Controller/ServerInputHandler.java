@@ -26,5 +26,10 @@ public class ServerInputHandler {
             FollowRequest req = (FollowRequest)obj;
             serverController.requestToFollow(req, user);
         }
+        if (obj instanceof RemoveFriend){
+            RemoveFriend removeObj = (RemoveFriend) obj;
+            serverController.removeFriend(removeObj, user);
+        }
+
     }
 }

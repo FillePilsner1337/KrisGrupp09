@@ -27,6 +27,8 @@ public class RegisterFrame extends JFrame implements ActionListener, KeyListener
         this.guiController = guiController;
         this.clientController = clientController;
         setUpFrame();
+        ImageIcon img = new ImageIcon("files/1.png");
+        this.setIconImage(img.getImage());
     }
 
     public void setUpFrame() {

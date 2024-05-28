@@ -54,6 +54,11 @@ public class ContactList {
             return contactList.get(user);
         }
 
+    public void removeFriend(User userToRemove, User user) {
+            contactList.get(user).remove(userToRemove);
+            serverController.allContactUpdatesToAll();
+    }
+
     public class loadSave extends Thread {
         @Override
         public void run() {
