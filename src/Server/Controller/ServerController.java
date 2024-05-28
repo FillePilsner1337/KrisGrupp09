@@ -27,8 +27,7 @@ public class ServerController {
 
     public ServerController() {
         this.serverMainFrame = new ServerMainFrame(this);
-        ImageIcon img = new ImageIcon("files/1.png");
-        serverMainFrame.setIconImage(img.getImage());
+
         this.connectedClients = new ConnectedClients(this);
         this.serverInputHandler = new ServerInputHandler(this);
         this.newClientConnection = new NewClientConnection(20000, this, serverInputHandler);

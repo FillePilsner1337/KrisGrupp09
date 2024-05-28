@@ -15,7 +15,7 @@ public class MainFrame extends JFrame {
     private InfoFriendsPanel infoFriendsPanel;
     private GUIcontroller guiController;
     private VMApanel vmaPanel;
-    private final Taskbar taskbar = Taskbar.getTaskbar();
+
 
 
     public  MainFrame(GUIcontroller guiController) {
@@ -25,11 +25,23 @@ public class MainFrame extends JFrame {
         this.infoFriendsPanel = new InfoFriendsPanel(guiController);
         this.vmaPanel =new VMApanel(this);
         setupGUI();
+        setIcons();
+
+    }
+    private void setIcons() {
         ImageIcon img = new ImageIcon("files/1.png");
-        Image img1 = img.getImage();
-        taskbar.setIconImage(img1);
         this.setIconImage(img.getImage());
 
+        if (Taskbar.isTaskbarSupported()) {
+            Taskbar taskbar = Taskbar.getTaskbar();
+            try {
+                Image image = img.getImage();
+                taskbar.setIconImage(image);
+            }
+            catch (Exception e){
+
+            }
+        }
     }
 
     private void setupGUI() {

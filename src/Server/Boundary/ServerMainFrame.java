@@ -3,6 +3,7 @@ package Server.Boundary;
 import Server.Controller.ServerController;
 import SharedModel.User;
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -25,6 +26,22 @@ public class ServerMainFrame extends JFrame {
     public ServerMainFrame(ServerController serverController) {
         this.serverController = serverController;
         setUpFrame();
+        setIcons();
+    }
+    private void setIcons() {
+        ImageIcon img = new ImageIcon("files/1.png");
+        this.setIconImage(img.getImage());
+
+        if (Taskbar.isTaskbarSupported()) {
+            Taskbar taskbar = Taskbar.getTaskbar();
+            try {
+                Image image = img.getImage();
+                taskbar.setIconImage(image);
+            }
+            catch (Exception e){
+
+            }
+        }
     }
 
     private void setUpFrame() {

@@ -21,17 +21,29 @@ public class RegisterFrame extends JFrame implements ActionListener, KeyListener
     private JLabel usernameLabel;
     private JLabel passwordLabel;
     private ClientController clientController;
-    private final Taskbar taskbar = Taskbar.getTaskbar();
+
     private int defaultCloseOperation = DISPOSE_ON_CLOSE;
 
     public RegisterFrame(GUIcontroller guiController, ClientController clientController) {
         this.guiController = guiController;
         this.clientController = clientController;
         setUpFrame();
+        setIcons();
+    }
+    private void setIcons() {
         ImageIcon img = new ImageIcon("files/1.png");
-        Image img1 = img.getImage();
-        taskbar.setIconImage(img1);
         this.setIconImage(img.getImage());
+
+        if (Taskbar.isTaskbarSupported()) {
+            Taskbar taskbar = Taskbar.getTaskbar();
+            try {
+                Image image = img.getImage();
+                taskbar.setIconImage(image);
+            }
+            catch (Exception e){
+
+            }
+        }
     }
 
     public void setUpFrame() {

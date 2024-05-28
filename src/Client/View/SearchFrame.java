@@ -26,21 +26,28 @@ public class SearchFrame extends JFrame implements ActionListener, KeyListener {
     private JLabel searchLabel;
     private JList<CityObject> searchResult;
     private DefaultListModel<CityObject> modelSearchResult;
-    private final Taskbar taskbar = Taskbar.getTaskbar();
-
 
     public SearchFrame(GUIcontroller guiController) {
         this.guiController = guiController;
         setUpFrame();
         setSearchResultKeyListener();
-        ImageIcon img = new ImageIcon("files/1.png");
-        Image img1 = img.getImage();
-        taskbar.setIconImage(img1);
-        this.setIconImage(img.getImage());
+        setIcons();
     }
+    private void setIcons() {
+        ImageIcon img = new ImageIcon("files/1.png");
+        this.setIconImage(img.getImage());
 
+        if (Taskbar.isTaskbarSupported()) {
+            Taskbar taskbar = Taskbar.getTaskbar();
+            try {
+                Image image = img.getImage();
+                taskbar.setIconImage(image);
+            }
+            catch (Exception e){
 
-
+            }
+        }
+    }
     public void setUpFrame() {
         setLayout(null);
         setSize(335, 400);

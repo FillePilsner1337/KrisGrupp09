@@ -291,6 +291,7 @@ public class GUIcontroller implements Imap, IinfoFriends, Ivma{
         searchCityController.search(search);
     }
 
+
     public void removeFrind(String namn) {
         clientController.removeFriend(namn);
     }
