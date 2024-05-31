@@ -180,15 +180,6 @@ public class ClientController {
         return searchCityController;
     }
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(new FlatDarkLaf());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        new ClientController();
-    }
-
     public void removeFriend(String namn) {
         for (int i = 0; i < allFriends.size(); i++) {
             if (namn.equals(allFriends.get(i).getUsername())){
@@ -196,6 +187,15 @@ public class ClientController {
             break;
             }
         }
+    }
+    
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        new ClientController();
     }
 }
 
